@@ -29,7 +29,14 @@
                     </div>
                     <div class="user_info">
                       <span>{{ person.firstName }} {{ person.lastName }}</span>
-                      <p>{{ formatDistance(person.distance) }}</p>
+                      <b-row>
+                        <b-col>
+                          <p>{{ formatDistance(person.distance) }}</p>
+                        </b-col>
+                        <b-col>
+                          <img v-for="(group, index2) in person.groups" :key="index2" width="20px" :src="'/media/photos/' + group.logo_url">
+                        </b-col>
+                      </b-row>
                     </div>
                   </div>
                 </router-link>
@@ -42,11 +49,13 @@
           <div class="card">
             <div class="card-header msg_head">
               <div class="d-flex bd-highlight">
-                <div class="img_cont">
-                  <img :src="'/media/photos/' + $store.state.person.profile_picture"
-                       class="rounded-circle user_img">
-                  <span class="online_icon"></span>
-                </div>
+                <router-link :to="{ name: 'ProfileView', params: { personId: this.$store.state.person.id }}">
+                  <div class="img_cont">
+                    <img :src="'/media/photos/' + $store.state.person.profile_picture"
+                         class="rounded-circle user_img">
+                    <span class="online_icon"></span>
+                  </div>
+                </router-link>
                 <div class="user_info">
                   <span>{{ $store.state.person.firstName }} {{ $store.state.person.lastName }}</span>
                   <p>{{ $store.state.messages.length }} Wiadomości</p>
@@ -56,10 +65,10 @@
                   icon="three-dots-vertical"></b-icon></span>
               <div v-show="showActionMenu" class="action_menu">
                 <ul>
-                  <li>
+                  <router-link tag="li" :to="{ name: 'ProfileView', params: { personId: this.$store.state.person.id }}">
                     <b-icon icon="person-circle"></b-icon>
                     View profile
-                  </li>
+                  </router-link>
                   <li>
                     <b-icon icon="people-fill"></b-icon>
                     Add to close friends

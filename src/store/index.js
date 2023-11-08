@@ -194,6 +194,10 @@ const store = new Vuex.Store({
     getters: {
         isAuth: state => {
             return state.accessToken !== null && state.accessToken !== undefined
+        },
+        nearestUser: state => {
+            console.log(state.people)
+            return state.people.length === 0 ? 1 : state.people[0].id
         }
     },
     mutations: {

@@ -13,9 +13,8 @@
         <b-navbar-nav>
           <b-nav-item v-if="!$store.getters.isAuth" to="/">Home</b-nav-item>
           <b-nav-item v-if="!$store.getters.isAuth" to="/register">Rejestracja</b-nav-item>
-          <b-nav-item v-if="$store.getters.isAuth" to="/chat">Czat</b-nav-item>
+          <b-nav-item v-if="$store.getters.isAuth" :to="{name: 'ChatView', params: {personId: this.$store.getters.nearestUser}}">Czat</b-nav-item>
           <b-nav-item v-if="!$store.getters.isAuth" to="/login">Login</b-nav-item>
-          <b-nav-item @click="logout" v-if="$store.getters.isAuth">Wyloguj</b-nav-item>
         </b-navbar-nav>
 
         <!-- Right aligned nav items -->
@@ -26,8 +25,8 @@
             <template #button-content>
               <em>{{ $store.state.username }}</em>
             </template>
-            <b-dropdown-item href="#">Profile</b-dropdown-item>
-            <b-dropdown-item href="#">Sign Out</b-dropdown-item>
+            <b-dropdown-item :to="{ name: 'ProfileView', params: { personId: this.$store.state.userId }}">Profil</b-dropdown-item>
+            <b-dropdown-item @click="logout" v-if="$store.getters.isAuth">Wyloguj</b-dropdown-item>
           </b-nav-item-dropdown>
         </b-navbar-nav>
       </b-collapse>

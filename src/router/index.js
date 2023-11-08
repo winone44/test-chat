@@ -5,6 +5,7 @@ import LoginView from "@/views/LoginView";
 import ChatView from "@/views/ChatView";
 import store from "@/store";
 import Register from "@/views/Register";
+import ProfileView from "@/views/ProfileView";
 
 Vue.use(VueRouter)
 
@@ -55,6 +56,13 @@ const routes = [
     path: '/chat/:personId?',
     name: 'ChatView',
     component: ChatView,
+    beforeEnter: authGuard,
+    props: true
+  },
+  {
+    path: '/profile/:personId',
+    name: 'ProfileView',
+    component: ProfileView,
     beforeEnter: authGuard,
     props: true
   },
