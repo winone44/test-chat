@@ -19,7 +19,11 @@
         </div>
         <div class="card mt-3">
           <ul class="list-group list-group-flush">
-            <li v-for="(group, index) in $store.state.person.groups" :key="index" class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+            <li
+                @click="getGroupMembers(index)"
+                :class="{ 'li-group-active': activeGroupIndex === index}"
+                v-for="(group, index) in $store.state.person.groups"
+                :key="index" class="list-group-item d-flex justify-content-between align-items-center flex-wrap li-group">
               <h6 class="mb-0">
                 <b-img width="24px" :src="'/media/photos/' + group.logo_url"></b-img>
                 {{ group.name }}
@@ -29,15 +33,101 @@
           </ul>
         </div>
       </div>
+      <div class="col-md-7 col-lg-6 mb-3" >
+        <transition name="fade" mode="out-in">
+          <div v-if="isLoading" class="card-body">
+            <div class="d-flex justify-content-center">
+              <div>
+                <b-spinner variant="warning"/>
+              </div>
+            </div>
+          </div>
+          <div v-else>
+            <div id="map-container">
+              <l-map :zoom="zoom" :center="center">
+                <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
+                <l-marker
+                    v-for="(person, index) in people"
+                    :key="index"
+                    :lat-lng="[person.latitude, person.longitude]"
+                    @mouseover="blockDetails ? null : showDetails(person)"
+                    @click="blockHideDetails"
+                    @mouseout="hideDetails"
+                >
+                  <l-icon
+                      :icon-size="[32, 32]"
+                      :icon-anchor="[16, 32]"
+                      :icon-url="'/media/photos/' + person.profile_picture" >
+                  </l-icon>
+                  <l-tooltip>{{ person.name }}</l-tooltip>
+                </l-marker>
+                <l-polyline
+                    v-for="(line, i) in lines"
+                    :key="i+'line'"
+                    :lat-lngs="line"
+                    :color="lineColor"
+                ></l-polyline>
+              </l-map>
+            </div>
+            <div class="card mt-3">
+              <b-table striped hover :items="closest" :fields="fields"></b-table>
+            </div>
+          </div>
+        </transition>
+      </div>
     </div>
   </b-container>
 </template>
 
 <script>
+import {LIcon, LMap, LMarker, LPolyline, LTileLayer, LTooltip} from "vue2-leaflet";
+import 'leaflet/dist/leaflet.css';
+
 export default {
   name: "ProfileView",
+  components: {
+    LMap,
+    LTileLayer,
+    LMarker,
+    LTooltip,
+    LPolyline,
+    LIcon
+  },
   props: {
     personId: [String, Number]
+  },
+  data() {
+    return {
+      activeGroupIndex: 0,
+
+      blockDetails: false,
+      isLoading: true,
+
+      url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+      attribution:
+          '&copy; <a target="_blank" href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+      zoom: 6,
+      center: [51.9194, 19.1451],
+      markerLatLng: [51.504, -0.159],
+      people: [],
+      closest: [],
+      lineColor: 'green',
+
+      fields: [
+        {
+          key: 'person.name',
+          label: 'Nazwa',
+          sortable: true
+        },
+        {
+          key: 'distance',
+          label: 'Dystans (w km)',
+          sortable: true
+        }
+      ],
+      lines: [],
+      activePerson: null
+    };
   },
   methods: {
     async getPerson() {
@@ -45,9 +135,95 @@ export default {
         id: this.personId
       })
     },
+    async getGroupMembers(index) {
+      this.isLoading = true;
+      this.activeGroupIndex = index;
+      await this.$store.dispatch("getGroupMembers", {
+        id: this.$store.state.person.groups[index].id
+      })
+      await this.start();
+      this.isLoading = false;
+    },
+    showDetails(person) {
+      this.activePerson = person;
+      this.calculateLines(person);
+    },
+    hideDetails() {
+      if (!this.blockDetails) {
+        this.lines = [];
+      }
+    },
+    blockHideDetails() {
+      this.blockDetails = !this.blockDetails;
+      if (this.blockDetails) {
+        this.lineColor = 'blue'
+      } else {
+        this.lineColor = 'green'
+      }
+    },
+    calculateLines(selectedPerson) {
+      // Funkcja oblicza odległości od wybranego punktu do wszystkich innych
+      let distances = this.people.map(person => {
+        let distance = this.calculateDistance(person.latitude, person.longitude,
+            selectedPerson.latitude, selectedPerson.longitude)
+        return { person, distance };
+      });
+
+      // Sortowanie ludzi według odległości od wybranego punktu
+      distances.sort((a, b) => a.distance - b.distance);
+
+      // Wybieranie 5 najbliższych punktów (oprócz samego siebie, który jest pierwszy)
+      this.closest = distances.slice(1, 6);
+      console.log(this.closest)
+      // Tworzenie linii między wybranym punktem a 5 najbliższymi punktami
+      this.lines = this.closest.map(p => ([
+        [selectedPerson.latitude, selectedPerson.longitude],
+        [p.person.latitude, p.person.longitude]
+      ]));
+    },
+    calculateDistance(lat1, lon1, lat2, lon2) {
+      // Konwersja stopni na radiany
+      function toRadians(degrees) {
+        return degrees * Math.PI / 180;
+      }
+
+      // Promień Ziemi w kilometrach
+      let R = 6371;
+
+      // Konwersja współrzędnych na radiany
+      let lat1Rad = toRadians(lat1);
+      let lat2Rad = toRadians(lat2);
+      let deltaLatRad = toRadians(lat2 - lat1);
+      let deltaLonRad = toRadians(lon2 - lon1);
+
+      // Formuła Haversine
+      let a = Math.sin(deltaLatRad / 2) * Math.sin(deltaLatRad / 2) +
+          Math.cos(lat1Rad) * Math.cos(lat2Rad) *
+          Math.sin(deltaLonRad / 2) * Math.sin(deltaLonRad / 2);
+      let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+      // Obliczenie odległości
+      let distance = R * c;
+
+      return Math.round(distance);
+    },
+    start() {
+      this.people = [];
+      for (let member of this.$store.state.groupMembers) {
+        let person = {
+          id: member.id,
+          name: `${member.firstName} ${member.lastName}`,
+          latitude: member.latitude,
+          longitude: member.longitude,
+          profile_picture: member.profile_picture
+        };
+        this.people.push(person);
+      }
+    },
   },
-  created() {
-    this.getPerson();
+  async created() {
+    await this.getPerson();
+    await this.getGroupMembers(0);
   }
 }
 </script>
@@ -103,5 +279,18 @@ export default {
 
 .shadow-none {
   box-shadow: none !important;
+}
+
+#map-container {
+  height: 400px;
+}
+
+.li-group:hover {
+  background-color: #acc3ec;
+  cursor: pointer;
+}
+
+.li-group-active {
+  background-color: #cbd6ea;
 }
 </style>

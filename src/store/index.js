@@ -47,6 +47,7 @@ const store = new Vuex.Store({
 
         messages: null,
         person: null,
+        groupMembers: null,
         people: [],
         backendSerwerResponse: null,
         data: {
@@ -254,6 +255,10 @@ const store = new Vuex.Store({
             console.log(payload)
             state.messages.push(payload);
         },
+        setGroupMembers(state, payload) {
+            console.log(payload)
+            state.groupMembers = payload;
+        }
     },
     actions: {
         async login({commit, dispatch}, payload) {
@@ -478,6 +483,18 @@ const store = new Vuex.Store({
                 commit('addMessages', data)
                 //console.log(state.userId);
             } catch (e) {
+                console.log(e)
+            }
+        },
+        async getGroupMembers({commit, state}, payload) {
+            if (state.userId == null) {
+                return;
+            }
+            try {
+                let {data} = await apiClient.get(`${API_URL}groups/${payload.id}/users/`);
+                console.log(data)
+                commit('setGroupMembers', data)
+            } catch(e) {
                 console.log(e)
             }
         },
