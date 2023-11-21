@@ -15,30 +15,34 @@
             <div class="card-body contacts_body">
               <ul class="contacts">
                 <router-link
-                    tag="li"
+
+                    custom v-slot="{ navigate }"
                     :to="{name:'ChatView', params:{personId: person.id}}"
                     :class="{active: person.username === $store.state.username}"
                     v-for="(person, index) in filteredPeople"
                     :key="index"
                 >
-                  <div class="d-flex bd-highlight">
-                    <div class="img_cont">
-                      <img :src="'/media/photos/' + person.profile_picture"
-                           class="rounded-circle user_img">
-                      <span class="online_icon"></span>
+                  <li @click="navigate">
+                    <div class="d-flex bd-highlight">
+                      <div class="img_cont">
+                        <img :src="'/media/photos/' + person.profile_picture"
+                             class="rounded-circle user_img">
+                      </div>
+                      <div class="user_info">
+                        <span>{{ person.firstName }} {{ person.lastName }}</span>
+                        <b-row>
+                          <b-col>
+                            <p>{{ formatDistance(person.distance) }}</p>
+                          </b-col>
+                          <b-col>
+                            <img v-for="(group, index2) in person.groups" :key="index2" width="20px"
+                                 :src="'/media/photos/' + group.logo_url">
+                          </b-col>
+                        </b-row>
+                      </div>
                     </div>
-                    <div class="user_info">
-                      <span>{{ person.firstName }} {{ person.lastName }}</span>
-                      <b-row>
-                        <b-col>
-                          <p>{{ formatDistance(person.distance) }}</p>
-                        </b-col>
-                        <b-col>
-                          <img v-for="(group, index2) in person.groups" :key="index2" width="20px" :src="'/media/photos/' + group.logo_url">
-                        </b-col>
-                      </b-row>
-                    </div>
-                  </div>
+                  </li>
+
                 </router-link>
               </ul>
             </div>
@@ -53,21 +57,30 @@
                   <div class="img_cont">
                     <img :src="'/media/photos/' + $store.state.person.profile_picture"
                          class="rounded-circle user_img">
-                    <span class="online_icon"></span>
+                    <span
+                        class="online_icon"
+                          :class="{offline: !$store.state.person.online}"
+                    ></span>
                   </div>
                 </router-link>
                 <div class="user_info">
                   <span>{{ $store.state.person.firstName }} {{ $store.state.person.lastName }}</span>
                   <p>{{ $store.state.messages.length }} Wiadomości</p>
                 </div>
+                <div class="user_info">
+                  <span>{{ this.$store.state.userId }} {{ this.personId }}</span>
+                </div>
               </div>
               <span @click="showActionMenu =! showActionMenu" id="action_menu_btn"><b-icon
                   icon="three-dots-vertical"></b-icon></span>
               <div v-show="showActionMenu" class="action_menu">
                 <ul>
-                  <router-link tag="li" :to="{ name: 'ProfileView', params: { personId: this.$store.state.person.id }}">
-                    <b-icon icon="person-circle"></b-icon>
-                    View profile
+                  <router-link custom v-slot="{ navigate }"
+                               :to="{ name: 'ProfileView', params: { personId: this.$store.state.person.id }}">
+                    <li @click="navigate">
+                      <b-icon icon="person-circle"></b-icon>
+                      View profile
+                    </li>
                   </router-link>
                   <li>
                     <b-icon icon="people-fill"></b-icon>
@@ -180,6 +193,8 @@ export default {
       if (to.params.personId !== from.params.personId) {
         this.isLoading = true;
         this.isFirstLoad = true;
+        this.$store.state.person = [];
+        this.$store.state.messages = [];
         // Wywołanie metody, która pobiera dane użytkownika
         this.getPerson();
         this.getMessage();
@@ -198,6 +213,22 @@ export default {
     }
   },
   methods: {
+    async submitNewDescription() {
+      try {
+        const id = this.$store.state.userId
+        const newData = {description: this.description}
+        await this.$store.dispatch('patchPersonDescription', {
+          id, newData
+        })
+
+        console.log(this.description);
+        this.user.description = this.description;
+        this.showTextArea = false;
+      } catch (e) {
+        console.log(e)
+      }
+    },
+
     async getPeople() {
       await this.$store.dispatch("getPeople", {
         id: this.$store.state.userId

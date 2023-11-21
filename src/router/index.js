@@ -6,6 +6,7 @@ import ChatView from "@/views/ChatView";
 import store from "@/store";
 import Register from "@/views/Register";
 import ProfileView from "@/views/ProfileView";
+import LocationCheckView from "@/views/LocationCheckView";
 
 Vue.use(VueRouter)
 
@@ -45,6 +46,12 @@ const routes = [
     name: 'LoginView',
     component: LoginView,
     beforeEnter: notAuthGuard,
+  },
+  {
+    path: '/locationCheck',
+    name: 'LocationCheckView',
+    component: LocationCheckView,
+    beforeEnter: authGuard,
   },
   {
     path: '/register',

@@ -464,6 +464,18 @@ const store = new Vuex.Store({
                 console.log(e)
             }
         },
+        async patchLocation({commit, state}, {id, newData}) {
+            if (state.userId == null) {
+                return;
+            }
+            try {
+                let {data} = await apiClient.patch(`${API_URL}accounts/person/${id}/patch/`, newData);
+                console.log(data)
+                commit('setPerson', data)
+            } catch(e) {
+                console.log(e)
+            }
+        },
         async getMessages({commit, state}, payload) {
             if (state.userId == null) {
                 return;

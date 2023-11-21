@@ -92,15 +92,11 @@ export default {
          password: this.password
        })
        if (this.$store.getters.isAuth) {
-         await this.getPeople();
-         await this.$router.push({name: 'ChatView', params: {personId:this.$store.state.people[0].id}})
+         await this.$router.push({name: 'LocationCheckView'})
+
        }
     },
-    async getPeople() {
-      await this.$store.dispatch("getPeople", {
-        id: this.$store.state.userId
-      })
-    },
+
   },
 }
 </script>
