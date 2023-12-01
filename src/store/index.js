@@ -48,6 +48,7 @@ const store = new Vuex.Store({
         messages: null,
         person: null,
         groupMembers: null,
+        newGrupInfo: null,
         people: [],
         backendSerwerResponse: null,
         data: {
@@ -198,7 +199,18 @@ const store = new Vuex.Store({
         },
         nearestUser: state => {
             console.log(state.people)
-            return state.people.length === 0 ? 1 : state.people[0].id
+            return state.people.length === 0 ? 0 : state.people[0].id
+        },
+        profilePicture: state => {
+            if (state.person === null) {
+                return ''
+            } else if (state.person.profile_picture.startsWith('http://') || state.person.profile_picture.startsWith('https://')) {
+                // Jeśli zmienna profile_picture zawiera pełny URL
+                return state.person.profile_picture;
+            } else {
+                // Jeśli zmienna profile_picture zawiera tylko nazwę pliku
+                return '/media/photos/' + state.person.profile_picture;
+            }
         }
     },
     mutations: {
@@ -258,6 +270,12 @@ const store = new Vuex.Store({
         setGroupMembers(state, payload) {
             console.log(payload)
             state.groupMembers = payload;
+        },
+        addGroupToUser(state, payload) {
+            state.person.group.push(payload);
+        },
+        setNewGroupInfo(state, payload) {
+            state.newGrupInfo = payload;
         }
     },
     actions: {
@@ -510,6 +528,24 @@ const store = new Vuex.Store({
                 console.log(e)
             }
         },
+        async addMemberToGroup({commit}, payload) {
+            try {
+                let {data} = await apiClient.post(`${API_URL}group/join/`, payload)
+                console.log(data);
+                commit('addGroupToUser', payload)
+            } catch (e) {
+                console.log(e)
+            }
+        },
+        async addGroup({commit}, payload) {
+            try {
+                let {data} = await apiClient.post(`${API_URL}group/create/`, payload)
+                console.log(data);
+                commit('setNewGroupInfo', data)
+            } catch (e) {
+                console.log(e)
+            }
+        }
     },
     modules: {}
 })

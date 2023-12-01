@@ -15,6 +15,7 @@
           <b-nav-item v-if="!$store.getters.isAuth" to="/register">Rejestracja</b-nav-item>
           <b-nav-item v-if="$store.getters.isAuth" :to="{name: 'ChatView', params: {personId: this.$store.getters.nearestUser}}">Czat</b-nav-item>
           <b-nav-item v-if="!$store.getters.isAuth" to="/login">Login</b-nav-item>
+          <b-nav-item v-if="$store.getters.isAuth" :to="{name: 'NewGroupCreateView'}">NewGroupCreateView</b-nav-item>
         </b-navbar-nav>
 
         <!-- Right aligned nav items -->

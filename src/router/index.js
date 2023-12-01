@@ -7,6 +7,7 @@ import store from "@/store";
 import Register from "@/views/Register";
 import ProfileView from "@/views/ProfileView";
 import LocationCheckView from "@/views/LocationCheckView";
+import NewGroupCreateView from "@/views/NewGroupCreateView";
 
 Vue.use(VueRouter)
 
@@ -39,7 +40,6 @@ const routes = [
     path: '/',
     name: 'home',
     component: HomeView,
-    beforeEnter: notAuthGuard,
   },
   {
     path: '/login',
@@ -72,6 +72,12 @@ const routes = [
     component: ProfileView,
     beforeEnter: authGuard,
     props: true
+  },
+  {
+    path: '/group-create/',
+    name: 'NewGroupCreateView',
+    component: NewGroupCreateView,
+    beforeEnter: authGuard,
   },
   // {
   //   path: '/about',

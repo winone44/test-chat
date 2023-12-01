@@ -32,7 +32,7 @@
                         <span>{{ person.firstName }} {{ person.lastName }}</span>
                         <b-row>
                           <b-col>
-                            <p>{{ formatDistance(person.distance) }}</p>
+                            <p>{{ person.distance | formatDistance }}</p>
                           </b-col>
                           <b-col>
                             <img v-for="(group, index2) in person.groups" :key="index2" width="20px"
@@ -53,7 +53,7 @@
           <div class="card">
             <div class="card-header msg_head">
               <div class="d-flex bd-highlight">
-                <router-link :to="{ name: 'ProfileView', params: { personId: this.$store.state.person.id }}">
+                <router-link :to="{ name: 'ProfileView', params: { personId: this.personId }}">
                   <div class="img_cont">
                     <img :src="'/media/photos/' + $store.state.person.profile_picture"
                          class="rounded-circle user_img">
@@ -67,16 +67,13 @@
                   <span>{{ $store.state.person.firstName }} {{ $store.state.person.lastName }}</span>
                   <p>{{ $store.state.messages.length }} Wiadomości</p>
                 </div>
-                <div class="user_info">
-                  <span>{{ this.$store.state.userId }} {{ this.personId }}</span>
-                </div>
               </div>
               <span @click="showActionMenu =! showActionMenu" id="action_menu_btn"><b-icon
                   icon="three-dots-vertical"></b-icon></span>
               <div v-show="showActionMenu" class="action_menu">
                 <ul>
                   <router-link custom v-slot="{ navigate }"
-                               :to="{ name: 'ProfileView', params: { personId: this.$store.state.person.id }}">
+                               :to="{ name: 'ProfileView', params: { personId: this.personId }}">
                     <li @click="navigate">
                       <b-icon icon="person-circle"></b-icon>
                       View profile
@@ -130,7 +127,7 @@
                         :class="{'msg_time': String(message.receiver.id) === String($store.state.userId),
                             'msg_time_send': String(message.receiver.id) !== String($store.state.userId)
                   }"
-                    >{{ formatDate(message.created_at) }}</span>
+                    >{{ message.created_at | formatDate }}</span>
                   </div>
                   <div v-if="String(message.receiver.id) !== String($store.state.userId)" class="img_cont_msg">
                     <img :src="'/media/photos/' + String($store.state.profilePicture)"
@@ -290,43 +287,6 @@ export default {
       };
 
       requestAnimationFrame(animate);
-    },
-    formatDate(inputDateString) {
-      const now = new Date();
-      const inputDate = new Date(inputDateString);
-
-      const diffInSeconds = Math.floor((now - inputDate) / 1000);
-      const diffInMinutes = Math.floor(diffInSeconds / 60);
-      const diffInHours = Math.floor(diffInMinutes / 60);
-
-      if (diffInSeconds < 60) {
-        return 'teraz';
-      }
-
-      if (diffInMinutes >= 1 && diffInMinutes <= 59) {
-        return `${diffInMinutes}min`;
-      }
-
-      if (diffInHours >= 1 && diffInHours <= 24) {
-        return `${diffInHours}godz`;
-      }
-
-      if (diffInHours >= 25 && diffInHours <= 48) {
-        return `wczoraj, ${inputDate.toTimeString().split(" ")[0]}`;
-      }
-
-      if (diffInHours >= 49 && diffInHours <= 72) {
-        return `przedwczoraj, ${inputDate.toTimeString().split(" ")[0]}`;
-      }
-
-      return inputDate.toISOString().split("T")[0] + " " + inputDate.toTimeString().split(" ")[0];
-    },
-    formatDistance(distanceInKilometers) {
-      if (distanceInKilometers > 1) {
-        return `${distanceInKilometers}km`;
-      } else {
-        return `poniżej 1 km`;
-      }
     },
   },
   created() {

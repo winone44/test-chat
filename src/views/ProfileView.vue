@@ -19,6 +19,10 @@
         </div>
         <div class="card mt-3">
           <ul class="list-group list-group-flush">
+            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+              <h6>Nazwa organizacji</h6>
+              <AddGroupModalComponent />
+            </li>
             <li
                 @click="getGroupMembers(index)"
                 :class="{ 'li-group-active': activeGroupIndex === index}"
@@ -31,6 +35,14 @@
               <span class="text-secondary">{{ group.group_site_url }}</span>
             </li>
           </ul>
+          <b-pagination
+              v-model="currentPage"
+              :total-rows="totalRows"
+              :per-page="perPage"
+              align="fill"
+              size="sm"
+              class="my-0"
+          ></b-pagination>
         </div>
       </div>
       <div class="col-md-7 col-lg-6 mb-3" >
@@ -70,7 +82,12 @@
               </l-map>
             </div>
             <div class="card mt-3">
-              <b-table striped hover :items="closest" :fields="fields"></b-table>
+              <b-table striped hover :items="closest" :fields="fields">
+                <template #cell(profile_picture)="data">
+                  <img :src="'/media/photos/' + data.value"
+                       class="rounded-circle user_img">
+                </template>
+              </b-table>
             </div>
           </div>
         </transition>
@@ -82,10 +99,12 @@
 <script>
 import {LIcon, LMap, LMarker, LPolyline, LTileLayer, LTooltip} from "vue2-leaflet";
 import 'leaflet/dist/leaflet.css';
+import AddGroupModalComponent from "@/components/ProfileView/AddGroupModalComponent";
 
 export default {
   name: "ProfileView",
   components: {
+    AddGroupModalComponent,
     LMap,
     LTileLayer,
     LMarker,
@@ -115,7 +134,11 @@ export default {
 
       fields: [
         {
-          key: 'person.name',
+          key: 'profile_picture',
+          label: 'Awatar',
+        },
+        {
+          key: 'name',
           label: 'Nazwa',
           sortable: true
         },
@@ -126,7 +149,11 @@ export default {
         }
       ],
       lines: [],
-      activePerson: null
+      activePerson: null,
+
+      totalRows: 1,
+      currentPage: 1,
+      perPage: 5,
     };
   },
   methods: {
@@ -164,21 +191,20 @@ export default {
     calculateLines(selectedPerson) {
       // Funkcja oblicza odległości od wybranego punktu do wszystkich innych
       let distances = this.people.map(person => {
-        let distance = this.calculateDistance(person.latitude, person.longitude,
+        let { latitude, longitude, ...restOfProperties } = person;
+        let distance = this.calculateDistance(latitude, longitude,
             selectedPerson.latitude, selectedPerson.longitude)
-        return { person, distance };
+        return { ...restOfProperties, latitude, longitude, distance };
       });
-
+      console.log(distances);
       // Sortowanie ludzi według odległości od wybranego punktu
       distances.sort((a, b) => a.distance - b.distance);
-
       // Wybieranie 5 najbliższych punktów (oprócz samego siebie, który jest pierwszy)
       this.closest = distances.slice(1, 6);
-      console.log(this.closest)
       // Tworzenie linii między wybranym punktem a 5 najbliższymi punktami
       this.lines = this.closest.map(p => ([
         [selectedPerson.latitude, selectedPerson.longitude],
-        [p.person.latitude, p.person.longitude]
+        [p.latitude, p.longitude]
       ]));
     },
     calculateDistance(lat1, lon1, lat2, lon2) {
@@ -292,5 +318,11 @@ export default {
 
 .li-group-active {
   background-color: #cbd6ea;
+}
+
+.user_img {
+  height: 60px;
+  width: 60px;
+  border: 1.5px solid #f5f6fa;
 }
 </style>

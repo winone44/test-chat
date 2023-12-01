@@ -27,7 +27,7 @@ export default {
       this.location = `Szerokość geograficzna: ${position.coords.latitude}, Długość geograficzna: ${position.coords.longitude}. Przekierowanie...`;
       await this.submitNewDescription(position.coords.latitude, position.coords.longitude);
       await this.getPeople();
-      await this.$router.push({name: 'ChatView', params: {personId: this.$store.state.people[0].id}})
+      await this.$router.push({name: 'ChatView', params: {personId: this.$store.getters.nearestUser}})
     },
     showError(error) {
       switch (error.code) {
