@@ -14,6 +14,11 @@ const apiClient = axios.create({
 
 async function onRequestFailure(error, store) {
     const { config } = error;
+    if (error.response && error.response.status !== 401) {
+        const message = error.response.data.error || 'Wystąpił nieoczekiwany błąd';
+        const variant = error.response.status === 404 ? 'danger' : 'warning';
+        store.dispatch('showToast', { message, variant });
+    }
     if (error.response.status === 401 && config && !config.__isRetryRequest) {
         // Jeśli odpowiedź to 401 Unauthorized, spróbuj odświeżyć tokeny
         try {
@@ -37,6 +42,18 @@ async function onRequestFailure(error, store) {
     return Promise.reject(error);
 }
 
+function onRequestSuccess(response, store) {
+    if (response.status === 201) {
+        const message = response.data.message || 'Zapisano w bazie danych';
+        store.dispatch('showToast', {message, variant: 'success'}).then(() =>{});
+        console.log('STATUS 201')
+    } else if (response.status === 200 && response.data.message) {
+        const message = response.data.message
+        store.dispatch('showToast', {message, variant: 'success'}).then(() =>{});
+        console.log('STATUS 200')
+    }
+}
+
 const store = new Vuex.Store({
     state: {
         accessToken: null,
@@ -52,145 +69,8 @@ const store = new Vuex.Store({
         people: [],
         backendSerwerResponse: null,
         data: {
-            people: [
-                {
-                    id: '23',
-                    username: 'Khalid Charif',
-                    distance: '348m',
-                    avatarUrl: 'https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg'
-                },
-                {
-                    id: '34',
-                    username: 'Chaymae Naim',
-                    distance: '548m',
-                    avatarUrl: 'https://2.bp.blogspot.com/-8ytYF7cfPkQ/WkPe1-rtrcI/AAAAAAAAGqU/FGfTDVgkcIwmOTtjLka51vineFBExJuSACLcBGAs/s320/31.jpg'
-                },
-                {
-                    id: '3',
-                    username: 'Sami Rafi',
-                    distance: '1388m',
-                    avatarUrl: 'https://i.pinimg.com/originals/ac/b9/90/acb990190ca1ddbb9b20db303375bb58.jpg'
-                },
-                {
-                    id: '21',
-                    username: 'Hassan Agmirf',
-                    distance: '2228m',
-                    avatarUrl: 'https://avatars.hsoubcdn.com/ed57f9e6329993084a436b89498b6088?s=256'
-                },
-                {
-                    id: '8',
-                    username: 'Abdou Chatabi',
-                    distance: '2848m',
-                    avatarUrl: 'https://static.turbosquid.com/Preview/001214/650/2V/boy-cartoon-3D-model_D.jpg'
-                },
-            ],
-            messages: [
-                {
-                    id: '1',
-                    created_at: '2023-06-08T13:47:19.112807Z',
-                    receiver: {
-                        id: '1',
-                        username: 'Hassan Agmir',
-                        userImg: 'https://avatars.hsoubcdn.com/ed57f9e6329993084a436b89498b6088?s=256'
-                    },
-                    sender: {
-                        id: '2',
-                        username: 'Khalid Charif',
-                        userImg: 'https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg'
-                    },
-                    text: 'Hi, how are you samim?'
-                },
-                {
-                    id: '2',
-                    created_at: '2023-06-08T13:47:19.112807Z',
-                    receiver: {
-                        id: '2',
-                        username: 'Khalid Charif',
-                        userImg: 'https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg'
-                    },
-                    sender: {
-                        id: '1',
-                        username: 'Hassan Agmir',
-                        userImg: 'https://avatars.hsoubcdn.com/ed57f9e6329993084a436b89498b6088?s=256'
-                    },
-                    text: 'Hi Khalid i am good tnx how about you?'
-                },
-                {
-                    id: '3',
-                    created_at: '2023-06-08T13:47:19.112807Z',
-                    receiver: {
-                        id: '1',
-                        username: 'Hassan Agmir',
-                        userImg: 'https://avatars.hsoubcdn.com/ed57f9e6329993084a436b89498b6088?s=256'
-                    },
-                    sender: {
-                        id: '2',
-                        username: 'Khalid Charif',
-                        userImg: 'https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg'
-                    },
-                    text: 'I am good too, thank you for your chat template'
-                },
-                {
-                    id: '4',
-                    created_at: '2023-06-08T13:47:19.112807Z',
-                    receiver: {
-                        id: '2',
-                        username: 'Khalid Charif',
-                        userImg: 'https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg'
-                    },
-                    sender: {
-                        id: '1',
-                        username: 'Hassan Agmir',
-                        userImg: 'https://avatars.hsoubcdn.com/ed57f9e6329993084a436b89498b6088?s=256'
-                    },
-                    text: 'You are welcome'
-                },
-                {
-                    id: '5',
-                    created_at: '2023-06-08T13:47:19.112807Z',
-                    receiver: {
-                        id: '1',
-                        username: 'Hassan Agmir',
-                        userImg: 'https://avatars.hsoubcdn.com/ed57f9e6329993084a436b89498b6088?s=256'
-                    },
-                    sender: {
-                        id: '2',
-                        username: 'Khalid Charif',
-                        userImg: 'https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg'
-                    },
-                    text: 'I am looking for your next templates'
-                },
-                {
-                    id: '6',
-                    created_at: '2023-06-08T13:47:19.112807Z',
-                    receiver: {
-                        id: '2',
-                        username: 'Khalid Charif',
-                        userImg: 'https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg'
-                    },
-                    sender: {
-                        id: '1',
-                        username: 'Hassan Agmir',
-                        userImg: 'https://avatars.hsoubcdn.com/ed57f9e6329993084a436b89498b6088?s=256'
-                    },
-                    text: 'Ok, thank you have a good day'
-                },
-                {
-                    id: '7',
-                    created_at: '2023-06-08T13:47:19.112807Z',
-                    receiver: {
-                        id: '1',
-                        username: 'Hassan Agmir',
-                        userImg: 'https://avatars.hsoubcdn.com/ed57f9e6329993084a436b89498b6088?s=256'
-                    },
-                    sender: {
-                        id: '2',
-                        username: 'Khalid Charif',
-                        userImg: 'https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg'
-                    },
-                    text: 'Bye, see you'
-                },
-            ]
+            people: [],
+            messages: []
         }
     },
     getters: {
@@ -199,7 +79,11 @@ const store = new Vuex.Store({
         },
         nearestUser: state => {
             console.log(state.people)
-            return state.people.length === 0 ? 0 : state.people[0].id
+            if (state.people.length === 0) {
+                return state.userId
+            } else {
+                return state.people[0].id
+            }
         },
         profilePicture: state => {
             if (state.person === null) {
@@ -393,7 +277,7 @@ const store = new Vuex.Store({
             try {
                 let response = await apiClient.post(`${API_URL}accounts/register`, qs.stringify(payload))
                 console.log(response);
-                router.push({name: 'login'})
+
 
             } catch (e) {
                 commit('setResponse', {
@@ -545,13 +429,35 @@ const store = new Vuex.Store({
             } catch (e) {
                 console.log(e)
             }
+        },
+        async delMemberFromGroup({state}, payload) {
+            if (state.userId == null) {
+                return;
+            }
+            try {
+                let {data} = await apiClient.delete(`${API_URL}group/leave/`,  {data: payload });
+                console.log(data)
+            } catch(e) {
+                console.log(e)
+            }
+        },
+        showToast({state},{ message, variant }) {
+            this._vm.$bvToast.toast(message, {
+                title: variant === 'success' ? 'Sukces' : 'Bład',
+                variant: variant,
+                solid: true
+            });
+            console.log('User ID: '+ state.userId + ' ' + message)
         }
     },
     modules: {}
 })
 
 apiClient.interceptors.response.use(
-    (response) => response,
+    (response) => {
+        onRequestSuccess(response, store)
+        return response
+    },
     (error) => onRequestFailure(error, store)
 );
 

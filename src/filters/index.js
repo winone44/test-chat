@@ -38,3 +38,12 @@ Vue.filter("formatDistance", function (distanceInKilometers) {
         return `poniżej 1 km`;
     }
 })
+
+Vue.filter("normalizeUrl", function (url) {
+    // Usuwa protokół (http://, https://)
+    let stripped = url.replace(/(^\w+:|^)\/\//, '');
+    // Usuwa ścieżki po domenie (wszystko po '/')
+    stripped = stripped.split('/')[0];
+    // Usuwa 'www.' jeśli istnieje
+    return stripped.replace('www.', '');
+})

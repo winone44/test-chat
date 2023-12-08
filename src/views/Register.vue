@@ -180,6 +180,7 @@
 
 <script>
 import {required, minLength, email, sameAs} from 'vuelidate/lib/validators'
+import router from "@/router";
 
 // import authAxios from "@/auth-axios";
 
@@ -259,6 +260,7 @@ export default {
         password2: this.password2,
         date_of_birth: this.date_of_birth
       })
+      await this.$router.push({name: 'LoginView'})
     },
     onReset(event) {
       event.preventDefault();

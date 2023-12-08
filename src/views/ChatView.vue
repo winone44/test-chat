@@ -1,156 +1,160 @@
 <template>
   <div class="home">
     <div class="container-fluid h-100">
-      <div class="row justify-content-center h-100">
-        <div class="col-md-4 col-xl-3 chat">
-          <div class="card mb-sm-3 mb-md-0 contacts_card">
-            <div class="card-header">
-              <div class="input-group">
-                <input v-model="filter" type="text" placeholder="Wyszukiwanie..." name="" class="form-control search">
-                <div class="input-group-prepend">
-                  <span class="input-group-text search_btn"><b-icon icon="search"></b-icon></span>
-                </div>
-              </div>
-            </div>
-            <div class="card-body contacts_body">
-              <ul class="contacts">
-                <router-link
-
-                    custom v-slot="{ navigate }"
-                    :to="{name:'ChatView', params:{personId: person.id}}"
-                    :class="{active: person.username === $store.state.username}"
-                    v-for="(person, index) in filteredPeople"
-                    :key="index"
-                >
-                  <li @click="navigate">
-                    <div class="d-flex bd-highlight">
-                      <div class="img_cont">
-                        <img :src="'/media/photos/' + person.profile_picture"
-                             class="rounded-circle user_img">
-                      </div>
-                      <div class="user_info">
-                        <span>{{ person.firstName }} {{ person.lastName }}</span>
-                        <b-row>
-                          <b-col>
-                            <p>{{ person.distance | formatDistance }}</p>
-                          </b-col>
-                          <b-col>
-                            <img v-for="(group, index2) in person.groups" :key="index2" width="20px"
-                                 :src="'/media/photos/' + group.logo_url">
-                          </b-col>
-                        </b-row>
-                      </div>
-                    </div>
-                  </li>
-
-                </router-link>
-              </ul>
-            </div>
-            <div class="card-footer"></div>
-          </div>
-        </div>
-        <div class="col-md-8 col-xl-6 chat">
-          <div class="card">
-            <div class="card-header msg_head">
-              <div class="d-flex bd-highlight">
-                <router-link :to="{ name: 'ProfileView', params: { personId: this.personId }}">
-                  <div class="img_cont">
-                    <img :src="'/media/photos/' + $store.state.person.profile_picture"
-                         class="rounded-circle user_img">
-                    <span
-                        class="online_icon"
-                          :class="{offline: !$store.state.person.online}"
-                    ></span>
+      <div v-if="$store.getters.nearestUser === 0" class="row justify-content-center h-100">
+        Reload?
+      </div>
+      <div v-else class="row justify-content-center h-100">
+          <div class="col-md-4 col-xl-3 chat">
+            <div class="card mb-sm-3 mb-md-0 contacts_card">
+              <div class="card-header">
+                <div class="input-group">
+                  <input v-model="filter" type="text" placeholder="Wyszukiwanie..." name="" class="form-control search">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text search_btn"><b-icon icon="search"></b-icon></span>
                   </div>
-                </router-link>
-                <div class="user_info">
-                  <span>{{ $store.state.person.firstName }} {{ $store.state.person.lastName }}</span>
-                  <p>{{ $store.state.messages.length }} Wiadomości</p>
                 </div>
               </div>
-              <span @click="showActionMenu =! showActionMenu" id="action_menu_btn"><b-icon
-                  icon="three-dots-vertical"></b-icon></span>
-              <div v-show="showActionMenu" class="action_menu">
-                <ul>
-                  <router-link custom v-slot="{ navigate }"
-                               :to="{ name: 'ProfileView', params: { personId: this.personId }}">
+              <div class="card-body contacts_body">
+                <ul class="contacts">
+                  <router-link
+                      custom v-slot="{ navigate }"
+                      :to="{name:'ChatView', params:{personId: person.id}}"
+                      :class="{active: person.username === $store.state.username, disabled: isLoading }"
+                      v-for="(person, index) in filteredPeople"
+                      :key="index"
+                  >
                     <li @click="navigate">
-                      <b-icon icon="person-circle"></b-icon>
-                      View profile
+                      <div class="d-flex bd-highlight">
+                        <div class="img_cont">
+                          <img :src="'/media/photos/' + person.profile_picture"
+                               class="rounded-circle user_img">
+                        </div>
+                        <div class="user_info">
+                          <span>{{ person.firstName }} {{ person.lastName }}</span>
+                          <b-row>
+                            <b-col>
+                              <p>{{ person.distance | formatDistance }}</p>
+                            </b-col>
+                            <b-col>
+                              <img v-for="(group, index2) in person.groups" :key="index2" width="20px"
+                                   :src="'/media/photos/' + group.logo_url">
+                            </b-col>
+                          </b-row>
+                        </div>
+                      </div>
                     </li>
+
                   </router-link>
-                  <li>
-                    <b-icon icon="people-fill"></b-icon>
-                    Add to close friends
-                  </li>
-                  <li>
-                    <b-icon icon="plus-lg"></b-icon>
-                    Add to group
-                  </li>
-                  <li>
-                    <b-icon icon="slash-circle"></b-icon>
-                    Block
-                  </li>
                 </ul>
               </div>
+              <div class="card-footer">
+                <b-button variant="primary" :to="{name: 'ChatView', params: {personId: this.$store.state.userId}}">Notatnik</b-button>
+              </div>
             </div>
-            <transition name="fade" mode="out-in">
-              <div v-if="isLoading" class="card-body">
-                <div class="d-flex justify-content-center">
-                  <div>
-                    <b-spinner variant="warning"/>
+          </div>
+          <div class="col-md-8 col-xl-6 chat">
+            <div class="card">
+              <div class="card-header msg_head">
+                <div class="d-flex bd-highlight">
+                  <router-link :to="{ name: 'ProfileView', params: { personId: this.personId }}">
+                    <div class="img_cont">
+                      <img :src="'/media/photos/' + $store.state.person.profile_picture"
+                           class="rounded-circle user_img">
+                      <span
+                          class="online_icon"
+                          :class="{offline: !$store.state.person.online}"
+                      ></span>
+                    </div>
+                  </router-link>
+                  <div class="user_info">
+                    <span>{{ $store.state.person.firstName }} {{ $store.state.person.lastName }}</span>
+                    <p>{{ $store.state.messages.length }} Wiadomości</p>
                   </div>
                 </div>
-
+                <span @click="showActionMenu =! showActionMenu" id="action_menu_btn"><b-icon
+                    icon="three-dots-vertical"></b-icon></span>
+                <div v-show="showActionMenu" class="action_menu">
+                  <ul>
+                    <router-link custom v-slot="{ navigate }"
+                                 :to="{ name: 'ProfileView', params: { personId: this.personId }}">
+                      <li @click="navigate">
+                        <b-icon icon="person-circle"></b-icon>
+                        Wyświetl profil
+                      </li>
+                    </router-link>
+                    <li>
+                      <b-icon icon="people-fill"></b-icon>
+                      Dodaj do bliskich znajomych
+                    </li>
+                    <li>
+                      <b-icon icon="plus-lg"></b-icon>
+                      Dodaj do grupy
+                    </li>
+                    <li>
+                      <b-icon icon="slash-circle"></b-icon>
+                      Zablokuj
+                    </li>
+                  </ul>
+                </div>
               </div>
-              <div v-else ref="messagesContainer" class="card-body msg_card_body">
-                <div
-                    v-for="(message, index) in $store.state.messages"
-                    :key="index"
-                    class="d-flex mb-4"
-                    :class="{'justify-content-start': String(message.receiver.id) === String($store.state.userId),
+              <transition name="fade" mode="out-in">
+                <div v-if="isLoading" class="card-body">
+                  <div class="d-flex justify-content-center">
+                    <div>
+                      <b-spinner variant="warning"/>
+                    </div>
+                  </div>
+
+                </div>
+                <div v-else ref="messagesContainer" class="card-body msg_card_body">
+                  <div
+                      v-for="(message, index) in $store.state.messages"
+                      :key="index"
+                      class="d-flex mb-4"
+                      :class="{'justify-content-start': String(message.receiver.id) === String($store.state.userId),
                             'justify-content-end': String(message.receiver.id) !== String($store.state.userId)
                   }"
-                >
-                  <div v-if="String(message.receiver.id) === String($store.state.userId)" class="img_cont_msg">
-                    <img :src="'/media/photos/' + $store.state.person.profile_picture"
-                         class="rounded-circle user_img_msg"
-                    >
-                  </div>
-                  <div
-                      :class="{'msg_cotainer': String(message.receiver.id) === String($store.state.userId),
+                  >
+                    <div v-if="String(message.receiver.id) === String($store.state.userId)" class="img_cont_msg">
+                      <img :src="'/media/photos/' + $store.state.person.profile_picture"
+                           class="rounded-circle user_img_msg"
+                      >
+                    </div>
+                    <div
+                        :class="{'msg_cotainer': String(message.receiver.id) === String($store.state.userId),
                             'msg_cotainer_send': String(message.receiver.id) !== String($store.state.userId)
                   }"
-                  >
-                    {{ message.text }}
-                    <span
-                        :class="{'msg_time': String(message.receiver.id) === String($store.state.userId),
+                    >
+                      {{ message.text }}
+                      <span
+                          :class="{'msg_time': String(message.receiver.id) === String($store.state.userId),
                             'msg_time_send': String(message.receiver.id) !== String($store.state.userId)
                   }"
-                    >{{ message.created_at | formatDate }}</span>
-                  </div>
-                  <div v-if="String(message.receiver.id) !== String($store.state.userId)" class="img_cont_msg">
-                    <img :src="'/media/photos/' + String($store.state.profilePicture)"
-                         class="rounded-circle user_img_msg">
+                      >{{ message.created_at | formatDate }}</span>
+                    </div>
+                    <div v-if="String(message.receiver.id) !== String($store.state.userId)" class="img_cont_msg">
+                      <img :src="'/media/photos/' + String($store.state.profilePicture)"
+                           class="rounded-circle user_img_msg">
+                    </div>
                   </div>
                 </div>
-              </div>
-            </transition>
-            <div class="card-footer">
-              <div class="input-group">
-                <div class="input-group-append">
-                  <span class="input-group-text attach_btn"><b-icon icon="paperclip"></b-icon></span>
-                </div>
-                <textarea v-model="newMessageText" @keyup.enter="sendMessage" name="" class="form-control type_msg"
-                          placeholder="Wpisz wiadomość..."></textarea>
-                <div class="input-group-append">
+              </transition>
+              <div class="card-footer">
+                <div class="input-group">
+                  <div class="input-group-append">
+                    <span class="input-group-text attach_btn"><b-icon icon="paperclip"></b-icon></span>
+                  </div>
+                  <textarea v-model="newMessageText" @keyup.enter="sendMessage" name="" class="form-control type_msg"
+                            placeholder="Wpisz wiadomość..."></textarea>
+                  <div class="input-group-append">
                   <span @click="sendMessage" class="input-group-text send_btn"><b-icon
                       icon="cursor-fill"></b-icon></span>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
       </div>
 
     </div>
@@ -188,6 +192,7 @@ export default {
     $route(to, from) {
       // Reagowanie na zmianę parametru routera
       if (to.params.personId !== from.params.personId) {
+        clearInterval(this.intervalId);
         this.isLoading = true;
         this.isFirstLoad = true;
         this.$store.state.person = [];
@@ -195,6 +200,7 @@ export default {
         // Wywołanie metody, która pobiera dane użytkownika
         this.getPerson();
         this.getMessage();
+        this.intervalId = setInterval(this.getMessage, 5000);
       }
     },
     conversation: {
@@ -572,6 +578,11 @@ export default {
 
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
+}
+
+.disabled {
+  opacity: 0.5;
+  pointer-events: none;
 }
 
 @media (max-width: 576px) {

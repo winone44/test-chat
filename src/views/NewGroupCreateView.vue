@@ -1,93 +1,109 @@
 <template>
-  <div>
-    <b-form @submit.prevent="addGroup">
-      <b-form-group
-          label="Nazwa grupy"
-          label-for="groupName"
-          label-cols="4"
-      >
-        <b-form-input
-            id="groupName"
-            type="text"
-            v-model="groupName"
-            @input="$v.groupName.$model = $event.trim()"
-            :state="!$v.groupName.$dirty ? null : !$v.groupName.$error"
-            required
-            placeholder="Podaj nazwę grupy"
-        ></b-form-input>
-      </b-form-group>
-      <b-form-group
-          label="Url logo"
-          label-for="logo_url"
-          label-cols="4"
-      >
-        <b-form-input
-            id="logo_url"
-            type="text"
-            v-model="logoUrl"
-            @input="$v.logoUrl.$model = $event.trim()"
-            :state="!$v.logoUrl.$dirty ? null : !$v.logoUrl.$error"
-            required
-            placeholder="Podaj adres url do logo"
-        ></b-form-input>
-      </b-form-group>
-      <b-form-group
-          label="Adres url"
-          label-for="groupSiteUrl"
-          label-cols="4"
-      >
-        <b-form-input
-            id="groupSiteUrl"
-            type="text"
-            v-model="groupSiteUrl"
-            @input="$v.groupSiteUrl.$model = $event.trim()"
-            :state="!$v.groupSiteUrl.$dirty ? null : !$v.groupSiteUrl.$error"
-            required
-            placeholder="Podaj adres url do strony organizacji"
-        ></b-form-input>
-      </b-form-group>
-      <b-form-group
-          label="Hasło do grupy"
-          label-for="password"
-          label-cols="4"
-      >
-        <b-form-input
-            id="password"
-            type="text"
-            disabled
-            v-model="password"
-            @input="$v.password.$model = $event.trim()"
-            :state="!$v.password.$dirty ? null : !$v.password.$error"
-        ></b-form-input>
-        <b-button @click.prevent="generatePassword">Generuj hasło</b-button>
-        <b-button @click.prevent="copyToClipboard">Kopiuj</b-button>
-      </b-form-group>
-      <b-button type="submit" variant="primary" :disabled="$v.$invalid">Wyślij</b-button>
-    </b-form>
-    <b-button @click="showMsgBoxTwo"></b-button>
-    <b-button @click="$bvModal.show('modal-scoped')">Open Modal</b-button>
+  <div id="login-form">
+    <div class="main-wrapper vh-100" style="background-color: #508bfc">
+      <b-container class="py-5 h-100">
+        <b-row class="d-flex justify-content-center align-items-center h-100">
+          <b-col cols="12" class="col-md-8 col-md-8 col-lg-6 col-xl-5">
+            <b-card class="shadow-2-strong" style="border-radius: 1rem">
+              <b-card-body class="p-5 text-center">
+                <h3 class="mb-5">Stwórz nową grupę</h3>
+                <div class="form-outline mb-4">
+                  <b-form @submit.prevent="addGroup">
+                    <b-form-group
+                        label="Nazwa grupy"
+                        label-for="groupName"
+                        label-cols="4"
+                    >
+                      <b-form-input
+                          id="groupName"
+                          type="text"
+                          v-model="groupName"
+                          @input="$v.groupName.$model = $event.trim()"
+                          :state="!$v.groupName.$dirty ? null : !$v.groupName.$error"
+                          required
+                          placeholder="Podaj nazwę grupy"
+                      ></b-form-input>
+                    </b-form-group>
+                    <b-form-group
+                        label="Url logo"
+                        label-for="logo_url"
+                        label-cols="4"
+                    >
+                      <b-form-input
+                          id="logo_url"
+                          type="text"
+                          v-model="logoUrl"
+                          @input="$v.logoUrl.$model = $event.trim()"
+                          :state="!$v.logoUrl.$dirty ? null : !$v.logoUrl.$error"
+                          required
+                          placeholder="Podaj adres url do logo"
+                      ></b-form-input>
+                    </b-form-group>
+                    <b-form-group
+                        label="Adres url"
+                        label-for="groupSiteUrl"
+                        label-cols="4"
+                    >
+                      <b-form-input
+                          id="groupSiteUrl"
+                          type="text"
+                          v-model="groupSiteUrl"
+                          @input="$v.groupSiteUrl.$model = $event.trim()"
+                          :state="!$v.groupSiteUrl.$dirty ? null : !$v.groupSiteUrl.$error"
+                          required
+                          placeholder="Podaj adres url do strony organizacji"
+                      ></b-form-input>
+                    </b-form-group>
+                    <b-form-group
+                        label="Hasło do grupy"
+                        label-for="password"
+                        label-cols="4"
+                    >
+                      <b-form-input
+                          id="password"
+                          type="text"
+                          disabled
+                          v-model="password"
+                          @input="$v.password.$model = $event.trim()"
+                          :state="!$v.password.$dirty ? null : !$v.password.$error"
+                      ></b-form-input>
+                      <b-button @click.prevent="generatePassword">Generuj hasło</b-button>
+                      <b-button @click.prevent="copyToClipboard">Kopiuj</b-button>
+                    </b-form-group>
+                    <b-button type="submit" variant="primary" :disabled="$v.$invalid">Wyślij</b-button>
+                  </b-form>
+                  <b-button @click="showMsgBoxTwo"></b-button>
+                  <b-button @click="$bvModal.show('modal-scoped')">Open Modal</b-button>
 
-    <b-modal
-        id="modal-scoped"
-        @ok="clearForm"
-    >
-      <template #modal-header>
-        <h5>Stworzona Grupa</h5>
-      </template>
+                  <b-modal
+                      id="modal-scoped"
+                      @ok="clearForm"
+                  >
+                    <template #modal-header>
+                      <h5>Stworzona Grupa</h5>
+                    </template>
 
-      <template #default>
-        <b-table striped hover :items="newGroupInfo" :fields="fields"></b-table>
-        <p>Dołączyłeś do grupy automatycznie. Opuścić grupę możesz w zakładce profil</p>
-        <p><b>Zachowaj ID</b> stworzonej grupy. <b>ID i hasło</b> posłuży innym użytkownikom do dołączenia do tej grupy </p>
-      </template>
+                    <template #default>
+                      <b-table striped hover :items="newGroupInfo" :fields="fields"></b-table>
+                      <p>Dołączyłeś do grupy automatycznie. Opuścić grupę możesz w zakładce profil</p>
+                      <p><b>Zachowaj ID</b> stworzonej grupy. <b>ID i hasło</b> posłuży innym użytkownikom do dołączenia
+                        do tej grupy </p>
+                    </template>
 
-      <template #modal-footer="{ ok }">
-        <!-- Przycisk z niestandardową wartością wyzwalacza zamknięcia -->
-        <b-button size="sm" variant="outline-secondary" @click="ok()">
-          Następna
-        </b-button>
-      </template>
-    </b-modal>
+                    <template #modal-footer="{ ok }">
+                      <!-- Przycisk z niestandardową wartością wyzwalacza zamknięcia -->
+                      <b-button size="sm" variant="outline-secondary" @click="ok()">
+                        Następna
+                      </b-button>
+                    </template>
+                  </b-modal>
+                </div>
+              </b-card-body>
+            </b-card>
+          </b-col>
+        </b-row>
+      </b-container>
+    </div>
   </div>
 </template>
 

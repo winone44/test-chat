@@ -18,10 +18,45 @@
           </div>
         </div>
         <div class="card mt-3">
+          <b-table
+              :per-page="perPage"
+              :current-page="currentPage"
+              hover
+              :items="$store.state.person.groups"
+              :fields="fields"
+              :tbody-tr-class="rowClass"
+
+          >
+            <template #cell(name)="data">
+              <div class="pointer" @click="getGroupMembers(data.item.id)">
+                <b-img width="24px" :src="'/media/photos/' + data.item.logo_url"></b-img>
+                {{ data.item.name }}
+              </div>
+            </template>
+            <template #head(name)>
+              Nazwa organizacji
+            </template>
+            <template #cell(group_site_url)="data">
+              <a :href="data.item.group_site_url">{{data.item.group_site_url | normalizeUrl}}</a>
+            </template>
+            <template #head(group_site_url)>
+              <AddGroupModalComponent />
+            </template>
+            <template #cell(del)="row">
+              <b-button size="sm" @click="delGroup(row.item.id, row)" class="mr-2">x</b-button>
+            </template>
+          </b-table>
+          <b-pagination
+              v-model="currentPage"
+              :total-rows="totalRows"
+              :per-page="perPage"
+              align="fill"
+              size="sm"
+              class="my-0"
+          ></b-pagination>
           <ul class="list-group list-group-flush">
             <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
               <h6>Nazwa organizacji</h6>
-              <AddGroupModalComponent />
             </li>
             <li
                 @click="getGroupMembers(index)"
@@ -32,17 +67,9 @@
                 <b-img width="24px" :src="'/media/photos/' + group.logo_url"></b-img>
                 {{ group.name }}
               </h6>
-              <span class="text-secondary">{{ group.group_site_url }}</span>
+              <span class="text-secondary">{{ group.group_site_url | normalizeUrl }}</span>
             </li>
           </ul>
-          <b-pagination
-              v-model="currentPage"
-              :total-rows="totalRows"
-              :per-page="perPage"
-              align="fill"
-              size="sm"
-              class="my-0"
-          ></b-pagination>
         </div>
       </div>
       <div class="col-md-7 col-lg-6 mb-3" >
@@ -82,7 +109,7 @@
               </l-map>
             </div>
             <div class="card mt-3">
-              <b-table striped hover :items="closest" :fields="fields">
+              <b-table striped hover :items="closest" :fields="fields2">
                 <template #cell(profile_picture)="data">
                   <img :src="'/media/photos/' + data.value"
                        class="rounded-circle user_img">
@@ -134,6 +161,17 @@ export default {
 
       fields: [
         {
+          key: 'name',
+        },
+        {
+          key: 'group_site_url',
+        },
+        {
+          key: 'del'
+        }
+      ],
+      fields2: [
+        {
           key: 'profile_picture',
           label: 'Awatar',
         },
@@ -151,22 +189,32 @@ export default {
       lines: [],
       activePerson: null,
 
-      totalRows: 1,
       currentPage: 1,
       perPage: 5,
     };
   },
+  computed: {
+    totalRows() {
+      return this.$store.state.person.groups.length;
+    }
+  },
   methods: {
+    async delGroup(groupId) {
+      await this.$store.dispatch("delMemberFromGroup", {
+        group_id: groupId
+      })
+      this.$store.state.person.groups = this.$store.state.person.groups.filter(object => object.id !== groupId);
+    },
     async getPerson() {
       await this.$store.dispatch("getPerson", {
         id: this.personId
       })
     },
-    async getGroupMembers(index) {
+    async getGroupMembers(id) {
       this.isLoading = true;
-      this.activeGroupIndex = index;
+      this.activeGroupIndex = id;
       await this.$store.dispatch("getGroupMembers", {
-        id: this.$store.state.person.groups[index].id
+        id: id
       })
       await this.start();
       this.isLoading = false;
@@ -246,10 +294,16 @@ export default {
         this.people.push(person);
       }
     },
+    rowClass(item, type) {
+      if (type === 'row') {
+        if (!item || type !== 'row') return
+        if (item.id === this.activeGroupIndex) return 'table-active'
+      }
+    },
   },
   async created() {
     await this.getPerson();
-    await this.getGroupMembers(0);
+    await this.getGroupMembers(this.$store.state.person.groups[0].id);
   }
 }
 </script>
@@ -317,7 +371,7 @@ export default {
 }
 
 .li-group-active {
-  background-color: #cbd6ea;
+  background-color: #cbd6ea !important;
 }
 
 .user_img {
@@ -325,4 +379,9 @@ export default {
   width: 60px;
   border: 1.5px solid #f5f6fa;
 }
+
+.pointer{
+  cursor: pointer;
+}
+
 </style>
