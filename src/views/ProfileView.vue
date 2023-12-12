@@ -5,8 +5,8 @@
         <div class="card">
           <div class="card-body">
             <div class="d-flex flex-column align-items-center text-center">
-              <img :src="'/media/photos/' + $store.state.person.profile_picture"
-                   class="rounded-circle user_img" width="150">
+              <b-avatar :src="'/media/photos/' + $store.state.person.profile_picture"
+                   class="rounded-circle user_img" width="150" />
               <div class="mt-3">
                 <h4>{{ $store.state.person.firstName }} {{ $store.state.person.lastName }}</h4>
                 <p class="text-secondary mb-1">Full Stack Developer</p>

@@ -6,11 +6,25 @@ import axios from "axios";
 
 Vue.use(Vuex)
 
-const API_URL = "http://127.0.0.1:8000/api/";
+// const API_URL = "http://127.0.0.1:8000/api/";
+const API_URL = "https://pksimpleweb.pythonanywhere.com/api/";
 
 const apiClient = axios.create({
     baseURL: process.env.VUE_APP_API_BASE_URL,
 });
+
+function onInternetConnectionError(store) {
+    store.dispatch('showToast', {
+        message: 'Nie można połączyć się z serwerem. Sprawdź swoje połączenie sieciowe.',
+        variant: 'danger'
+    });
+}
+
+function onAuthorizationError(error, store) {
+    const message = error.response.data.error || 'Niepoprawny email lub hasło';
+    const variant = error.response.status === 404 ? 'danger' : 'warning';
+    store.dispatch('showToast', {message, variant});
+}
 
 async function onRequestFailure(error, store) {
     const { config } = error;
@@ -19,6 +33,7 @@ async function onRequestFailure(error, store) {
         const variant = error.response.status === 404 ? 'danger' : 'warning';
         store.dispatch('showToast', { message, variant });
     }
+
     if (error.response.status === 401 && config && !config.__isRetryRequest) {
         // Jeśli odpowiedź to 401 Unauthorized, spróbuj odświeżyć tokeny
         try {
@@ -43,11 +58,7 @@ async function onRequestFailure(error, store) {
 }
 
 function onRequestSuccess(response, store) {
-    if (response.status === 201) {
-        const message = response.data.message || 'Zapisano w bazie danych';
-        store.dispatch('showToast', {message, variant: 'success'}).then(() =>{});
-        console.log('STATUS 201')
-    } else if (response.status === 200 && response.data.message) {
+    if (response.status === 200 && response.data.message) {
         const message = response.data.message
         store.dispatch('showToast', {message, variant: 'success'}).then(() =>{});
         console.log('STATUS 200')
@@ -63,9 +74,12 @@ const store = new Vuex.Store({
         profilePicture: '',
 
         messages: null,
+        intervalIds: [],
+
         person: null,
         groupMembers: null,
         newGrupInfo: null,
+        groupInfoDetail: null,
         people: [],
         backendSerwerResponse: null,
         data: {
@@ -86,7 +100,7 @@ const store = new Vuex.Store({
             }
         },
         profilePicture: state => {
-            if (state.person === null) {
+            if (state.person === null || state.person.profile_picture === undefined) {
                 return ''
             } else if (state.person.profile_picture.startsWith('http://') || state.person.profile_picture.startsWith('https://')) {
                 // Jeśli zmienna profile_picture zawiera pełny URL
@@ -94,6 +108,17 @@ const store = new Vuex.Store({
             } else {
                 // Jeśli zmienna profile_picture zawiera tylko nazwę pliku
                 return '/media/photos/' + state.person.profile_picture;
+            }
+        },
+        person: state => {
+            if (state.person === null) {
+                return {
+                    online: false,
+                    firstName: '',
+                    lastName: '',
+                }
+            } else {
+                return state.person;
             }
         }
     },
@@ -134,9 +159,6 @@ const store = new Vuex.Store({
             state.profilePicture = null;
             delete apiClient.defaults.headers.common['Authorization'];
         },
-        setBackendSerwerResponse(state, payload) {
-            state.backendSerwerResponse =  payload;
-        },
         setPerson(state, payload) {
             console.log(payload)
             state.person = payload;
@@ -160,13 +182,18 @@ const store = new Vuex.Store({
         },
         setNewGroupInfo(state, payload) {
             state.newGrupInfo = payload;
+        },
+        setGroupInfoDetail(state, payload) {
+            state.groupInfoDetail = payload;
         }
+
     },
     actions: {
         async login({commit, dispatch}, payload) {
             try {
                 console.log(payload);
                 let response = await apiClient.post(`${API_URL}accounts/login`, qs.stringify(payload))
+                if (response === undefined) return;
                 console.log(response);
                 console.log(response.data.localId);
                 commit('auth', {
@@ -196,14 +223,7 @@ const store = new Vuex.Store({
                 }, response.data.refresh_token_lifetime * 1000)
 
             } catch (e) {
-                if (e.response && e.response.status === 400) {
-                    commit('setBackendSerwerResponse', {
-                        response: e.response.data.msg
-                    });
-                }
                 console.log(e)
-
-
             }
         },
         async refreshTokens({ state, commit }) {
@@ -287,17 +307,13 @@ const store = new Vuex.Store({
                 console.log(e)
             }
         },
-        async changePassword({commit}, payload) {
+        async changePassword({state}, payload) {
             try {
                 let {data} = await apiClient.post(`${API_URL}change-password`, payload)
                 console.log(data.msg);
-                commit('setBackendSerwerResponse', data.msg)
+                console.log(state.userId)
             } catch (e) {
                 console.log(e.response.data)
-                if (e.response.data.current_password.current_password) {
-                    commit('setBackendSerwerResponse', e.response.data.current_password.current_password)
-                }
-
             }
         },
         async addFriend({state}, payload) {
@@ -441,6 +457,18 @@ const store = new Vuex.Store({
                 console.log(e)
             }
         },
+        async getGroupDetail({commit, state}, payload) {
+            if (state.userId == null) {
+                return;
+            }
+            try {
+                let {data} = await apiClient.get(`${API_URL}groups/${payload.id}`);
+                commit('setGroupInfoDetail', data)
+                console.log(data)
+            } catch(e) {
+                console.log(e)
+            }
+        },
         showToast({state},{ message, variant }) {
             this._vm.$bvToast.toast(message, {
                 title: variant === 'success' ? 'Sukces' : 'Bład',
@@ -458,7 +486,19 @@ apiClient.interceptors.response.use(
         onRequestSuccess(response, store)
         return response
     },
-    (error) => onRequestFailure(error, store)
+    (error) => {
+        if (!error.response) {
+            //Gdy błąd nie ma error.response
+            onInternetConnectionError(store)
+        } else {
+            if (error.response && error.response.status === 401 && !store.state.userId) {
+                onAuthorizationError(error, store);
+            } else  {
+                return onRequestFailure(error, store)
+            }
+        }
+
+    }
 );
 
 export default store;

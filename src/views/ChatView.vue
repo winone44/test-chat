@@ -27,8 +27,8 @@
                     <li @click="navigate">
                       <div class="d-flex bd-highlight">
                         <div class="img_cont">
-                          <img :src="'/media/photos/' + person.profile_picture"
-                               class="rounded-circle user_img">
+                          <b-avatar :src="profilePicture(person.profile_picture)"
+                               class="rounded-circle user_img" />
                         </div>
                         <div class="user_info">
                           <span>{{ person.firstName }} {{ person.lastName }}</span>
@@ -59,17 +59,17 @@
                 <div class="d-flex bd-highlight">
                   <router-link :to="{ name: 'ProfileView', params: { personId: this.personId }}">
                     <div class="img_cont">
-                      <img :src="'/media/photos/' + $store.state.person.profile_picture"
-                           class="rounded-circle user_img">
+                      <b-avatar :src="$store.getters.profilePicture"
+                           class="rounded-circle user_img" />
                       <span
                           class="online_icon"
-                          :class="{offline: !$store.state.person.online}"
+                          :class="{offline: !$store.getters.person.online}"
                       ></span>
                     </div>
                   </router-link>
                   <div class="user_info">
-                    <span>{{ $store.state.person.firstName }} {{ $store.state.person.lastName }}</span>
-                    <p>{{ $store.state.messages.length }} Wiadomości</p>
+                    <span>{{ $store.getters.person.firstName }} {{ $store.getters.person.lastName }}</span>
+                    <p>{{ $store.state.messages === null ? 0 : $store.state.messages.length}} Wiadomości</p>
                   </div>
                 </div>
                 <span @click="showActionMenu =! showActionMenu" id="action_menu_btn"><b-icon
@@ -117,16 +117,16 @@
                   }"
                   >
                     <div v-if="String(message.receiver.id) === String($store.state.userId)" class="img_cont_msg">
-                      <img :src="'/media/photos/' + $store.state.person.profile_picture"
+                      <b-avatar :src="$store.getters.profilePicture"
                            class="rounded-circle user_img_msg"
-                      >
+                      />
                     </div>
                     <div
                         :class="{'msg_cotainer': String(message.receiver.id) === String($store.state.userId),
                             'msg_cotainer_send': String(message.receiver.id) !== String($store.state.userId)
                   }"
                     >
-                      {{ message.text }}
+                      <span>{{ message.text }}</span>
                       <span
                           :class="{'msg_time': String(message.receiver.id) === String($store.state.userId),
                             'msg_time_send': String(message.receiver.id) !== String($store.state.userId)
@@ -134,23 +134,20 @@
                       >{{ message.created_at | formatDate }}</span>
                     </div>
                     <div v-if="String(message.receiver.id) !== String($store.state.userId)" class="img_cont_msg">
-                      <img :src="'/media/photos/' + String($store.state.profilePicture)"
-                           class="rounded-circle user_img_msg">
+                      <b-avatar :src="profilePicture($store.state.profilePicture)"
+                           class="rounded-circle user_img_msg" />
                     </div>
                   </div>
                 </div>
               </transition>
               <div class="card-footer">
                 <div class="input-group">
-                  <div class="input-group-append">
-                    <span class="input-group-text attach_btn"><b-icon icon="paperclip"></b-icon></span>
-                  </div>
-                  <textarea v-model="newMessageText" @keyup.enter="sendMessage" name="" class="form-control type_msg"
-                            placeholder="Wpisz wiadomość..."></textarea>
-                  <div class="input-group-append">
+                  <b-form-textarea v-model="newMessageText" @keydown="handleKeydown" name="" class="type_msg"
+                            placeholder="Wpisz wiadomość..."></b-form-textarea>
+                  <b-input-group-append class="input-group-append">
                   <span @click="sendMessage" class="input-group-text send_btn"><b-icon
                       icon="cursor-fill"></b-icon></span>
-                  </div>
+                  </b-input-group-append>
                 </div>
               </div>
             </div>
@@ -170,6 +167,7 @@ export default {
   },
   data() {
     return {
+      chatPollingInterval: 10_000,
       showActionMenu: false,
       filter: '',
       intervalId: null,
@@ -192,7 +190,7 @@ export default {
     $route(to, from) {
       // Reagowanie na zmianę parametru routera
       if (to.params.personId !== from.params.personId) {
-        clearInterval(this.intervalId);
+        this.clearAllIntervals();
         this.isLoading = true;
         this.isFirstLoad = true;
         this.$store.state.person = [];
@@ -200,7 +198,8 @@ export default {
         // Wywołanie metody, która pobiera dane użytkownika
         this.getPerson();
         this.getMessage();
-        this.intervalId = setInterval(this.getMessage, 5000);
+        let intervalId = setInterval(this.getMessage, this.chatPollingInterval);
+        this.$store.state.intervalIds.push(intervalId)
       }
     },
     conversation: {
@@ -254,14 +253,23 @@ export default {
       }
       this.isLoading = false;
     },
+    handleKeydown(event) {
+      if (event.key === "Enter" && !event.shiftKey) {
+        event.preventDefault(); // Zapobiega domyślnemu zachowaniu, czyli dodaniu nowej linii
+        this.sendMessage();
+      }
+    },
     async sendMessage() {
-      await this.$store.dispatch('sendMessages', {
-        sender: this.$store.state.userId,
-        receiver: this.personId,
-        text: this.newMessageText
-      })
+      if (this.newMessageText) {
+        await this.$store.dispatch('sendMessages', {
+          sender: this.$store.state.userId,
+          receiver: this.personId,
+          text: this.newMessageText
+        })
+        this.conversation = this.$store.state.messages
+      }
+      console.log(this.newMessageText);
       this.newMessageText = '';
-      this.conversation = this.$store.state.messages
     },
     scrollToBottom() {
       this.$nextTick(() => {
@@ -293,16 +301,34 @@ export default {
       };
 
       requestAnimationFrame(animate);
+
     },
+    clearAllIntervals() {
+      for (let i = 0; i < this.$store.state.intervalIds.length; i++) {
+        clearInterval(this.$store.state.intervalIds[i]);
+      }
+      // Opróżnienie listy po zatrzymaniu wszystkich interwałów
+      this.$store.state.intervalIds = [];
+    },
+    profilePicture(profilePicture) {
+       if (profilePicture.startsWith('http://') || profilePicture.startsWith('https://')) {
+        // Jeśli zmienna profile_picture zawiera pełny URL
+        return profilePicture;
+      } else {
+        // Jeśli zmienna profile_picture zawiera tylko nazwę pliku
+        return '/media/photos/' + profilePicture;
+      }
+    }
   },
   created() {
     this.getPeople();
     this.getPerson();
     this.getMessage();
-    this.intervalId = setInterval(this.getMessage, 5000);
+    let intervalId = setInterval(this.getMessage, this.chatPollingInterval);
+    this.$store.state.intervalIds.push(intervalId)
   },
   beforeRouteLeave(to, from, next) {
-    clearInterval(this.intervalId);
+    this.clearAllIntervals();
     next();
   },
 }
@@ -380,7 +406,6 @@ export default {
 }
 
 .send_btn {
-  border-radius: 0 15px 15px 0 !important;
   background-color: rgba(0, 0, 0, 0.3) !important;
   border: 0 !important;
   color: white !important;
@@ -477,6 +502,7 @@ export default {
   background-color: #82ccdd;
   padding: 10px;
   position: relative;
+  white-space: pre-wrap;
 }
 
 .msg_cotainer_send {
@@ -487,6 +513,7 @@ export default {
   background-color: #78e08f;
   padding: 10px;
   position: relative;
+  white-space: pre-wrap;
 }
 
 .msg_time {

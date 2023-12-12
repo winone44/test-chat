@@ -25,9 +25,6 @@
                       <b-form-invalid-feedback>
                         <span v-if="!$v.firstName.required">To pole jest wymagane. </span>
                       </b-form-invalid-feedback>
-                      <b-form-valid-feedback>
-                        <span>Wszystko jest okej. </span>
-                      </b-form-valid-feedback>
                     </b-form-group>
                     <b-form-group
                         label="Nazwisko:"
@@ -45,9 +42,6 @@
                       <b-form-invalid-feedback>
                         <span v-if="!$v.lastName.required">To pole jest wymagane. </span>
                       </b-form-invalid-feedback>
-                      <b-form-valid-feedback>
-                        <span>Wszystko jest okej. </span>
-                      </b-form-valid-feedback>
                     </b-form-group>
                     <b-form-group
                         label="Nazwa użytkownika:"
@@ -65,9 +59,6 @@
                       <b-form-invalid-feedback>
                         <span v-if="!$v.username.required">To pole jest wymagane. </span>
                       </b-form-invalid-feedback>
-                      <b-form-valid-feedback>
-                        <span>Wszystko jest okej. </span>
-                      </b-form-valid-feedback>
                     </b-form-group>
                     <b-form-group
                         label="Email:"
@@ -86,9 +77,6 @@
                         <span v-if="!$v.email.required">To pole jest wymagane. </span>
                         <span v-if="!$v.email.email">Błędny adres email. </span>
                       </b-form-invalid-feedback>
-                      <b-form-valid-feedback>
-                        <span>Wszystko jest okej. </span>
-                      </b-form-valid-feedback>
                     </b-form-group>
 
                     <b-form-group
@@ -110,9 +98,6 @@
                             v-if="!$v.date_of_birth.minAge">Osoby poniżej 13 roku życia nie mogą się zarejestrować.</span>
                         <span v-if="!$v.date_of_birth.maxAge">Osoby powyżej 120 lat nie przechodzą validacji.</span>
                       </b-form-invalid-feedback>
-                      <b-form-valid-feedback>
-                        <span>Wszystko jest okej. </span>
-                      </b-form-valid-feedback>
                     </b-form-group>
 
                     <b-form-group
@@ -133,9 +118,6 @@
                         <span v-if="!$v.password.required">To pole jest wymagane. </span>
                         <span v-if="!$v.password.minLength">Hasło musi posiadać conajmniej 8 znaków. </span>
                       </b-form-invalid-feedback>
-                      <b-form-valid-feedback>
-                        <span>Wszystko jest okej. </span>
-                      </b-form-valid-feedback>
                     </b-form-group>
 
                     <b-form-group
@@ -156,14 +138,7 @@
                         <span v-if="!$v.password2.required">To pole jest wymagane. </span>
                         <span v-if="!$v.password2.sameAsPassword">Hasła muszą być identyczne.</span>
                       </b-form-invalid-feedback>
-                      <b-form-valid-feedback>
-                        <span>Wszystko jest okej. </span>
-                      </b-form-valid-feedback>
                     </b-form-group>
-
-                    <transition name="fade">
-                      <b-alert :show="error !== null" variant="danger">{{ error }}</b-alert>
-                    </transition>
 
                     <b-button type="submit" variant="primary" :disabled="$v.$invalid">Wyślij</b-button> &nbsp;
                     <b-button type="reset" variant="danger">Reset</b-button>
@@ -180,9 +155,6 @@
 
 <script>
 import {required, minLength, email, sameAs} from 'vuelidate/lib/validators'
-import router from "@/router";
-
-// import authAxios from "@/auth-axios";
 
 function minAge(age) {
   return function (value) {

@@ -8,6 +8,7 @@ import Register from "@/views/Register";
 import ProfileView from "@/views/ProfileView";
 import LocationCheckView from "@/views/LocationCheckView";
 import NewGroupCreateView from "@/views/NewGroupCreateView";
+import JoinGroupView from "@/views/JoinGroupView";
 
 Vue.use(VueRouter)
 
@@ -78,6 +79,13 @@ const routes = [
     name: 'NewGroupCreateView',
     component: NewGroupCreateView,
     beforeEnter: authGuard,
+  },
+  {
+    path: '/join-to-group/:groupId',
+    name: 'JoinGroup',
+    component: JoinGroupView,
+    beforeEnter: authGuard,
+    props: true
   },
   // {
   //   path: '/about',

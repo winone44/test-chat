@@ -26,9 +26,6 @@
                         <span v-if="!$v.email.required">To pole jest wymagane. </span>
                         <span v-if="!$v.email.email">Błędny adres email. </span>
                       </b-form-invalid-feedback>
-                      <b-form-valid-feedback>
-                        <span>Wszystko jest okej. </span>
-                      </b-form-valid-feedback>
                     </b-form-group>
                     <b-form-group
                         label="Hasło:"
@@ -47,9 +44,6 @@
                         <span v-if="!$v.password.required">To pole jest wymagane. </span>
                         <span v-if="!$v.password.minLength">Hasło musi posiadać conajmniej 8 znaków. </span>
                       </b-form-invalid-feedback>
-                      <b-form-valid-feedback>
-                        <span>Wszystko jest okej. </span>
-                      </b-form-valid-feedback>
                     </b-form-group>
 <!--                    <p>{{ $store.state.backendSerwerResponse }}</p>-->
                     <b-button type="submit" class="btn-lg btn-block mt-5" variant="primary">Zaloguj się</b-button>
