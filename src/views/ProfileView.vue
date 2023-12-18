@@ -5,10 +5,10 @@
         <div class="card">
           <div class="card-body">
             <div class="d-flex flex-column align-items-center text-center">
-              <b-avatar :src="'/media/photos/' + $store.state.person.profile_picture"
-                   class="rounded-circle user_img" width="150" />
+              <b-avatar :src="$store.getters.profilePicture"
+                        class="rounded-circle user_img" width="150"/>
               <div class="mt-3">
-                <h4>{{ $store.state.person.firstName }} {{ $store.state.person.lastName }}</h4>
+                <h4>{{ $store.getters.person.firstName }} {{ $store.getters.person.lastName }}</h4>
                 <p class="text-secondary mb-1">Full Stack Developer</p>
                 <p class="text-muted font-size-sm">Bay Area, San Francisco, CA</p>
                 <button class="btn btn-primary">Follow</button>
@@ -22,14 +22,14 @@
               :per-page="perPage"
               :current-page="currentPage"
               hover
-              :items="$store.state.person.groups"
+              :items="$store.getters.person.groups"
               :fields="fields"
               :tbody-tr-class="rowClass"
 
           >
             <template #cell(name)="data">
               <div class="pointer" @click="getGroupMembers(data.item.id)">
-                <b-img width="24px" :src="'/media/photos/' + data.item.logo_url"></b-img>
+                <b-img width="24px" :src="logoIcon(data.item.logo_url)"></b-img>
                 {{ data.item.name }}
               </div>
             </template>
@@ -37,13 +37,27 @@
               Nazwa organizacji
             </template>
             <template #cell(group_site_url)="data">
-              <a :href="data.item.group_site_url">{{data.item.group_site_url | normalizeUrl}}</a>
+              <a :href="data.item.group_site_url">{{ data.item.group_site_url | normalizeUrl }}</a>
             </template>
             <template #head(group_site_url)>
-              <AddGroupModalComponent />
+              <div class="d-flex justify-content-between">
+                <div>
+                  <AddGroupModalComponent/>
+                </div>
+                <div @click="unLockDelButtons()">
+                  <div v-if="isUnlockDelButtons">
+                    <b-icon icon="unlock-fill"></b-icon>
+                  </div>
+                  <div v-else>
+                    <b-icon icon="lock-fill"></b-icon>
+                  </div>
+                </div>
+              </div>
             </template>
-            <template #cell(del)="row">
-              <b-button size="sm" @click="delGroup(row.item.id, row)" class="mr-2">x</b-button>
+            <template v-if="isUnlockDelButtons" #cell(del)="row">
+              <b-button size="sm" variant="danger" @click="delGroup(row.item.id, row)" class="mr-2">
+                <b-icon icon="trash-fill"></b-icon>
+              </b-button>
             </template>
           </b-table>
           <b-pagination
@@ -54,25 +68,9 @@
               size="sm"
               class="my-0"
           ></b-pagination>
-          <ul class="list-group list-group-flush">
-            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-              <h6>Nazwa organizacji</h6>
-            </li>
-            <li
-                @click="getGroupMembers(index)"
-                :class="{ 'li-group-active': activeGroupIndex === index}"
-                v-for="(group, index) in $store.state.person.groups"
-                :key="index" class="list-group-item d-flex justify-content-between align-items-center flex-wrap li-group">
-              <h6 class="mb-0">
-                <b-img width="24px" :src="'/media/photos/' + group.logo_url"></b-img>
-                {{ group.name }}
-              </h6>
-              <span class="text-secondary">{{ group.group_site_url | normalizeUrl }}</span>
-            </li>
-          </ul>
         </div>
       </div>
-      <div class="col-md-7 col-lg-6 mb-3" >
+      <div class="col-md-7 col-lg-6 mb-3">
         <transition name="fade" mode="out-in">
           <div v-if="isLoading" class="card-body">
             <div class="d-flex justify-content-center">
@@ -96,7 +94,7 @@
                   <l-icon
                       :icon-size="[32, 32]"
                       :icon-anchor="[16, 32]"
-                      :icon-url="'/media/photos/' + person.profile_picture" >
+                      :icon-url="profilePicture(person.profile_picture) === '/media/photos/' ? '/media/photos/avatar.png' : profilePicture(person.profile_picture)">
                   </l-icon>
                   <l-tooltip>{{ person.name }}</l-tooltip>
                 </l-marker>
@@ -111,8 +109,8 @@
             <div class="card mt-3">
               <b-table striped hover :items="closest" :fields="fields2">
                 <template #cell(profile_picture)="data">
-                  <img :src="'/media/photos/' + data.value"
-                       class="rounded-circle user_img">
+                  <b-avatar :src="profilePicture(data.value)"
+                            class="rounded-circle user_img"/>
                 </template>
               </b-table>
             </div>
@@ -148,6 +146,8 @@ export default {
 
       blockDetails: false,
       isLoading: true,
+      isUnlockDelButtons: false,
+      permit: false,
 
       url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
       attribution:
@@ -165,9 +165,6 @@ export default {
         },
         {
           key: 'group_site_url',
-        },
-        {
-          key: 'del'
         }
       ],
       fields2: [
@@ -195,15 +192,39 @@ export default {
   },
   computed: {
     totalRows() {
-      return this.$store.state.person.groups.length;
+      return this.$store.getters.person.groups.length;
     }
   },
   methods: {
+    unLockDelButtons() {
+      if (this.isUnlockDelButtons) {
+        this.fields = this.fields.filter(field => field.key !== 'del');
+      } else {
+        this.fields.push({key: 'del'});
+      }
+      this.isUnlockDelButtons = !this.isUnlockDelButtons;
+    },
     async delGroup(groupId) {
-      await this.$store.dispatch("delMemberFromGroup", {
-        group_id: groupId
+      this.$bvModal.msgBoxConfirm('Potwierdź, że chcesz odłączyć się od grupy.', {
+        title: 'Opuszczanie grupy',
+        size: 'sm',
+        buttonSize: 'sm',
+        okVariant: 'danger',
+        okTitle: 'TAK',
+        cancelTitle: 'NIE',
+        footerClass: 'p-2',
+        hideHeaderClose: false,
+        centered: true
+      }).then(value => {
+        this.permit = value
       })
-      this.$store.state.person.groups = this.$store.state.person.groups.filter(object => object.id !== groupId);
+      if (this.permit) {
+        await this.$store.dispatch("delMemberFromGroup", {
+          group_id: groupId
+        })
+        this.$store.state.person.groups = this.$store.state.person.groups.filter(object => object.id !== groupId);
+      }
+      this.permit = false;
     },
     async getPerson() {
       await this.$store.dispatch("getPerson", {
@@ -239,10 +260,10 @@ export default {
     calculateLines(selectedPerson) {
       // Funkcja oblicza odległości od wybranego punktu do wszystkich innych
       let distances = this.people.map(person => {
-        let { latitude, longitude, ...restOfProperties } = person;
+        let {latitude, longitude, ...restOfProperties} = person;
         let distance = this.calculateDistance(latitude, longitude,
             selectedPerson.latitude, selectedPerson.longitude)
-        return { ...restOfProperties, latitude, longitude, distance };
+        return {...restOfProperties, latitude, longitude, distance};
       });
       console.log(distances);
       // Sortowanie ludzi według odległości od wybranego punktu
@@ -300,6 +321,24 @@ export default {
         if (item.id === this.activeGroupIndex) return 'table-active'
       }
     },
+    logoIcon(logoIcon) {
+      if (logoIcon.startsWith('http://') || logoIcon.startsWith('https://')) {
+        // Jeśli zmienna profile_picture zawiera pełny URL
+        return logoIcon;
+      } else {
+        // Jeśli zmienna profile_picture zawiera tylko nazwę pliku
+        return '/media/photos/' + logoIcon;
+      }
+    },
+    profilePicture(profilePicture) {
+      if (profilePicture.startsWith('http://') || profilePicture.startsWith('https://')) {
+        // Jeśli zmienna profile_picture zawiera pełny URL
+        return profilePicture;
+      } else {
+        // Jeśli zmienna profile_picture zawiera tylko nazwę pliku
+        return '/media/photos/' + profilePicture;
+      }
+    }
   },
   async created() {
     await this.getPerson();
@@ -380,7 +419,7 @@ export default {
   border: 1.5px solid #f5f6fa;
 }
 
-.pointer{
+.pointer {
   cursor: pointer;
 }
 

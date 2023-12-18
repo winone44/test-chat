@@ -5,7 +5,7 @@
           id="input-group-name"
           label="Nazwa:"
           label-for="input-name"
-          :description="'Grupa ma ' + $store.state.groupInfoDetail.user_count + ' użytkowników'"
+          :description="$store.state.groupInfoDetail.user_count | declineUser"
       >
         <b-form-input
             id="input-id"
@@ -31,23 +31,20 @@
         ></b-form-input>
       </b-form-group>
       <b-form-group
-          id="input-group-id"
-          label="ID:"
-          label-for="input-id"
+          id="input-group-password"
+          label="Hasło:"
+          label-for="input-password"
       >
         <b-form-input
-            id="input-id"
-            type="number"
-            v-model="$store.state.groupInfoDetail.id"
+            id="input-password"
+            type="text"
+            v-model="password"
             disabled
-            placeholder="Enter group ID"
+            placeholder="Enter group password"
             required
         ></b-form-input>
       </b-form-group>
     </b-form>
-    {{$store.state.groupInfoDetail.id}},
-    {{$store.state.groupInfoDetail.name}}
-    {{$store.state.groupInfoDetail.user_count}}
   </div>
 </template>
 

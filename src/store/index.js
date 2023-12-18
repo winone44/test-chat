@@ -6,11 +6,10 @@ import axios from "axios";
 
 Vue.use(Vuex)
 
-// const API_URL = "http://127.0.0.1:8000/api/";
-const API_URL = "https://pksimpleweb.pythonanywhere.com/api/";
-
 const apiClient = axios.create({
     baseURL: process.env.VUE_APP_API_BASE_URL,
+    // baseURL: "https://pksimpleweb.pythonanywhere.com/api/",
+    // baseURL: "http://127.0.0.1:8000/api/",
 });
 
 function onInternetConnectionError(store) {
@@ -22,15 +21,16 @@ function onInternetConnectionError(store) {
 
 function onAuthorizationError(error, store) {
     const message = error.response.data.error || 'Niepoprawny email lub hasło';
-    const variant = error.response.status === 404 ? 'danger' : 'warning';
+    const variant = 'danger';
     store.dispatch('showToast', {message, variant});
 }
 
 async function onRequestFailure(error, store) {
     const { config } = error;
+
     if (error.response && error.response.status !== 401) {
         const message = error.response.data.error || 'Wystąpił nieoczekiwany błąd';
-        const variant = error.response.status === 404 ? 'danger' : 'warning';
+        const variant = 'warning';
         store.dispatch('showToast', { message, variant });
     }
 
@@ -60,8 +60,7 @@ async function onRequestFailure(error, store) {
 function onRequestSuccess(response, store) {
     if (response.status === 200 && response.data.message) {
         const message = response.data.message
-        store.dispatch('showToast', {message, variant: 'success'}).then(() =>{});
-        console.log('STATUS 200')
+        store.dispatch('showToast', {message, variant: 'success'});
     }
 }
 
@@ -81,6 +80,7 @@ const store = new Vuex.Store({
         newGrupInfo: null,
         groupInfoDetail: null,
         people: [],
+        peopleInbox: [],
         backendSerwerResponse: null,
         data: {
             people: [],
@@ -116,11 +116,19 @@ const store = new Vuex.Store({
                     online: false,
                     firstName: '',
                     lastName: '',
+                    groups: [
+                        {
+                            group_site_url: '',
+                            id: 0,
+                            logo_url: '',
+                            name: 'Wczytywanie...',
+                        }
+                    ]
                 }
             } else {
                 return state.person;
             }
-        }
+        },
     },
     mutations: {
         auth(state, payload) {
@@ -166,6 +174,9 @@ const store = new Vuex.Store({
         setPeople(state, payload) {
             state.people = payload;
         },
+        setPeopleInbox(state, payload) {
+            state.peopleInbox = payload;
+        },
         setMessages(state, payload) {
             state.messages = payload;
         },
@@ -192,7 +203,7 @@ const store = new Vuex.Store({
         async login({commit, dispatch}, payload) {
             try {
                 console.log(payload);
-                let response = await apiClient.post(`${API_URL}accounts/login`, qs.stringify(payload))
+                let response = await apiClient.post(`accounts/login`, qs.stringify(payload))
                 if (response === undefined) return;
                 console.log(response);
                 console.log(response.data.localId);
@@ -228,7 +239,7 @@ const store = new Vuex.Store({
         },
         async refreshTokens({ state, commit }) {
             try {
-                let response = await apiClient.post(`${API_URL}accounts/token-refresh/`, {
+                let response = await apiClient.post(`accounts/token-refresh/`, {
                     refresh: state.refreshToken,
                 });
                 commit('updateTokens', {
@@ -295,7 +306,7 @@ const store = new Vuex.Store({
         },
         async register({commit}, payload) {
             try {
-                let response = await apiClient.post(`${API_URL}accounts/register`, qs.stringify(payload))
+                let response = await apiClient.post(`accounts/register`, qs.stringify(payload))
                 console.log(response);
 
 
@@ -309,7 +320,7 @@ const store = new Vuex.Store({
         },
         async changePassword({state}, payload) {
             try {
-                let {data} = await apiClient.post(`${API_URL}change-password`, payload)
+                let {data} = await apiClient.post(`change-password`, payload)
                 console.log(data.msg);
                 console.log(state.userId)
             } catch (e) {
@@ -318,7 +329,7 @@ const store = new Vuex.Store({
         },
         async addFriend({state}, payload) {
             try {
-                let {data} = await apiClient.post(`${API_URL}accounts/friend/`, payload)
+                let {data} = await apiClient.post(`accounts/friend/`, payload)
                 console.log(data);
                 console.log(state.userId);
             } catch (e) {
@@ -330,7 +341,7 @@ const store = new Vuex.Store({
                 return;
             }
             try {
-                let {data} = await apiClient.get(`${API_URL}accounts/friend/` + payload.id + '/');
+                let {data} = await apiClient.get(`accounts/friend/` + payload.id + '/');
                 console.log('zrobione')
                 commit('setFriends', Object.values(data))
             } catch(e) {
@@ -342,18 +353,30 @@ const store = new Vuex.Store({
                 return;
             }
             try {
-                await apiClient.delete(`${API_URL}accounts/friend/`, { data: payload });
+                await apiClient.delete(`accounts/friend/`, { data: payload });
             } catch(e) {
                 console.log(e)
             }
         },
-        async getPeople({commit, state}, payload) {
+        async getPeople({commit, state}) {
             if (state.userId == null) {
                 return;
             }
             try {
-                let {data} = await apiClient.get(`${API_URL}list_users_with_distance/` + payload.id + '/');
+                let {data} = await apiClient.get(`list_users_with_distance/`);
                 commit('setPeople', Object.values(data))
+            } catch(e) {
+                console.log(e)
+            }
+        },
+        async getPeopleInbox({commit, state}) {
+            if (state.userId == null) {
+                return;
+            }
+            try {
+                let {data} = await apiClient.get(`list_users_by_recent_message/`);
+                commit('setPeopleInbox', Object.values(data))
+                console.log(data)
             } catch(e) {
                 console.log(e)
             }
@@ -363,7 +386,7 @@ const store = new Vuex.Store({
                 return;
             }
             try {
-                let {data} = await apiClient.get(`${API_URL}accounts/person/` + payload.id + '/');
+                let {data} = await apiClient.get(`accounts/person/` + payload.id + '/');
                 console.log(data)
                 commit('setPerson', data)
             } catch(e) {
@@ -375,7 +398,7 @@ const store = new Vuex.Store({
                 return;
             }
             try {
-                let {data} = await apiClient.patch(`${API_URL}accounts/person/${id}/patch/`, newData);
+                let {data} = await apiClient.patch(`accounts/person/${id}/patch/`, newData);
                 console.log(data)
                 commit('setPerson', data)
             } catch(e) {
@@ -387,7 +410,7 @@ const store = new Vuex.Store({
                 return;
             }
             try {
-                let {data} = await apiClient.patch(`${API_URL}accounts/person/${id}/patch/`, newData);
+                let {data} = await apiClient.patch(`accounts/person/${id}/patch/`, newData);
                 console.log(data)
                 commit('setPerson', data)
             } catch(e) {
@@ -399,7 +422,7 @@ const store = new Vuex.Store({
                 return;
             }
             try {
-                let {data} = await apiClient.get(`${API_URL}messages/`, {params: payload});
+                let {data} = await apiClient.get(`messages/`, {params: payload});
                 console.log(data)
                 commit('setMessages', Object.values(data))
             } catch(e) {
@@ -408,7 +431,7 @@ const store = new Vuex.Store({
         },
         async sendMessages({commit}, payload) {
             try {
-                let {data} = await apiClient.post(`${API_URL}messages/`, payload)
+                let {data} = await apiClient.post(`messages/`, payload)
                 console.log(data);
                 commit('addMessages', data)
                 //console.log(state.userId);
@@ -421,7 +444,7 @@ const store = new Vuex.Store({
                 return;
             }
             try {
-                let {data} = await apiClient.get(`${API_URL}groups/${payload.id}/users/`);
+                let {data} = await apiClient.get(`groups/${payload.id}/users/`);
                 console.log(data)
                 commit('setGroupMembers', data)
             } catch(e) {
@@ -430,7 +453,7 @@ const store = new Vuex.Store({
         },
         async addMemberToGroup({commit}, payload) {
             try {
-                let {data} = await apiClient.post(`${API_URL}group/join/`, payload)
+                let {data} = await apiClient.post(`group/join/`, payload)
                 console.log(data);
                 commit('addGroupToUser', payload)
             } catch (e) {
@@ -439,7 +462,7 @@ const store = new Vuex.Store({
         },
         async addGroup({commit}, payload) {
             try {
-                let {data} = await apiClient.post(`${API_URL}group/create/`, payload)
+                let {data} = await apiClient.post(`group/create/`, payload)
                 console.log(data);
                 commit('setNewGroupInfo', data)
             } catch (e) {
@@ -451,7 +474,7 @@ const store = new Vuex.Store({
                 return;
             }
             try {
-                let {data} = await apiClient.delete(`${API_URL}group/leave/`,  {data: payload });
+                let {data} = await apiClient.delete(`group/leave/`,  {data: payload });
                 console.log(data)
             } catch(e) {
                 console.log(e)
@@ -462,7 +485,7 @@ const store = new Vuex.Store({
                 return;
             }
             try {
-                let {data} = await apiClient.get(`${API_URL}groups/${payload.id}`);
+                let {data} = await apiClient.get(`groups/${payload.id}`);
                 commit('setGroupInfoDetail', data)
                 console.log(data)
             } catch(e) {
@@ -471,7 +494,7 @@ const store = new Vuex.Store({
         },
         showToast({state},{ message, variant }) {
             this._vm.$bvToast.toast(message, {
-                title: variant === 'success' ? 'Sukces' : 'Bład',
+                title: variant === 'success' ? 'Sukces' : 'Błąd',
                 variant: variant,
                 solid: true
             });

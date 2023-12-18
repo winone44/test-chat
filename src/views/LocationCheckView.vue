@@ -60,9 +60,7 @@ export default {
       }
     },
     async getPeople() {
-      await this.$store.dispatch("getPeople", {
-        id: this.$store.state.userId
-      })
+      await this.$store.dispatch("getPeople")
     },
   },
   mounted() {

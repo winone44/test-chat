@@ -140,6 +140,17 @@
                       </b-form-invalid-feedback>
                     </b-form-group>
 
+                    <b-form-group>
+                    <b-form-checkbox
+                        id="checkbox-1"
+                        v-model="agreeTerms"
+                        name="checkbox-1"
+                        required
+                    >
+                      Jestem osobą upoważnioną do Rejestracji przez Administrację oraz <br> Akceptuję warunki i sposób użytkowania
+                    </b-form-checkbox>
+                    </b-form-group>
+
                     <b-button type="submit" variant="primary" :disabled="$v.$invalid">Wyślij</b-button> &nbsp;
                     <b-button type="reset" variant="danger">Reset</b-button>
                   </b-form>
@@ -178,6 +189,8 @@ function maxAge(age) {
   }
 }
 
+const isChecked = value => value === true;
+
 export default {
   name: 'register-main',
   data() {
@@ -188,7 +201,8 @@ export default {
       email: '',
       password: '',
       password2: '',
-      date_of_birth: ''
+      date_of_birth: '',
+      agreeTerms: false
     }
   },
   validations: {
@@ -218,6 +232,9 @@ export default {
       required,
       minAge: minAge(13),
       maxAge: maxAge(120)
+    },
+    agreeTerms: {
+      isChecked
     }
   },
   methods: {

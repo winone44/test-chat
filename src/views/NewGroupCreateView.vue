@@ -84,7 +84,11 @@
                     </template>
 
                     <template #default>
-                      <b-table striped hover :items="newGroupInfo" :fields="fields"></b-table>
+                      <b-table striped hover :items="newGroupInfo" :fields="fields">
+                        <template #cell(share)="data">
+                          <b-button @click="prepareShareGroupAccessLink(data.item.id, data.item.password)"><b-icon icon="share" /></b-button>
+                        </template>
+                      </b-table>
                       <p>Dołączyłeś do grupy automatycznie. Opuścić grupę możesz w zakładce profil</p>
                       <p><b>Zachowaj ID</b> stworzonej grupy. <b>ID i hasło</b> posłuży innym użytkownikom do dołączenia
                         do tej grupy </p>
@@ -140,6 +144,10 @@ export default {
         {
           key: 'password',
           label: 'Hasło'
+        },
+        {
+          key: 'share',
+          label: 'Udostępnij'
         }
       ]
     }
@@ -182,6 +190,22 @@ export default {
     async copyToClipboard() {
       try {
         await navigator.clipboard.writeText(this.password);
+        this.$bvToast.toast('Hasło skopiowane do schowka', {
+          title: 'Sukces',
+          variant: 'success',
+          autoHideDelay: 5000,
+        })
+      } catch (err) {
+        this.$bvToast.toast(`Nie udało się skopiować hasła do schowka: ${err}`, {
+          title: 'Błąd',
+          variant: 'danger',
+          autoHideDelay: 5000,
+        })
+      }
+    },
+    async prepareShareGroupAccessLink(id, password) {
+      try {
+        await navigator.clipboard.writeText(`${process.env.VUE_APP_BASE_URL}join-to-group/${id}?password=${password}`);
         this.$bvToast.toast('Hasło skopiowane do schowka', {
           title: 'Sukces',
           variant: 'success',

@@ -47,3 +47,11 @@ Vue.filter("normalizeUrl", function (url) {
     // Usuwa 'www.' jeśli istnieje
     return stripped.replace('www.', '');
 })
+
+Vue.filter('declineUser', function (number) {
+    if (number === 1) {
+        return `Grupa ma ${number} użytkownika`;
+    } else {
+        return `Grupa ma ${number} użytkowników`;
+    }
+})

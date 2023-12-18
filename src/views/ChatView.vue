@@ -5,153 +5,199 @@
         Reload?
       </div>
       <div v-else class="row justify-content-center h-100">
-          <div class="col-md-4 col-xl-3 chat">
-            <div class="card mb-sm-3 mb-md-0 contacts_card">
-              <div class="card-header">
-                <div class="input-group">
-                  <input v-model="filter" type="text" placeholder="Wyszukiwanie..." name="" class="form-control search">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text search_btn"><b-icon icon="search"></b-icon></span>
-                  </div>
+        <div class="col-md-4 col-xl-3 chat">
+          <div class="card mb-sm-3 mb-md-0 contacts_card">
+            <div class="card-header">
+              <div class="input-group">
+                <input v-model="filter" type="text" placeholder="Wyszukiwanie..." name="" class="form-control search">
+                <div class="input-group-prepend">
+                  <span class="input-group-text search_btn"><b-icon icon="search"></b-icon></span>
                 </div>
               </div>
-              <div class="card-body contacts_body">
-                <ul class="contacts">
-                  <router-link
-                      custom v-slot="{ navigate }"
-                      :to="{name:'ChatView', params:{personId: person.id}}"
-                      :class="{active: person.username === $store.state.username, disabled: isLoading }"
-                      v-for="(person, index) in filteredPeople"
-                      :key="index"
-                  >
-                    <li @click="navigate">
-                      <div class="d-flex bd-highlight">
-                        <div class="img_cont">
-                          <b-avatar :src="profilePicture(person.profile_picture)"
-                               class="rounded-circle user_img" />
+            </div>
+            <div class="card-body contacts_body">
+              <swiper
+                  :slides-per-view="1"
+                  @slideChange="onSlideChange">
+                <swiper-slide>
+                  <ul class="contacts">
+                    <router-link
+                        custom v-slot="{ navigate }"
+                        :to="{name:'ChatView', params:{personId: person.id}}"
+                        :class="{active: person.username === $store.state.username, disabled: isLoading }"
+                        v-for="(person, index) in filteredPeople"
+                        :key="index"
+                    >
+                      <li @click="navigate">
+                        <div class="d-flex bd-highlight">
+                          <div class="img_cont">
+                            <b-avatar :src="profilePicture(person.profile_picture)"
+                                      class="rounded-circle user_img"/>
+                          </div>
+                          <div class="user_info">
+                            <span>{{ person.firstName }} {{ person.lastName }}</span>
+                            <b-row>
+                              <b-col>
+                                <p>{{ person.distance | formatDistance }}</p>
+                              </b-col>
+                              <b-col>
+                                <img v-for="(group, index2) in person.groups" :key="index2" width="20px"
+                                     :src="'/media/photos/' + group.logo_url">
+                              </b-col>
+                            </b-row>
+                          </div>
                         </div>
-                        <div class="user_info">
-                          <span>{{ person.firstName }} {{ person.lastName }}</span>
-                          <b-row>
-                            <b-col>
-                              <p>{{ person.distance | formatDistance }}</p>
-                            </b-col>
-                            <b-col>
-                              <img v-for="(group, index2) in person.groups" :key="index2" width="20px"
-                                   :src="'/media/photos/' + group.logo_url">
-                            </b-col>
-                          </b-row>
-                        </div>
-                      </div>
-                    </li>
+                      </li>
 
+                    </router-link>
+                  </ul>
+                </swiper-slide>
+                <swiper-slide>
+                  INBOX
+                  <ul class="contacts">
+                    <router-link
+                        custom v-slot="{ navigate }"
+                        :to="{name:'ChatView', params:{personId: person.id}}"
+                        :class="{active: person.username === $store.state.username, disabled: isLoading }"
+                        v-for="(person, index) in filteredPeopleInbox"
+                        :key="index"
+                    >
+                      <li @click="navigate">
+                        <div class="d-flex bd-highlight">
+                          <div class="img_cont">
+                            <b-avatar :src="profilePicture(person.profile_picture)"
+                                      class="rounded-circle user_img"/>
+                            <span
+                                class="online_icon"
+                                :class="{offline: !filteredPeopleInbox.online}"
+                            ></span>
+                          </div>
+                          <div class="user_info">
+                            <span>{{ person.firstName }} {{ person.lastName }}</span>
+                            <b-row>
+                              <b-col>
+                                <p>{{ person.distance | formatDistance }}</p>
+                              </b-col>
+                              <b-col>
+                                <img v-for="(group, index2) in person.groups" :key="index2" width="20px"
+                                     :src="'/media/photos/' + group.logo_url">
+                              </b-col>
+                            </b-row>
+                          </div>
+                        </div>
+                      </li>
+
+                    </router-link>
+                  </ul>
+                </swiper-slide>
+              </swiper>
+            </div>
+            <div class="card-footer">
+              <b-button variant="primary" :to="{name: 'ChatView', params: {personId: this.$store.state.userId}}">
+                Notatnik
+              </b-button>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-8 col-xl-6 chat">
+          <div class="card">
+            <div class="card-header msg_head">
+              <div class="d-flex bd-highlight">
+                <router-link :to="{ name: 'ProfileView', params: { personId: this.personId }}">
+                  <div class="img_cont">
+                    <b-avatar :src="$store.getters.profilePicture"
+                              class="rounded-circle user_img"/>
+                    <span
+                        class="online_icon"
+                        :class="{offline: !$store.getters.person.online}"
+                    ></span>
+                  </div>
+                </router-link>
+                <div class="user_info">
+                  <span>{{ $store.getters.person.firstName }} {{ $store.getters.person.lastName }}</span>
+                  <p>{{ $store.state.messages === null ? 0 : $store.state.messages.length }} Wiadomości</p>
+                </div>
+              </div>
+              <span @click="showActionMenu =! showActionMenu" id="action_menu_btn"><b-icon
+                  icon="three-dots-vertical"></b-icon></span>
+              <div v-show="showActionMenu" class="action_menu">
+                <ul>
+                  <router-link custom v-slot="{ navigate }"
+                               :to="{ name: 'ProfileView', params: { personId: this.personId }}">
+                    <li @click="navigate">
+                      <b-icon icon="person-circle"></b-icon>
+                      Wyświetl profil
+                    </li>
                   </router-link>
+                  <li>
+                    <b-icon icon="people-fill"></b-icon>
+                    Dodaj do bliskich znajomych
+                  </li>
+                  <li>
+                    <b-icon icon="plus-lg"></b-icon>
+                    Dodaj do grupy
+                  </li>
+                  <li>
+                    <b-icon icon="slash-circle"></b-icon>
+                    Zablokuj
+                  </li>
                 </ul>
               </div>
-              <div class="card-footer">
-                <b-button variant="primary" :to="{name: 'ChatView', params: {personId: this.$store.state.userId}}">Notatnik</b-button>
-              </div>
             </div>
-          </div>
-          <div class="col-md-8 col-xl-6 chat">
-            <div class="card">
-              <div class="card-header msg_head">
-                <div class="d-flex bd-highlight">
-                  <router-link :to="{ name: 'ProfileView', params: { personId: this.personId }}">
-                    <div class="img_cont">
-                      <b-avatar :src="$store.getters.profilePicture"
-                           class="rounded-circle user_img" />
-                      <span
-                          class="online_icon"
-                          :class="{offline: !$store.getters.person.online}"
-                      ></span>
-                    </div>
-                  </router-link>
-                  <div class="user_info">
-                    <span>{{ $store.getters.person.firstName }} {{ $store.getters.person.lastName }}</span>
-                    <p>{{ $store.state.messages === null ? 0 : $store.state.messages.length}} Wiadomości</p>
+            <transition name="fade" mode="out-in">
+              <div v-if="isLoading" class="card-body">
+                <div class="d-flex justify-content-center">
+                  <div>
+                    <b-spinner variant="warning"/>
                   </div>
                 </div>
-                <span @click="showActionMenu =! showActionMenu" id="action_menu_btn"><b-icon
-                    icon="three-dots-vertical"></b-icon></span>
-                <div v-show="showActionMenu" class="action_menu">
-                  <ul>
-                    <router-link custom v-slot="{ navigate }"
-                                 :to="{ name: 'ProfileView', params: { personId: this.personId }}">
-                      <li @click="navigate">
-                        <b-icon icon="person-circle"></b-icon>
-                        Wyświetl profil
-                      </li>
-                    </router-link>
-                    <li>
-                      <b-icon icon="people-fill"></b-icon>
-                      Dodaj do bliskich znajomych
-                    </li>
-                    <li>
-                      <b-icon icon="plus-lg"></b-icon>
-                      Dodaj do grupy
-                    </li>
-                    <li>
-                      <b-icon icon="slash-circle"></b-icon>
-                      Zablokuj
-                    </li>
-                  </ul>
-                </div>
-              </div>
-              <transition name="fade" mode="out-in">
-                <div v-if="isLoading" class="card-body">
-                  <div class="d-flex justify-content-center">
-                    <div>
-                      <b-spinner variant="warning"/>
-                    </div>
-                  </div>
 
-                </div>
-                <div v-else ref="messagesContainer" class="card-body msg_card_body">
-                  <div
-                      v-for="(message, index) in $store.state.messages"
-                      :key="index"
-                      class="d-flex mb-4"
-                      :class="{'justify-content-start': String(message.receiver.id) === String($store.state.userId),
+              </div>
+              <div v-else ref="messagesContainer" class="card-body msg_card_body">
+                <div
+                    v-for="(message, index) in $store.state.messages"
+                    :key="index"
+                    class="d-flex mb-4"
+                    :class="{'justify-content-start': String(message.receiver.id) === String($store.state.userId),
                             'justify-content-end': String(message.receiver.id) !== String($store.state.userId)
                   }"
-                  >
-                    <div v-if="String(message.receiver.id) === String($store.state.userId)" class="img_cont_msg">
-                      <b-avatar :src="$store.getters.profilePicture"
-                           class="rounded-circle user_img_msg"
-                      />
-                    </div>
-                    <div
-                        :class="{'msg_cotainer': String(message.receiver.id) === String($store.state.userId),
+                >
+                  <div v-if="String(message.receiver.id) === String($store.state.userId)" class="img_cont_msg">
+                    <b-avatar :src="$store.getters.profilePicture"
+                              class="rounded-circle user_img_msg"
+                    />
+                  </div>
+                  <div
+                      :class="{'msg_cotainer': String(message.receiver.id) === String($store.state.userId),
                             'msg_cotainer_send': String(message.receiver.id) !== String($store.state.userId)
                   }"
-                    >
-                      <span>{{ message.text }}</span>
-                      <span
-                          :class="{'msg_time': String(message.receiver.id) === String($store.state.userId),
+                  >
+                    <span>{{ message.text }}</span>
+                    <span
+                        :class="{'msg_time': String(message.receiver.id) === String($store.state.userId),
                             'msg_time_send': String(message.receiver.id) !== String($store.state.userId)
                   }"
-                      >{{ message.created_at | formatDate }}</span>
-                    </div>
-                    <div v-if="String(message.receiver.id) !== String($store.state.userId)" class="img_cont_msg">
-                      <b-avatar :src="profilePicture($store.state.profilePicture)"
-                           class="rounded-circle user_img_msg" />
-                    </div>
+                    >{{ message.created_at | formatDate }}</span>
+                  </div>
+                  <div v-if="String(message.receiver.id) !== String($store.state.userId)" class="img_cont_msg">
+                    <b-avatar :src="profilePicture($store.state.profilePicture)"
+                              class="rounded-circle user_img_msg"/>
                   </div>
                 </div>
-              </transition>
-              <div class="card-footer">
-                <div class="input-group">
-                  <b-form-textarea v-model="newMessageText" @keydown="handleKeydown" name="" class="type_msg"
-                            placeholder="Wpisz wiadomość..."></b-form-textarea>
-                  <b-input-group-append class="input-group-append">
+              </div>
+            </transition>
+            <div class="card-footer">
+              <div class="input-group">
+                <b-form-textarea v-model="newMessageText" @keydown="handleKeydown" name="" class="type_msg"
+                                 placeholder="Wpisz wiadomość..."></b-form-textarea>
+                <b-input-group-append class="input-group-append">
                   <span @click="sendMessage" class="input-group-text send_btn"><b-icon
                       icon="cursor-fill"></b-icon></span>
-                  </b-input-group-append>
-                </div>
+                </b-input-group-append>
               </div>
             </div>
           </div>
+        </div>
       </div>
 
     </div>
@@ -159,8 +205,16 @@
 </template>
 
 <script>
+import { Navigation, Pagination } from 'swiper'
+import { SwiperCore, Swiper, SwiperSlide } from 'swiper-vue2'
+import 'swiper/swiper-bundle.css'
+SwiperCore.use([Navigation, Pagination])
 
 export default {
+  components: {
+    Swiper,
+    SwiperSlide,
+  },
   name: 'ChatView',
   props: {
     personId: [String, Number]
@@ -181,6 +235,12 @@ export default {
   computed: {
     filteredPeople() {
       return this.$store.state.people.filter(person => {
+        const fullName = (person.firstName + ' ' + person.lastName).toLowerCase();
+        return fullName.includes(this.filter.toLowerCase());
+      });
+    },
+    filteredPeopleInbox() {
+      return this.$store.state.peopleInbox.filter(person => {
         const fullName = (person.firstName + ' ' + person.lastName).toLowerCase();
         return fullName.includes(this.filter.toLowerCase());
       });
@@ -215,6 +275,9 @@ export default {
     }
   },
   methods: {
+    onSlideChange() {
+      console.log('slide change');
+    },
     async submitNewDescription() {
       try {
         const id = this.$store.state.userId
@@ -232,9 +295,10 @@ export default {
     },
 
     async getPeople() {
-      await this.$store.dispatch("getPeople", {
-        id: this.$store.state.userId
-      })
+      await this.$store.dispatch("getPeople",)
+    },
+    async getPeopleInbox() {
+      await this.$store.dispatch("getPeopleInbox",)
     },
     async getPerson() {
       await this.$store.dispatch("getPerson", {
@@ -311,7 +375,7 @@ export default {
       this.$store.state.intervalIds = [];
     },
     profilePicture(profilePicture) {
-       if (profilePicture.startsWith('http://') || profilePicture.startsWith('https://')) {
+      if (profilePicture.startsWith('http://') || profilePicture.startsWith('https://')) {
         // Jeśli zmienna profile_picture zawiera pełny URL
         return profilePicture;
       } else {
@@ -322,6 +386,7 @@ export default {
   },
   created() {
     this.getPeople();
+    this.getPeopleInbox();
     this.getPerson();
     this.getMessage();
     let intervalId = setInterval(this.getMessage, this.chatPollingInterval);
