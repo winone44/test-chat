@@ -1,0 +1,78 @@
+{
+  "NavigationComp": {
+    "home": "Главная страница",
+    "registration": "Регистрация",
+    "chat": "Чат",
+    "login": "Вход",
+    "newGroup": "Создать новую группу",
+    "profile": "Профиль",
+    "logout": "Выйти",
+    "selectLanguage": "Выберите язык",
+    "english": "English \uD83C\uDDEC\uD83C\uDDE7",
+    "polish": "Polski \uD83C\uDDF5\uD83C\uDDF1",
+    "german": "Deutsch \uD83C\uDDE9\uD83C\uDDEA",
+    "russian": "Русский \uD83C\uDDF7\uD83C\uDDFA"
+  },
+
+  "HomeView": {
+    "title": "Мы соединяем людей",
+    "subtitle": "в вашем районе!",
+    "description": "Добро пожаловать в нашу социальную сеть, где вы можете связаться с людьми разного возраста в вашем районе. Наша миссия - создавать крепкие и долгосрочные связи между жителями, независимо от их возраста. Присоединяйтесь к нам и открывайте возможности заводить новые знакомства, обмениваться опытом и проводить время в вдохновляющей компании. Начните свое приключение с нами прямо сейчас",
+    "loginButton": "Войти",
+    "registerButton": "Зарегистрироваться"
+  },
+
+  "RegisterView": {
+    "registerTitle": "Зарегистрироваться",
+    "firstNameLabel": "Имя:",
+    "firstNamePlaceholder": "Введите ваше имя",
+    "firstNameRequired": "Это поле обязательно.",
+    "lastNameLabel": "Фамилия:",
+    "lastNamePlaceholder": "Введите вашу фамилию",
+    "lastNameRequired": "Это поле обязательно.",
+    "usernameLabel": "Имя пользователя:",
+    "usernamePlaceholder": "Введите ваше имя пользователя",
+    "usernameRequired": "Это поле обязательно.",
+    "emailLabel": "Электронная почта:",
+    "emailPlaceholder": "Введите адрес электронной почты",
+    "emailRequired": "Это поле обязательно.",
+    "emailInvalid": "Неверный адрес электронной почты.",
+    "birthDateLabel": "Дата рождения:",
+    "birthDateRequired": "Это поле обязательно.",
+    "birthDateMinAge": "Лица младше 13 лет не могут зарегистрироваться.",
+    "birthDateMaxAge": "Лица старше 120 лет не проходят валидацию",
+    "passwordLabel": "Пароль:",
+    "passwordPlaceholder": "Введите пароль",
+    "passwordRequired": "Это поле обязательно.",
+    "passwordMinLength": "Пароль должен содержать не менее 8 символов.",
+    "password2Label": "Повторите пароль:",
+    "password2Placeholder": "Введите пароль",
+    "password2Required": "Это поле обязательно.",
+    "password2SameAsPassword": "Пароли должны совпадать.",
+    "agreeTerms": "Я уполномочен для регистрации Администрацией и \n Принимаю условия использования",
+    "registerSendButton": "Отправить",
+    "registerClearButton": "Сброс"
+  },
+
+  "LoginView": {
+    "loginTitle": "Войти",
+    "emailLabel": "Электронная почта:",
+    "emailPlaceholder": "Введите вашу электронную почту",
+    "emailRequired": "Это поле обязательно.",
+    "emailInvalid": "Неверный адрес электронной почты.",
+    "passwordLabel": "Пароль:",
+    "passwordPlaceholder": "Введите ваш пароль",
+    "passwordRequired": "Это поле обязательно.",
+    "passwordMinLength": "Пароль должен содержать не менее 8 символов.",
+    "loginButton": "Войти"
+  },
+
+  "Toasts": {
+    "connectError": "Не удалось подключиться к серверу. Проверьте сетевое соединение.",
+    "authError": "Неверные данные аутентификации",
+    "unexpectedError": "Произошла неожиданная ошибка",
+    "save": "Сохранено",
+    "titleSuccess": "Успех",
+    "titleError": "Ошибка"
+  }
+}

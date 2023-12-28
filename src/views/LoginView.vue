@@ -6,11 +6,11 @@
           <b-col cols="12" class="col-md-8 col-md-8 col-lg-6 col-xl-5">
             <b-card class="shadow-2-strong" style="border-radius: 1rem">
               <b-card-body class="p-5 text-center">
-                <h3 class="mb-5">Zaloguj się</h3>
+                <h3 class="mb-5">{{ localT('loginTitle') }}</h3>
                 <div class="form-outline mb-4">
                   <b-form @submit.prevent="onSubmit">
                     <b-form-group
-                        label="Email:"
+                        :label="localT('emailLabel')"
                         label-for="email"
                     >
                       <b-form-input
@@ -20,15 +20,15 @@
                           @input="$v.email.$model = $event.trim()"
                           :state="!$v.email.$dirty ? null : !$v.email.$error"
                           required
-                          placeholder="Wpisz swój email"
+                          :placeholder="localT('emailPlaceholder')"
                       ></b-form-input>
                       <b-form-invalid-feedback>
-                        <span v-if="!$v.email.required">To pole jest wymagane. </span>
-                        <span v-if="!$v.email.email">Błędny adres email. </span>
+                        <span v-if="!$v.email.required">{{localT('emailRequired')}}</span>
+                        <span v-if="!$v.email.email">{{ localT('emailInvalid')}}</span>
                       </b-form-invalid-feedback>
                     </b-form-group>
                     <b-form-group
-                        label="Hasło:"
+                        :label="localT('passwordLabel')"
                         label-for="password"
                     >
                       <b-form-input
@@ -38,15 +38,14 @@
                           @input="$v.password.$model = $event.trim()"
                           :state="!$v.password.$dirty ? null : !$v.password.$error"
                           required
-                          placeholder="Wpisz swoje hasło"
+                          :placeholder="localT('passwordPlaceholder')"
                       ></b-form-input>
                       <b-form-invalid-feedback>
-                        <span v-if="!$v.password.required">To pole jest wymagane. </span>
-                        <span v-if="!$v.password.minLength">Hasło musi posiadać conajmniej 8 znaków. </span>
+                        <span v-if="!$v.password.required">{{localT('passwordRequired')}}</span>
+                        <span v-if="!$v.password.minLength">{{localT('passwordMinLength')}}</span>
                       </b-form-invalid-feedback>
                     </b-form-group>
-<!--                    <p>{{ $store.state.backendSerwerResponse }}</p>-->
-                    <b-button type="submit" class="btn-lg btn-block mt-5" variant="primary">Zaloguj się</b-button>
+                    <b-button type="submit" class="btn-lg btn-block mt-5" variant="primary">{{localT('loginButton')}}</b-button>
                   </b-form>
                 </div>
               </b-card-body>

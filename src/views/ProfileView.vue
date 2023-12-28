@@ -42,7 +42,7 @@
             <template #head(group_site_url)>
               <div class="d-flex justify-content-between">
                 <div>
-                  <AddGroupModalComponent/>
+                  <ButtonAddGroupModalComponent/>
                 </div>
                 <div @click="unLockDelButtons()">
                   <div v-if="isUnlockDelButtons">
@@ -56,7 +56,7 @@
             </template>
             <template v-if="isUnlockDelButtons" #cell(del)="row">
               <b-button size="sm" variant="danger" @click="delGroup(row.item.id, row)" class="mr-2">
-                <b-icon icon="trash-fill"></b-icon>
+                x
               </b-button>
             </template>
           </b-table>
@@ -108,6 +108,9 @@
             </div>
             <div class="card mt-3">
               <b-table striped hover :items="closest" :fields="fields2">
+                <template #head(profile_picture)>
+                  <ButtonGroupMessageModalComponent :closest="closest" />
+                </template>
                 <template #cell(profile_picture)="data">
                   <b-avatar :src="profilePicture(data.value)"
                             class="rounded-circle user_img"/>
@@ -124,12 +127,14 @@
 <script>
 import {LIcon, LMap, LMarker, LPolyline, LTileLayer, LTooltip} from "vue2-leaflet";
 import 'leaflet/dist/leaflet.css';
-import AddGroupModalComponent from "@/components/ProfileView/AddGroupModalComponent";
+import ButtonAddGroupModalComponent from "@/components/ProfileView/ButtonAddGroupModalComponent.vue";
+import ButtonGroupMessageModalComponent from "@/components/ProfileView/ButtonGroupMessageModalComponent.vue";
 
 export default {
   name: "ProfileView",
   components: {
-    AddGroupModalComponent,
+    ButtonGroupMessageModalComponent,
+    ButtonAddGroupModalComponent,
     LMap,
     LTileLayer,
     LMarker,
@@ -188,6 +193,8 @@ export default {
 
       currentPage: 1,
       perPage: 5,
+
+      newMessageText: 'Cześć 12'
     };
   },
   computed: {
@@ -270,6 +277,7 @@ export default {
       distances.sort((a, b) => a.distance - b.distance);
       // Wybieranie 5 najbliższych punktów (oprócz samego siebie, który jest pierwszy)
       this.closest = distances.slice(1, 6);
+      console.log(this.closest);
       // Tworzenie linii między wybranym punktem a 5 najbliższymi punktami
       this.lines = this.closest.map(p => ([
         [selectedPerson.latitude, selectedPerson.longitude],

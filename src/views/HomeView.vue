@@ -2,13 +2,12 @@
   <div>
     <div class="section">
       <div class="text">
-        <h2 class="fade-in-left">Łączymy ludzi</h2>
-        <h3 class="fade-in-left">w Twojej okolicy!</h3>
-        <p class="fade-in-up">Witaj w naszym serwisie społecznościowym, gdzie możesz nawiązać kontakt z osobami w różnym wieku w Twojej okolicy. Nasza misja to tworzenie silnych i trwałych więzi między mieszkańcami, niezależnie od wieku. Dołącz do nas i odkryj możliwości nawiązywania nowych znajomości, wymiany doświadczeń i spędzania czasu w inspirującym towarzystwie. Zacznij swoją przygodę z nami już teraz </p>
+        <h2 class="fade-in-left">{{ localT('title') }}</h2>
+        <h3 class="fade-in-left">{{ localT('subtitle') }}</h3>
+        <p class="fade-in-up">{{ localT('description') }}</p>
         <div class="fade-in-up">
-          <b-button>Zaloguj się</b-button>
-          <b-button>Zarejestruj się</b-button>
-          <!--          <a href="#" @click="bounceMail = !bounceMail" class="contact" >Kontakt</a>-->
+          <b-button :to="{ name: 'LoginView' }">{{ localT('loginButton') }}</b-button>
+          <b-button :to="{ name: 'RegisterView' }">{{ localT('registerButton') }}</b-button>
         </div>
       </div>
 
@@ -20,27 +19,6 @@
     </div>
   </div>
 </template>
-
-<!--<template>-->
-<!--  <div>-->
-<!--    <b-container>-->
-<!--      <b-card no-body class="overflow-hidden" style="color:#ffffff;background-color: rgba(0,0,0,0.3)">-->
-<!--        <b-row no-gutters>-->
-<!--          <b-col md="6">-->
-<!--            <b-card-img src="/media/logo_big.png" alt="Image" class="rounded-0"></b-card-img>-->
-<!--          </b-col>-->
-<!--          <b-col md="6">-->
-<!--            <b-card-body title="Łączymy ludzi w Twojej okolicy!">-->
-<!--              <b-card-text>-->
-<!--                Witaj w naszym serwisie społecznościowym, gdzie możesz nawiązać kontakt z osobami w różnym wieku w Twojej okolicy. Nasza misja to tworzenie silnych i trwałych więzi między mieszkańcami, niezależnie od wieku. Dołącz do nas i odkryj możliwości nawiązywania nowych znajomości, wymiany doświadczeń i spędzania czasu w inspirującym towarzystwie. Zacznij swoją przygodę z nami już teraz-->
-<!--              </b-card-text>-->
-<!--            </b-card-body>-->
-<!--          </b-col>-->
-<!--        </b-row>-->
-<!--      </b-card>-->
-<!--    </b-container>-->
-<!--  </div>-->
-<!--</template>-->
 
 <script>
 

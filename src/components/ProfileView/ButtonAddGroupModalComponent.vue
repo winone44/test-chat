@@ -37,7 +37,7 @@
 
 <script>
 export default {
-  name: "AddGroupModalComponent",
+  name: "ButtonAddGroupModalComponent",
   data() {
     return {
       groupId: null,

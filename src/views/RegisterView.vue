@@ -6,11 +6,11 @@
           <b-col cols="12" class="col-lg-8 col-xl-8">
             <b-card class="shadow-2-strong" style="border-radius: 1rem">
               <b-card-body class="p-5 text-center">
-                <h3 class="mb-5">Zarejestruj się</h3>
+                <h3 class="mb-5">{{ localT('registerTitle') }}</h3>
                 <div class="form-outline mb-4">
                   <b-form @submit="onSubmit" @reset="onReset">
                     <b-form-group
-                        label="Imię:"
+                        :label="localT('firstNameLabel')"
                         label-for="firstName"
                         label-cols="4"
                     >
@@ -21,13 +21,13 @@
                           @input="$v.firstName.$model = $event.trim()"
                           :state="!$v.firstName.$dirty ? null : !$v.firstName.$error"
                           required
-                          placeholder="Podaj swoje imię "/>
+                          :placeholder="localT('firstNamePlaceholder')"/>
                       <b-form-invalid-feedback>
-                        <span v-if="!$v.firstName.required">To pole jest wymagane. </span>
+                        <span v-if="!$v.firstName.required">{{ localT('firstNameRequired') }}</span>
                       </b-form-invalid-feedback>
                     </b-form-group>
                     <b-form-group
-                        label="Nazwisko:"
+                        :label="localT('lastNameLabel')"
                         label-for="lastName"
                         label-cols="4"
                     >
@@ -38,13 +38,13 @@
                           @input="$v.lastName.$model = $event.trim()"
                           :state="!$v.lastName.$dirty ? null : !$v.lastName.$error"
                           required
-                          placeholder="Podaj swoje nazwisko"/>
+                          :placeholder="localT('lastNamePlaceholder')"/>
                       <b-form-invalid-feedback>
-                        <span v-if="!$v.lastName.required">To pole jest wymagane. </span>
+                        <span v-if="!$v.lastName.required">{{ localT('lastNameRequired') }}</span>
                       </b-form-invalid-feedback>
                     </b-form-group>
                     <b-form-group
-                        label="Nazwa użytkownika:"
+                        :label="localT('usernameLabel')"
                         label-for="username"
                         label-cols="4"
                     >
@@ -55,13 +55,13 @@
                           @input="$v.username.$model = $event.trim()"
                           :state="!$v.username.$dirty ? null : !$v.username.$error"
                           required
-                          placeholder="Podaj swoją nazwę użytkownika"/>
+                          :placeholder="localT('usernamePlaceholder')"/>
                       <b-form-invalid-feedback>
-                        <span v-if="!$v.username.required">To pole jest wymagane. </span>
+                        <span v-if="!$v.username.required">{{ localT('usernameRequired') }} </span>
                       </b-form-invalid-feedback>
                     </b-form-group>
                     <b-form-group
-                        label="Email:"
+                        :label="localT('emailLabel')"
                         label-for="email"
                         label-cols="4"
                     >
@@ -72,15 +72,15 @@
                           @input="$v.email.$model = $event.trim()"
                           :state="!$v.email.$dirty ? null : !$v.email.$error"
                           required
-                          placeholder="Podaj adres email"/>
+                          :placeholder="localT('emailPlaceholder')"/>
                       <b-form-invalid-feedback>
-                        <span v-if="!$v.email.required">To pole jest wymagane. </span>
-                        <span v-if="!$v.email.email">Błędny adres email. </span>
+                        <span v-if="!$v.email.required">{{ localT('emailRequired') }}</span>
+                        <span v-if="!$v.email.email">{{ localT('emailInvalid') }} </span>
                       </b-form-invalid-feedback>
                     </b-form-group>
 
                     <b-form-group
-                        label="Data urodzenia:"
+                        :label=" localT('birthDateLabel') "
                         label-for="date_of_birth"
                         label-cols="4"
                     >
@@ -93,15 +93,15 @@
                           required
                       />
                       <b-form-invalid-feedback>
-                        <span v-if="!$v.date_of_birth.required">To pole jest wymagane. </span>
+                        <span v-if="!$v.date_of_birth.required">{{ localT('birthDateRequired') }}</span>
                         <span
-                            v-if="!$v.date_of_birth.minAge">Osoby poniżej 13 roku życia nie mogą się zarejestrować.</span>
-                        <span v-if="!$v.date_of_birth.maxAge">Osoby powyżej 120 lat nie przechodzą validacji.</span>
+                            v-if="!$v.date_of_birth.minAge">{{ localT('birthDateMinAge') }}</span>
+                        <span v-if="!$v.date_of_birth.maxAge">{{ localT('birthDateMaxAge') }}</span>
                       </b-form-invalid-feedback>
                     </b-form-group>
 
                     <b-form-group
-                        label="Hasło:"
+                        :label="localT('passwordLabel') "
                         label-for="password"
                         label-cols="4"
                     >
@@ -112,16 +112,16 @@
                           @input="$v.password.$model = $event.trim()"
                           :state="!$v.password.$dirty ? null : !$v.password.$error"
                           required
-                          placeholder="Podaj hasło"/>
+                          :placeholder="localT('passwordPlaceholder')"/>
 
                       <b-form-invalid-feedback>
-                        <span v-if="!$v.password.required">To pole jest wymagane. </span>
-                        <span v-if="!$v.password.minLength">Hasło musi posiadać conajmniej 8 znaków. </span>
+                        <span v-if="!$v.password.required">{{ localT('passwordRequired') }}</span>
+                        <span v-if="!$v.password.minLength">{{ localT('passwordMinLength') }} </span>
                       </b-form-invalid-feedback>
                     </b-form-group>
 
                     <b-form-group
-                        label="Powtórz Hasło:"
+                        :label="localT('password2Label')"
                         label-for="password2"
                         label-cols="4"
                     >
@@ -132,11 +132,11 @@
                           @input="$v.password2.$model = $event.trim()"
                           :state="!$v.password2.$dirty ? null : !$v.password2.$error"
                           required
-                          placeholder="Podaj hasło"/>
+                          :placeholder="localT('password2Placeholder')"/>
 
                       <b-form-invalid-feedback>
-                        <span v-if="!$v.password2.required">To pole jest wymagane. </span>
-                        <span v-if="!$v.password2.sameAsPassword">Hasła muszą być identyczne.</span>
+                        <span v-if="!$v.password2.required">{{ localT('password2Required') }}</span>
+                        <span v-if="!$v.password2.sameAsPassword">{{ localT('password2SameAsPassword') }}</span>
                       </b-form-invalid-feedback>
                     </b-form-group>
 
@@ -146,13 +146,14 @@
                         v-model="agreeTerms"
                         name="checkbox-1"
                         required
+                        style="white-space: pre-wrap"
                     >
-                      Jestem osobą upoważnioną do Rejestracji przez Administrację oraz <br> Akceptuję warunki i sposób użytkowania
+                      {{ localT('agreeTerms') }}
                     </b-form-checkbox>
                     </b-form-group>
 
-                    <b-button type="submit" variant="primary" :disabled="$v.$invalid">Wyślij</b-button> &nbsp;
-                    <b-button type="reset" variant="danger">Reset</b-button>
+                    <b-button type="submit" variant="primary" :disabled="$v.$invalid">{{ localT('registerSendButton') }}</b-button> &nbsp;
+                    <b-button type="reset" variant="danger">{{ localT('registerClearButton') }}</b-button>
                   </b-form>
                 </div>
               </b-card-body>
@@ -192,7 +193,7 @@ function maxAge(age) {
 const isChecked = value => value === true;
 
 export default {
-  name: 'register-main',
+  name: 'RegisterView',
   data() {
     return {
       firstName: '',

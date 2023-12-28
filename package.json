@@ -21,6 +21,7 @@
     "swiper": "^6.7.5",
     "swiper-vue2": "^1.0.10",
     "vue": "^2.7.15",
+    "vue-i18n": "^8.28.2",
     "vue-router": "^3.5.1",
     "vue2-leaflet": "^2.7.1",
     "vuelidate": "^0.7.7",

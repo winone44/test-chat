@@ -1,10 +1,10 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+import HomeView from '@/views/HomeView.vue'
 import LoginView from "@/views/LoginView";
 import ChatView from "@/views/ChatView";
 import store from "@/store";
-import Register from "@/views/Register";
+import Register from "@/views/RegisterView.vue";
 import ProfileView from "@/views/ProfileView";
 import LocationCheckView from "@/views/LocationCheckView";
 import NewGroupCreateView from "@/views/NewGroupCreateView";
@@ -13,6 +13,7 @@ import JoinGroupView from "@/views/JoinGroupView";
 Vue.use(VueRouter)
 
 store.dispatch('autologin');
+store.dispatch('setLastLocale');
 
 const authGuard = (to, from, next) => {
   if (store.getters.isAuth) {
@@ -39,7 +40,7 @@ const notAuthGuard = (to, from, next) => {
 const routes = [
   {
     path: '/',
-    name: 'home',
+    name: 'HomeView',
     component: HomeView,
   },
   {
@@ -56,7 +57,7 @@ const routes = [
   },
   {
     path: '/register',
-    name: 'register',
+    name: 'RegisterView',
     component: Register,
     beforeEnter: notAuthGuard,
   },

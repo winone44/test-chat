@@ -307,9 +307,9 @@ export default {
     },
     async getMessage() {
       await this.$store.dispatch("getMessages", {
-        sender: this.$store.state.userId, receiver: this.personId
+        receiver: this.personId
       });
-      if (this.conversation.length !== this.$store.state.messages.length) {
+      if (this.$store.state.messages && this.conversation.length !== this.$store.state.messages.length) {
         console.log(this.conversation.length)
         console.log(this.$store.state.messages.length)
         this.conversation = this.$store.state.messages;
@@ -326,7 +326,6 @@ export default {
     async sendMessage() {
       if (this.newMessageText) {
         await this.$store.dispatch('sendMessages', {
-          sender: this.$store.state.userId,
           receiver: this.personId,
           text: this.newMessageText
         })

@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import router from "@/router";
 import qs from "qs";
 import axios from "axios";
+import { i18n } from '@/locales/i18n';
 
 Vue.use(Vuex)
 
@@ -14,24 +15,24 @@ const apiClient = axios.create({
 
 function onInternetConnectionError(store) {
     store.dispatch('showToast', {
-        message: 'Nie można połączyć się z serwerem. Sprawdź swoje połączenie sieciowe.',
+        message: i18n.t('Toasts.connectError'),
         variant: 'danger'
     });
 }
 
 function onAuthorizationError(error, store) {
-    const message = error.response.data.error || 'Niepoprawny email lub hasło';
+    const message = error.response.data.error;
     const variant = 'danger';
     store.dispatch('showToast', {message, variant});
 }
 
 async function onRequestFailure(error, store) {
-    const { config } = error;
+    const {config} = error;
 
     if (error.response && error.response.status !== 401) {
-        const message = error.response.data.error || 'Wystąpił nieoczekiwany błąd';
+        const message = error.response.data.error || i18n.t('Toasts.unexpectedError');
         const variant = 'warning';
-        store.dispatch('showToast', { message, variant });
+        store.dispatch('showToast', {message, variant});
     }
 
     if (error.response.status === 401 && config && !config.__isRetryRequest) {
@@ -49,8 +50,8 @@ async function onRequestFailure(error, store) {
             // Jeśli odświeżanie się nie powiedzie, wyloguj użytkownika
             store.dispatch('logout');
             // Przekieruj do strony logowania lub innego komponentu
-            if(router.currentRoute.name !== 'LoginView') {
-                router.push({ name: 'LoginView' });
+            if (router.currentRoute.name !== 'LoginView') {
+                router.push({name: 'LoginView'});
             }
         }
     }
@@ -62,10 +63,17 @@ function onRequestSuccess(response, store) {
         const message = response.data.message
         store.dispatch('showToast', {message, variant: 'success'});
     }
+    if (response.status === 201 && store.state.waitForCreateSuccess) {
+        const message = response.data.message || i18n.t('Toasts.save')
+        store.dispatch('showToast', {message, variant: 'success'});
+        store.state.waitForCreateSuccess = false;
+    }
 }
 
 const store = new Vuex.Store({
     state: {
+        locale: 'pl',
+
         accessToken: null,
         refreshToken: null,
         userId: null,
@@ -74,6 +82,7 @@ const store = new Vuex.Store({
 
         messages: null,
         intervalIds: [],
+        waitForCreateSuccess: false,
 
         person: null,
         groupMembers: null,
@@ -131,6 +140,11 @@ const store = new Vuex.Store({
         },
     },
     mutations: {
+        SET_LOCALE(state, newLocale) {
+            state.locale = newLocale;
+            console.log(newLocale)
+            apiClient.defaults.headers.common['Accept-Language'] = `${newLocale}`;
+        },
         auth(state, payload) {
             state.accessToken = payload.accessToken;
             state.refreshToken = payload.refreshToken;
@@ -200,6 +214,18 @@ const store = new Vuex.Store({
 
     },
     actions: {
+        changeLocale({commit}, newLocale) {
+            localStorage.setItem('language', newLocale);
+            commit('SET_LOCALE', newLocale);
+            i18n.locale = newLocale;
+        },
+        setLastLocale({commit}) {
+            const language = localStorage.getItem('language')
+            if (language) {
+                commit('SET_LOCALE', language);
+                i18n.locale = language;
+            }
+        },
         async login({commit, dispatch}, payload) {
             try {
                 console.log(payload);
@@ -214,7 +240,6 @@ const store = new Vuex.Store({
                     username: response.data.username,
                     profile_picture: response.data.profile_picture
                 });
-
 
 
                 const now = new Date();
@@ -237,7 +262,7 @@ const store = new Vuex.Store({
                 console.log(e)
             }
         },
-        async refreshTokens({ state, commit }) {
+        async refreshTokens({state, commit}) {
             try {
                 let response = await apiClient.post(`accounts/token-refresh/`, {
                     refresh: state.refreshToken,
@@ -263,8 +288,8 @@ const store = new Vuex.Store({
             localStorage.removeItem('expires');
             localStorage.removeItem('username');
             localStorage.removeItem('profile_picture');
-            if(router.currentRoute.name !== 'LoginView') {
-                router.push({ name: 'LoginView' });
+            if (router.currentRoute.name !== 'LoginView') {
+                router.push({name: 'LoginView'});
             }
 
         },
@@ -302,7 +327,7 @@ const store = new Vuex.Store({
             console.log("Pozostało tyle sekund: ", expirationDate.getTime() - now.getTime())
             setTimeout(() => {
                 dispatch('logout');
-            },expirationDate.getTime() - now.getTime())
+            }, expirationDate.getTime() - now.getTime())
         },
         async register({commit}, payload) {
             try {
@@ -344,7 +369,7 @@ const store = new Vuex.Store({
                 let {data} = await apiClient.get(`accounts/friend/` + payload.id + '/');
                 console.log('zrobione')
                 commit('setFriends', Object.values(data))
-            } catch(e) {
+            } catch (e) {
                 console.log(e)
             }
         },
@@ -353,8 +378,8 @@ const store = new Vuex.Store({
                 return;
             }
             try {
-                await apiClient.delete(`accounts/friend/`, { data: payload });
-            } catch(e) {
+                await apiClient.delete(`accounts/friend/`, {data: payload});
+            } catch (e) {
                 console.log(e)
             }
         },
@@ -365,7 +390,7 @@ const store = new Vuex.Store({
             try {
                 let {data} = await apiClient.get(`list_users_with_distance/`);
                 commit('setPeople', Object.values(data))
-            } catch(e) {
+            } catch (e) {
                 console.log(e)
             }
         },
@@ -377,7 +402,7 @@ const store = new Vuex.Store({
                 let {data} = await apiClient.get(`list_users_by_recent_message/`);
                 commit('setPeopleInbox', Object.values(data))
                 console.log(data)
-            } catch(e) {
+            } catch (e) {
                 console.log(e)
             }
         },
@@ -389,7 +414,7 @@ const store = new Vuex.Store({
                 let {data} = await apiClient.get(`accounts/person/` + payload.id + '/');
                 console.log(data)
                 commit('setPerson', data)
-            } catch(e) {
+            } catch (e) {
                 console.log(e)
             }
         },
@@ -401,7 +426,7 @@ const store = new Vuex.Store({
                 let {data} = await apiClient.patch(`accounts/person/${id}/patch/`, newData);
                 console.log(data)
                 commit('setPerson', data)
-            } catch(e) {
+            } catch (e) {
                 console.log(e)
             }
         },
@@ -413,7 +438,7 @@ const store = new Vuex.Store({
                 let {data} = await apiClient.patch(`accounts/person/${id}/patch/`, newData);
                 console.log(data)
                 commit('setPerson', data)
-            } catch(e) {
+            } catch (e) {
                 console.log(e)
             }
         },
@@ -425,7 +450,7 @@ const store = new Vuex.Store({
                 let {data} = await apiClient.get(`messages/`, {params: payload});
                 console.log(data)
                 commit('setMessages', Object.values(data))
-            } catch(e) {
+            } catch (e) {
                 console.log(e)
             }
         },
@@ -447,7 +472,7 @@ const store = new Vuex.Store({
                 let {data} = await apiClient.get(`groups/${payload.id}/users/`);
                 console.log(data)
                 commit('setGroupMembers', data)
-            } catch(e) {
+            } catch (e) {
                 console.log(e)
             }
         },
@@ -474,9 +499,9 @@ const store = new Vuex.Store({
                 return;
             }
             try {
-                let {data} = await apiClient.delete(`group/leave/`,  {data: payload });
+                let {data} = await apiClient.delete(`group/leave/`, {data: payload});
                 console.log(data)
-            } catch(e) {
+            } catch (e) {
                 console.log(e)
             }
         },
@@ -488,17 +513,17 @@ const store = new Vuex.Store({
                 let {data} = await apiClient.get(`groups/${payload.id}`);
                 commit('setGroupInfoDetail', data)
                 console.log(data)
-            } catch(e) {
+            } catch (e) {
                 console.log(e)
             }
         },
-        showToast({state},{ message, variant }) {
+        showToast({state}, {message, variant}) {
             this._vm.$bvToast.toast(message, {
-                title: variant === 'success' ? 'Sukces' : 'Błąd',
+                title: variant === 'success' ? i18n.t('Toasts.titleSuccess') : i18n.t('Toasts.titleError'),
                 variant: variant,
-                solid: true
+                solid: true,
             });
-            console.log('User ID: '+ state.userId + ' ' + message)
+            console.log('User ID: ' + state.userId + ' ' + message)
         }
     },
     modules: {}
@@ -516,7 +541,7 @@ apiClient.interceptors.response.use(
         } else {
             if (error.response && error.response.status === 401 && !store.state.userId) {
                 onAuthorizationError(error, store);
-            } else  {
+            } else {
                 return onRequestFailure(error, store)
             }
         }
