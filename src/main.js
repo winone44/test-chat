@@ -22,9 +22,3 @@ new Vue({
   store,
   render: h => h(App)
 }).$mount('#app')
-
-// store.subscribe((mutation, state) => {
-//   if (mutation.type === 'SET_LOCALE') {
-//     i18n.locale = state.locale;
-//   }
-// });
