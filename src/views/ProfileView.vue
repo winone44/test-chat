@@ -28,7 +28,10 @@
 
           >
             <template #cell(name)="data">
-              <div class="pointer" @click="getGroupMembers(data.item.id)">
+              <div
+                  :class="{pointer: $route.params.personId === $store.state.userId, disabled: $route.params.personId !== $store.state.userId}"
+                  @click="getGroupMembers(data.item.id)"
+              >
                 <b-img width="24px" :src="logoIcon(data.item.logo_url)"></b-img>
                 {{ data.item.name }}
               </div>
@@ -40,7 +43,7 @@
               <a :href="data.item.group_site_url">{{ data.item.group_site_url | normalizeUrl }}</a>
             </template>
             <template #head(group_site_url)>
-              <div class="d-flex justify-content-between">
+              <div v-if="$route.params.personId === $store.state.userId" class="d-flex justify-content-between">
                 <div>
                   <ButtonAddGroupModalComponent/>
                 </div>
@@ -53,11 +56,12 @@
                   </div>
                 </div>
               </div>
+              <div v-else>
+                Strona internetowa
+              </div>
             </template>
             <template v-if="isUnlockDelButtons" #cell(del)="row">
-              <b-button size="sm" variant="danger" @click="delGroup(row.item.id, row)" class="mr-2">
-                x
-              </b-button>
+              <ButtonDelGroupModalComponent :row="row" />
             </template>
           </b-table>
           <b-pagination
@@ -70,7 +74,7 @@
           ></b-pagination>
         </div>
       </div>
-      <div class="col-md-7 col-lg-6 mb-3">
+      <div v-if="$route.params.personId === $store.state.userId" class="col-md-7 col-lg-6 mb-3">
         <transition name="fade" mode="out-in">
           <div v-if="isLoading" class="card-body">
             <div class="d-flex justify-content-center">
@@ -107,6 +111,12 @@
               </l-map>
             </div>
             <div class="card mt-3">
+              <RangeInputClosestPoints
+                  :closestPoints="closestPoints"
+                  @changeClosestPoints="closestPoints = $event"
+              />
+            </div>
+            <div class="card mt-3">
               <b-table striped hover :items="closest" :fields="fields2">
                 <template #head(profile_picture)>
                   <ButtonGroupMessageModalComponent :closest="closest" />
@@ -120,6 +130,9 @@
           </div>
         </transition>
       </div>
+      <div v-else class="col-md-7 col-lg-6 mb-3">
+        <b-img style="width: 100%; opacity: 20%" src="/logo.png"></b-img>
+      </div>
     </div>
   </b-container>
 </template>
@@ -128,13 +141,17 @@
 import {LIcon, LMap, LMarker, LPolyline, LTileLayer, LTooltip} from "vue2-leaflet";
 import 'leaflet/dist/leaflet.css';
 import ButtonAddGroupModalComponent from "@/components/ProfileView/ButtonAddGroupModalComponent.vue";
+import ButtonDelGroupModalComponent from "@/components/ProfileView/ButtonDelGroupModalComponent.vue";
 import ButtonGroupMessageModalComponent from "@/components/ProfileView/ButtonGroupMessageModalComponent.vue";
+import RangeInputClosestPoints from "@/components/ProfileView/RangeInputClosestPoints.vue";
 
 export default {
   name: "ProfileView",
   components: {
+    RangeInputClosestPoints,
     ButtonGroupMessageModalComponent,
     ButtonAddGroupModalComponent,
+    ButtonDelGroupModalComponent,
     LMap,
     LTileLayer,
     LMarker,
@@ -152,7 +169,6 @@ export default {
       blockDetails: false,
       isLoading: true,
       isUnlockDelButtons: false,
-      permit: false,
 
       url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
       attribution:
@@ -163,6 +179,7 @@ export default {
       people: [],
       closest: [],
       lineColor: 'green',
+      closestPoints: 5,
 
       fields: [
         {
@@ -194,7 +211,7 @@ export default {
       currentPage: 1,
       perPage: 5,
 
-      newMessageText: 'Cześć 12'
+      newMessageText: ''
     };
   },
   computed: {
@@ -211,28 +228,7 @@ export default {
       }
       this.isUnlockDelButtons = !this.isUnlockDelButtons;
     },
-    async delGroup(groupId) {
-      this.$bvModal.msgBoxConfirm('Potwierdź, że chcesz odłączyć się od grupy.', {
-        title: 'Opuszczanie grupy',
-        size: 'sm',
-        buttonSize: 'sm',
-        okVariant: 'danger',
-        okTitle: 'TAK',
-        cancelTitle: 'NIE',
-        footerClass: 'p-2',
-        hideHeaderClose: false,
-        centered: true
-      }).then(value => {
-        this.permit = value
-      })
-      if (this.permit) {
-        await this.$store.dispatch("delMemberFromGroup", {
-          group_id: groupId
-        })
-        this.$store.state.person.groups = this.$store.state.person.groups.filter(object => object.id !== groupId);
-      }
-      this.permit = false;
-    },
+
     async getPerson() {
       await this.$store.dispatch("getPerson", {
         id: this.personId
@@ -275,10 +271,11 @@ export default {
       console.log(distances);
       // Sortowanie ludzi według odległości od wybranego punktu
       distances.sort((a, b) => a.distance - b.distance);
-      // Wybieranie 5 najbliższych punktów (oprócz samego siebie, który jest pierwszy)
-      this.closest = distances.slice(1, 6);
+      // Wybieranie najbliższych punktów (oprócz samego siebie, który jest pierwszy)
+      this.closest = distances.slice(1, Number(this.closestPoints) + 1);
+      console.log(this.closestPoints)
       console.log(this.closest);
-      // Tworzenie linii między wybranym punktem a 5 najbliższymi punktami
+      // Tworzenie linii między wybranym punktem a najbliższymi punktami
       this.lines = this.closest.map(p => ([
         [selectedPerson.latitude, selectedPerson.longitude],
         [p.latitude, p.longitude]
@@ -425,6 +422,10 @@ export default {
   height: 60px;
   width: 60px;
   border: 1.5px solid #f5f6fa;
+}
+
+.disabled {
+  pointer-events: none;
 }
 
 .pointer {

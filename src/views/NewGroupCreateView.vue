@@ -166,6 +166,7 @@ export default {
       })
     },
     async addGroup() {
+      this.$store.state.waitForCreateSuccess = true;
       await this.$store.dispatch("addGroup", {
         name: this.groupName,
         logo_url: this.logoUrl,
@@ -174,6 +175,7 @@ export default {
       })
       this.newGroupInfo.push(this.$store.state.newGrupInfo);
       this.newGroupInfo[this.newGroupInfo.length - 1].password = this.password;
+      this.$store.state.waitForCreateSuccess = false;
     },
     generatePassword() {
       const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
