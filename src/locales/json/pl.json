@@ -7,6 +7,7 @@
     "login": "Logowanie",
     "newGroup": "Utwórz nową grupę",
     "profile": "Profil",
+    "settings": "Ustawienia",
     "logout": "Wyloguj",
     "selectLanguage": "Wybierz język",
     "english": "English \uD83C\uDDEC\uD83C\uDDE7",
@@ -66,6 +67,38 @@
     "passwordRequired": "To pole jest wymagane.",
     "passwordMinLength": "Hasło musi posiadać conajmniej 8 znaków.",
     "loginButton": "Zaloguj się"
+  },
+
+  "ProfileSettingsView": {
+    "generalInformationTitle": "Informacje ogólne",
+    "passwordChange": "Zmiana hasła",
+    "deleteProfile": "Usuń profil"
+  },
+
+  "GeneralInformationComponent": {
+    "gender": "Płeć:",
+    "birthDate": "Data urodzenia:",
+    "age": "Wiek:",
+    "emailAddress": "Adres e-mail:",
+    "username": "Nazwa użytkownika:",
+    "followedGroupsCount": "Liczba obserwowanych grup:",
+    "lastKnownLocation": "Ostatnia zarejestrowana lokalizacja:"
+  },
+
+  "ChangePasswordComponent": {
+    "currentPasswordLabel": "Aktualne Hasło:",
+    "currentPasswordPlaceholder": "Podaj hasło",
+    "currentPasswordRequired": "To pole jest wymagane.",
+    "currentPasswordMinLength": "Hasło musi posiadać conajmniej 8 znaków.",
+    "newPasswordLabel": "Nowe Hasło:",
+    "newPasswordPlaceholder": "Wpisz nowe hasło",
+    "newPasswordRequired": "To pole jest wymagane.",
+    "newPasswordMinLength": "Hasło musi posiadać conajmniej 8 znaków.",
+    "confirmPasswordLabel": "Potwierdź Nowe Hasło:",
+    "confirmPasswordPlaceholder": "Potwierdź nowe hasło",
+    "confirmPasswordRequired": "To pole jest wymagane.",
+    "confirmPasswordSameAsPassword": "Hasła muszą być identyczne.",
+    "submitButton": "Zmień Hasło"
   },
 
   "Toasts": {

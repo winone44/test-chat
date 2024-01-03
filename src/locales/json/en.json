@@ -6,6 +6,7 @@
     "login": "Login",
     "newGroup": "Create new group",
     "profile": "Profile",
+    "settings": "Settings",
     "logout": "Logout",
     "selectLanguage": "Select language",
     "english": "English \uD83C\uDDEC\uD83C\uDDE7",
@@ -65,6 +66,38 @@
     "passwordRequired": "This field is required.",
     "passwordMinLength": "Password must be at least 8 characters long.",
     "loginButton": "Log In"
+  },
+
+  "ProfileSettingsView": {
+    "generalInformationTitle": "General Information",
+    "passwordChange": "Change Password",
+    "deleteProfile": "Delete Profile"
+  },
+
+  "GeneralInformationComponent": {
+    "gender": "Gender:",
+    "birthDate": "Date of Birth:",
+    "age": "Age:",
+    "emailAddress": "Email Address:",
+    "username": "Username:",
+    "followedGroupsCount": "Number of Followed Groups:",
+    "lastKnownLocation": "Last Known Location:"
+  },
+
+  "ChangePasswordComponent": {
+    "currentPasswordLabel": "Current Password:",
+    "currentPasswordPlaceholder": "Enter password",
+    "currentPasswordRequired": "This field is required.",
+    "currentPasswordMinLength": "Password must be at least 8 characters long.",
+    "newPasswordLabel": "New Password:",
+    "newPasswordPlaceholder": "Enter new password",
+    "newPasswordRequired": "This field is required.",
+    "newPasswordMinLength": "Password must be at least 8 characters long.",
+    "confirmPasswordLabel": "Confirm New Password:",
+    "confirmPasswordPlaceholder": "Confirm new password",
+    "confirmPasswordRequired": "This field is required.",
+    "confirmPasswordSameAsPassword": "Passwords must match.",
+    "submitButton": "Change Password"
   },
 
   "Toasts": {

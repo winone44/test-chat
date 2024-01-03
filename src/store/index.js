@@ -125,6 +125,13 @@ const store = new Vuex.Store({
                     online: false,
                     firstName: '',
                     lastName: '',
+                    date_of_birth: null,
+                    age: null,
+                    email: null,
+                    latitude: null,
+                    longitude: null,
+                    username: null,
+                    gender: '',
                     groups: [
                         {
                             group_site_url: '',
@@ -345,7 +352,7 @@ const store = new Vuex.Store({
         },
         async changePassword({state}, payload) {
             try {
-                let {data} = await apiClient.post(`change-password`, payload)
+                let {data} = await apiClient.post(`accounts/change-password`, payload)
                 console.log(data.msg);
                 console.log(state.userId)
             } catch (e) {

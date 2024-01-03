@@ -9,6 +9,7 @@ import ProfileView from "@/views/ProfileView";
 import LocationCheckView from "@/views/LocationCheckView";
 import NewGroupCreateView from "@/views/NewGroupCreateView";
 import JoinGroupView from "@/views/JoinGroupView";
+import ProfileSettingsView from "@/views/ProfileSettingsView.vue";
 
 Vue.use(VueRouter)
 
@@ -74,6 +75,12 @@ const routes = [
     component: ProfileView,
     beforeEnter: authGuard,
     props: true
+  },
+  {
+    path: '/settings',
+    name: 'ProfileSettingsView',
+    component: ProfileSettingsView,
+    beforeEnter: authGuard,
   },
   {
     path: '/group-create/',

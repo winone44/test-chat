@@ -6,6 +6,7 @@
     "login": "Вход",
     "newGroup": "Создать новую группу",
     "profile": "Профиль",
+    "settings": "Настройки",
     "logout": "Выйти",
     "selectLanguage": "Выберите язык",
     "english": "English \uD83C\uDDEC\uD83C\uDDE7",
@@ -65,6 +66,38 @@
     "passwordRequired": "Это поле обязательно.",
     "passwordMinLength": "Пароль должен содержать не менее 8 символов.",
     "loginButton": "Войти"
+  },
+
+  "ProfileSettingsView": {
+    "generalInformationTitle": "Общая информация",
+    "passwordChange": "Смена пароля",
+    "deleteProfile": "Удалить профиль"
+  },
+
+  "GeneralInformationComponent": {
+    "gender": "Пол:",
+    "birthDate": "Дата рождения:",
+    "age": "Возраст:",
+    "emailAddress": "Адрес электронной почты:",
+    "username": "Имя пользователя:",
+    "followedGroupsCount": "Количество отслеживаемых групп:",
+    "lastKnownLocation": "Последнее известное местоположение:"
+  },
+
+  "ChangePasswordComponent": {
+    "currentPasswordLabel": "Текущий Пароль:",
+    "currentPasswordPlaceholder": "Введите пароль",
+    "currentPasswordRequired": "Это поле обязательно.",
+    "currentPasswordMinLength": "Пароль должен быть не менее 8 символов.",
+    "newPasswordLabel": "Новый Пароль:",
+    "newPasswordPlaceholder": "Введите новый пароль",
+    "newPasswordRequired": "Это поле обязательно.",
+    "newPasswordMinLength": "Пароль должен быть не менее 8 символов.",
+    "confirmPasswordLabel": "Подтвердите Новый Пароль:",
+    "confirmPasswordPlaceholder": "Подтвердите новый пароль",
+    "confirmPasswordRequired": "Это поле обязательно.",
+    "confirmPasswordSameAsPassword": "Пароли должны совпадать.",
+    "submitButton": "Изменить пароль"
   },
 
   "Toasts": {

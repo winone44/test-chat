@@ -27,6 +27,7 @@
               <em>{{ $store.state.username }}</em>
             </template>
             <b-dropdown-item :to="{ name: 'ProfileView', params: { personId: this.$store.state.userId }}">{{ localT('profile') }}</b-dropdown-item>
+            <b-dropdown-item :to="{ name: 'ProfileSettingsView'}">{{ localT('settings') }}</b-dropdown-item>
             <b-dropdown-item @click="logout" v-if="$store.getters.isAuth">{{ localT('logout') }}</b-dropdown-item>
           </b-nav-item-dropdown>
         </b-navbar-nav>
