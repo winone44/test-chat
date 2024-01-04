@@ -359,6 +359,16 @@ const store = new Vuex.Store({
                 console.log(e.response.data)
             }
         },
+        async delAccount({state}) {
+            if (state.userId == null) {
+                return;
+            }
+            try {
+                await apiClient.delete(`accounts/delete-account/`);
+            } catch (e) {
+                console.log(e)
+            }
+        },
         async addFriend({state}, payload) {
             try {
                 let {data} = await apiClient.post(`accounts/friend/`, payload)

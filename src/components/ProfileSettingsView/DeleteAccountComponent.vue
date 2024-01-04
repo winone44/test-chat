@@ -22,8 +22,11 @@ export default {
         centered: true
       }).then(async permit => {
         if (permit) {
-          console.log('usunięto konto');
-          await this.$store.dispatch('logout');
+          await this.$store.dispatch('delAccount');
+          console.log('Usunięto konto, za chwilę nastąpi wylogowanie')
+          setTimeout(async () => {
+            await this.$store.dispatch('logout');
+          }, 3000)
         }
       })
     },
