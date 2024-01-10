@@ -61,7 +61,7 @@
               </div>
             </template>
             <template v-if="isUnlockDelButtons" #cell(del)="row">
-              <ButtonDelGroupModalComponent :row="row" />
+              <ButtonDelGroupModalComponent :row="row"/>
             </template>
           </b-table>
           <b-pagination
@@ -73,6 +73,7 @@
               class="my-0"
           ></b-pagination>
         </div>
+        <ListGrupAlertComponent v-if="$route.params.personId === $store.state.userId" />
       </div>
       <div v-if="$route.params.personId === $store.state.userId" class="col-md-7 col-lg-6 mb-3">
         <transition name="fade" mode="out-in">
@@ -119,7 +120,7 @@
             <div class="card mt-3">
               <b-table striped hover :items="closest" :fields="fields2">
                 <template #head(profile_picture)>
-                  <ButtonGroupMessageModalComponent :closest="closest" />
+                  <ButtonGroupMessageModalComponent :closest="closest"/>
                 </template>
                 <template #cell(profile_picture)="data">
                   <b-avatar :src="profilePicture(data.value)"
@@ -144,10 +145,12 @@ import ButtonAddGroupModalComponent from "@/components/ProfileView/ButtonAddGrou
 import ButtonDelGroupModalComponent from "@/components/ProfileView/ButtonDelGroupModalComponent.vue";
 import ButtonGroupMessageModalComponent from "@/components/ProfileView/ButtonGroupMessageModalComponent.vue";
 import RangeInputClosestPoints from "@/components/ProfileView/RangeInputClosestPoints.vue";
+import ListGrupAlertComponent from "@/components/ProfileSettingsView/ListGrupAlertComponent.vue";
 
 export default {
   name: "ProfileView",
   components: {
+    ListGrupAlertComponent,
     RangeInputClosestPoints,
     ButtonGroupMessageModalComponent,
     ButtonAddGroupModalComponent,

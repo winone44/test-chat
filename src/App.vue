@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import NavigationComp from "@/components/NavigationComp";
+import NavigationComp from "@/components/App/NavigationComp.vue";
 export default {
   components: {NavigationComp}
 }

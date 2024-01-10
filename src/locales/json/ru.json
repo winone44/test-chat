@@ -100,6 +100,14 @@
     "submitButton": "Изменить пароль"
   },
 
+  "DeleteAccountComponent": {
+    "delAccountButton": "Удалить ваш аккаунт",
+    "modalBoxMessage": "Вы уверены, что хотите удалить ваш аккаунт? Эта операция необратима!",
+    "modalBoxTitle": "Удаление аккаунта",
+    "modalBoxOk": "ДА",
+    "modalBoxCancel": "НЕТ"
+  },
+
   "Toasts": {
     "connectError": "Не удалось подключиться к серверу. Проверьте сетевое соединение.",
     "authError": "Неверные данные аутентификации",

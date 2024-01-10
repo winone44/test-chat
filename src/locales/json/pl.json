@@ -101,6 +101,14 @@
     "submitButton": "Zmień Hasło"
   },
 
+  "DeleteAccountComponent": {
+    "delAccountButton": "Usuń swoje konto",
+    "modalBoxMessage": "Czy na pewno chcesz usunąć konto. Ta operacja jest nieodwracalna!",
+    "modalBoxTitle": "Usuwanie konta",
+    "modalBoxOk": "TAK",
+    "modalBoxCancel": "NIE"
+  },
+
   "Toasts": {
     "connectError": "Nie można połączyć się z serwerem. Sprawdź swoje połączenie sieciowe.",
     "authError": "Nieprawidłowe dane uwierzytelniające",

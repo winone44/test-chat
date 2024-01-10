@@ -8,6 +8,7 @@ import Register from "@/views/RegisterView.vue";
 import ProfileView from "@/views/ProfileView";
 import LocationCheckView from "@/views/LocationCheckView";
 import NewGroupCreateView from "@/views/NewGroupCreateView";
+import NewAlertCreateView from "@/views/NewAlertCreateView";
 import JoinGroupView from "@/views/JoinGroupView";
 import ProfileSettingsView from "@/views/ProfileSettingsView.vue";
 
@@ -86,6 +87,12 @@ const routes = [
     path: '/group-create/',
     name: 'NewGroupCreateView',
     component: NewGroupCreateView,
+    beforeEnter: authGuard,
+  },
+  {
+    path: '/alert-create/',
+    name: 'NewAlertCreateView',
+    component: NewAlertCreateView,
     beforeEnter: authGuard,
   },
   {

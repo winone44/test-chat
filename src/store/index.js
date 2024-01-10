@@ -94,7 +94,8 @@ const store = new Vuex.Store({
         data: {
             people: [],
             messages: []
-        }
+        },
+        groupAlerts: null,
     },
     getters: {
         isAuth: state => {
@@ -217,8 +218,14 @@ const store = new Vuex.Store({
         },
         setGroupInfoDetail(state, payload) {
             state.groupInfoDetail = payload;
+        },
+        setGroupAlerts(state, payload){
+            state.groupAlerts = payload
+            // state.groupAlerts.count = payload.count;
+            // state.groupAlerts.next = payload.next;
+            // state.groupAlerts.previous = payload.previous;
+            // state.groupAlerts.results.push(payload.results);
         }
-
     },
     actions: {
         changeLocale({commit}, newLocale) {
@@ -529,6 +536,26 @@ const store = new Vuex.Store({
             try {
                 let {data} = await apiClient.get(`groups/${payload.id}`);
                 commit('setGroupInfoDetail', data)
+                console.log(data)
+            } catch (e) {
+                console.log(e)
+            }
+        },
+        async sendGrupAlert({state}, payload) {
+            if (state.userId == null) {
+                return;
+            }
+            try {
+                let {data} = await apiClient.post(`groups/alerts/`, payload)
+                console.log(data);
+            } catch (e) {
+                console.log(e)
+            }
+        },
+        async getGrupAlert({commit}, payload) {
+            try {
+                let {data} = await apiClient.get(`groups/alerts/?page=${payload}`);
+                commit('setGroupAlerts', data)
                 console.log(data)
             } catch (e) {
                 console.log(e)

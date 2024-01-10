@@ -16,6 +16,7 @@
           <b-nav-item v-if="$store.getters.isAuth" :to="{name: 'ChatView', params: {personId: this.$store.getters.nearestUser}}">{{ $t('NavigationComp.chat') }}</b-nav-item>
           <b-nav-item v-if="!$store.getters.isAuth" :to="{name: 'LoginView'}">{{ localT('login') }}</b-nav-item>
           <b-nav-item v-if="$store.getters.isAuth" :to="{name: 'NewGroupCreateView'}">{{ localT('newGroup') }}</b-nav-item>
+          <b-nav-item v-if="$store.getters.isAuth" :to="{name: 'NewAlertCreateView'}">{{ localT('newAlert') }}</b-nav-item>
         </b-navbar-nav>
 
         <!-- Right aligned nav items -->

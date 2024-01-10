@@ -100,6 +100,14 @@
     "submitButton": "Passwort ändern"
   },
 
+  "DeleteAccountComponent": {
+    "delAccountButton": "Lösche dein Konto",
+    "modalBoxMessage": "Bist du sicher, dass du dein Konto löschen möchtest? Diese Aktion ist unwiderruflich!",
+    "modalBoxTitle": "Kontolöschung",
+    "modalBoxOk": "JA",
+    "modalBoxCancel": "NEIN"
+  },
+
   "Toasts": {
     "connectError": "Verbindung zum Server nicht möglich. Überprüfen Sie Ihre Netzwerkverbindung.",
     "authError": "Ungültige Authentifizierungsdaten",
