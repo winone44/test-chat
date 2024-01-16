@@ -6,14 +6,14 @@
           od {{ $store.state.username }}
         </span>
       <span>
-          {{ startDate }} {{ startTime.slice(0,-3) }}
+          {{ startDateTime | formatDateAlerts }}
         </span>
       <br/>
       <span>
          do {{ group }}
         </span>
       <span>
-         {{endDate}} {{endTime.slice(0,-3)}}
+         {{ endDateTime | formatDateAlerts }}
         </span>
     </header>
     <hr>
@@ -30,10 +30,8 @@ export default {
   props: {
     title: [String],
     content: [String],
-    startDate: [String],
-    startTime: [String],
-    endDate: [String],
-    endTime: [String],
+    startDateTime: [String],
+    endDateTime: [String],
     group: [String],
     alertStyle: [String]
   }

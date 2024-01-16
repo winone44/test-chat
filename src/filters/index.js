@@ -1,6 +1,6 @@
 import Vue from "vue";
 
-Vue.filter("formatDate", function (value) {
+Vue.filter("formatDateMessages", function (value) {
     const now = new Date();
     const inputDate = new Date(value);
 
@@ -53,5 +53,22 @@ Vue.filter('declineUser', function (number) {
         return `Grupa ma ${number} użytkownika`;
     } else {
         return `Grupa ma ${number} użytkowników`;
+    }
+})
+
+Vue.filter('formatDateAlerts', function (inputDate) {
+    const dateObj = new Date(inputDate);
+
+    // Format the date depending on the year
+    const year = dateObj.getFullYear();
+    const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+    const day = String(dateObj.getDate()).padStart(2, '0');
+    const hours = String(dateObj.getHours()).padStart(2, '0');
+    const minutes = String(dateObj.getMinutes()).padStart(2, '0');
+
+    if (year === 2024) {
+        return `${hours}:${minutes} ${day}.${month}`;
+    } else {
+        return `${hours}:${minutes} ${day}.${month}.${year}`;
     }
 })

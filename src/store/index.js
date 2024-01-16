@@ -96,6 +96,7 @@ const store = new Vuex.Store({
             messages: []
         },
         groupAlerts: null,
+        blockedUsers: null,
     },
     getters: {
         isAuth: state => {
@@ -221,10 +222,9 @@ const store = new Vuex.Store({
         },
         setGroupAlerts(state, payload){
             state.groupAlerts = payload
-            // state.groupAlerts.count = payload.count;
-            // state.groupAlerts.next = payload.next;
-            // state.groupAlerts.previous = payload.previous;
-            // state.groupAlerts.results.push(payload.results);
+        },
+        setBlockUsers(state, payload) {
+            state.blockedUsers = payload
         }
     },
     actions: {
@@ -366,43 +366,46 @@ const store = new Vuex.Store({
                 console.log(e.response.data)
             }
         },
-        async delAccount({state}) {
-            if (state.userId == null) {
-                return;
-            }
+
+        async addBlockUsers({state}, payload) {
             try {
-                await apiClient.delete(`accounts/delete-account/`);
-            } catch (e) {
-                console.log(e)
-            }
-        },
-        async addFriend({state}, payload) {
-            try {
-                let {data} = await apiClient.post(`accounts/friend/`, payload)
+                let {data} = await apiClient.post(`accounts/blocked-user/`, payload)
+                state.person.blocked_user = true;
                 console.log(data);
                 console.log(state.userId);
             } catch (e) {
                 console.log(e)
             }
         },
-        async getFriends({commit, state}, payload) {
+        async getBlockUsers({commit, state}, payload) {
             if (state.userId == null) {
                 return;
             }
             try {
-                let {data} = await apiClient.get(`accounts/friend/` + payload.id + '/');
-                console.log('zrobione')
-                commit('setFriends', Object.values(data))
+                let {data} = await apiClient.get(`accounts/blocked-user/`, payload);
+                console.log(data)
+                commit('setBlockUsers', data)
             } catch (e) {
                 console.log(e)
             }
         },
-        async delFriend({state}, payload) {
+        async delBlockUsers({state}, payload) {
             if (state.userId == null) {
                 return;
             }
             try {
-                await apiClient.delete(`accounts/friend/`, {data: payload});
+                await apiClient.delete(`accounts/blocked-user/`, {data: payload});
+                state.person.blocked_user = false;
+            } catch (e) {
+                console.log(e)
+            }
+        },
+        async delAccount({state}) {
+            if (state.userId == null) {
+                return;
+            }
+            try {
+                await apiClient.delete(`accounts/delete-account/`);
             } catch (e) {
                 console.log(e)
             }

@@ -129,17 +129,13 @@
                       Wyświetl profil
                     </li>
                   </router-link>
-                  <li>
-                    <b-icon icon="people-fill"></b-icon>
-                    Dodaj do bliskich znajomych
-                  </li>
-                  <li>
-                    <b-icon icon="plus-lg"></b-icon>
-                    Dodaj do grupy
-                  </li>
-                  <li>
-                    <b-icon icon="slash-circle"></b-icon>
+                  <li v-if="!$store.getters.person.blocked_user" @click="blockUser($store.getters.person.id)">
+                    <b-icon icon="shield"></b-icon>
                     Zablokuj
+                  </li>
+                  <li v-else @click="unblockUser($store.getters.person.id)">
+                    <b-icon icon="shield-slash"></b-icon>
+                    Odblokuj
                   </li>
                 </ul>
               </div>
@@ -177,7 +173,7 @@
                         :class="{'msg_time': String(message.receiver.id) === String($store.state.userId),
                             'msg_time_send': String(message.receiver.id) !== String($store.state.userId)
                   }"
-                    >{{ message.created_at | formatDate }}</span>
+                    >{{ message.created_at | formatDateMessages }}</span>
                   </div>
                   <div v-if="String(message.receiver.id) !== String($store.state.userId)" class="img_cont_msg">
                     <b-avatar :src="profilePicture($store.state.profilePicture)"
@@ -316,6 +312,16 @@ export default {
         console.log(this.conversation);
       }
       this.isLoading = false;
+    },
+    async blockUser(id) {
+      await this.$store.dispatch("addBlockUsers", {
+        blocked_user: id
+      });
+    },
+    async unblockUser(id) {
+      await this.$store.dispatch("delBlockUsers", {
+        blocked_user: id
+      });
     },
     handleKeydown(event) {
       if (event.key === "Enter" && !event.shiftKey) {

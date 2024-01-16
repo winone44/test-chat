@@ -1,5 +1,5 @@
 <template>
-  <b-button size="sm" variant="danger" @click="delGroup(row.item.id, row)" class="mr-2">
+  <b-button size="sm" variant="danger" @click="leaveGroup(row.item.id, row)" class="mr-2">
     x
   </b-button>
 </template>
@@ -7,12 +7,12 @@
 <script>
 
 export default {
-  name: "ButtonDelGroupModalComponent",
+  name: "ButtonLeaveGroupGroupModalComponent",
   props: {
     row: [Object]
   },
   methods: {
-    async delGroup(groupId) {
+    async leaveGroup(groupId) {
       this.$bvModal.msgBoxConfirm('Potwierdź, że chcesz odłączyć się od grupy.', {
         title: 'Opuszczanie grupy',
         size: 'sm',

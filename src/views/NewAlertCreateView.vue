@@ -125,10 +125,8 @@
     <GroupAlertComponent
         :title="title"
         :content="content"
-        :startDate="startDate"
-        :startTime="startTime"
-        :endDate="endDate"
-        :endTime="endTime"
+        :startDateTime="startDateTime"
+        :endDateTime="endDateTime"
         :group="group.name"
         :alertStyle="alertStyle"
     />
@@ -214,6 +212,14 @@ export default {
         return {value: group, text: group.name};
       });
     },
+  },
+  computed: {
+    startDateTime() {
+      return this.startDate + 'T' + this.startTime;
+    },
+    endDateTime() {
+      return this.endDate + 'T' + this.endTime;
+    }
   },
   async created() {
     await this.getPerson();

@@ -142,10 +142,10 @@
 import {LIcon, LMap, LMarker, LPolyline, LTileLayer, LTooltip} from "vue2-leaflet";
 import 'leaflet/dist/leaflet.css';
 import ButtonAddGroupModalComponent from "@/components/ProfileView/ButtonAddGroupModalComponent.vue";
-import ButtonDelGroupModalComponent from "@/components/ProfileView/ButtonDelGroupModalComponent.vue";
+import ButtonDelGroupModalComponent from "@/components/ProfileView/ButtonLeaveGroupModalComponent.vue";
 import ButtonGroupMessageModalComponent from "@/components/ProfileView/ButtonGroupMessageModalComponent.vue";
 import RangeInputClosestPoints from "@/components/ProfileView/RangeInputClosestPoints.vue";
-import ListGrupAlertComponent from "@/components/ProfileSettingsView/ListGrupAlertComponent.vue";
+import ListGrupAlertComponent from "@/components/ProfileView/ListGrupAlertComponent.vue";
 
 export default {
   name: "ProfileView",

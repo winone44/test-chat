@@ -5,10 +5,8 @@
         <GroupAlertComponent
             :title="alert.title"
             :content="alert.content"
-            :startDate="alert.start_date"
-            startTime=""
-            :endDate="alert.end_date"
-            endTime=""
+            :startDateTime="alert.start_date"
+            :endDateTime="alert.end_date"
             :group="alert.group.name"
             :alertStyle="alert.style"
         />
