@@ -3,7 +3,7 @@
     <b-navbar toggleable="sm" type="light" variant="transparent">
 
       <b-navbar-brand>
-        <b-img width="50px" rounded="circle" src="/logo.png"></b-img>
+        <b-img width="50px" rounded="circle" :src="CDN('/logo.png')"></b-img>
         Nexus
       </b-navbar-brand>
 

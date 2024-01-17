@@ -13,7 +13,7 @@
 
       <div class="video-container">
         <div class="color-overlay"></div>
-        <video src="/media/video/people_walking.mp4" loop muted autoplay></video>
+        <video :src="CDN('/media/video/people_walking.mp4')" loop muted autoplay></video>
       </div>
 
     </div>

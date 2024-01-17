@@ -4,7 +4,7 @@ if ([string]::IsNullOrWhiteSpace($commitMessage)) {
     $commitMessage = "adding dist"
 }
 
-npm run build
+npm run buildStaging
 git add dist -f
 git commit -m $commitMessage
 git subtree push --prefix dist origin gh-pages

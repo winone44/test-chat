@@ -7,14 +7,14 @@ import router from './router'
 import store from './store'
 import "./filters/index";
 import { i18n } from '@/locales/i18n';
-import translationsMixin from '@/locales/translationsMixin';
+import mixins from '@/mixins';
 import Vuelidate from 'vuelidate'
 
 Vue.config.productionTip = false
 
 Vue.use(Vuelidate);
 
-Vue.mixin(translationsMixin);
+Vue.mixin(mixins);
 
 new Vue({
   i18n,

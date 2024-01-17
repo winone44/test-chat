@@ -42,7 +42,7 @@
                               </b-col>
                               <b-col>
                                 <img v-for="(group, index2) in person.groups" :key="index2" width="20px"
-                                     :src="'/media/photos/' + group.logo_url">
+                                     :src="CDN('/media/photos/' + group.logo_url)">
                               </b-col>
                             </b-row>
                           </div>
@@ -80,7 +80,7 @@
                               </b-col>
                               <b-col>
                                 <img v-for="(group, index2) in person.groups" :key="index2" width="20px"
-                                     :src="'/media/photos/' + group.logo_url">
+                                     :src="CDN('/media/photos/' + group.logo_url)">
                               </b-col>
                             </b-row>
                           </div>
@@ -105,7 +105,7 @@
               <div class="d-flex bd-highlight">
                 <router-link :to="{ name: 'ProfileView', params: { personId: this.personId }}">
                   <div class="img_cont">
-                    <b-avatar :src="$store.getters.profilePicture"
+                    <b-avatar :src="CDN($store.getters.profilePicture)"
                               class="rounded-circle user_img"/>
                     <span
                         class="online_icon"
@@ -159,7 +159,7 @@
                   }"
                 >
                   <div v-if="String(message.receiver.id) === String($store.state.userId)" class="img_cont_msg">
-                    <b-avatar :src="$store.getters.profilePicture"
+                    <b-avatar :src="CDN($store.getters.profilePicture)"
                               class="rounded-circle user_img_msg"
                     />
                   </div>
@@ -379,15 +379,6 @@ export default {
       // Opróżnienie listy po zatrzymaniu wszystkich interwałów
       this.$store.state.intervalIds = [];
     },
-    profilePicture(profilePicture) {
-      if (profilePicture.startsWith('http://') || profilePicture.startsWith('https://')) {
-        // Jeśli zmienna profile_picture zawiera pełny URL
-        return profilePicture;
-      } else {
-        // Jeśli zmienna profile_picture zawiera tylko nazwę pliku
-        return '/media/photos/' + profilePicture;
-      }
-    }
   },
   created() {
     this.getPeople();

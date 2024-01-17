@@ -1,23 +1,23 @@
 <template>
   <b-container>
-    <div class="row gutters-sm">
-      <div class="col-md-5 col-lg-6 mb-3">
-        <div class="card">
-          <div class="card-body">
+    <b-row class="gutters-sm">
+      <b-col class="col-md-5 col-lg-6 mb-3">
+        <b-card>
+          <b-card-body>
             <div class="d-flex flex-column align-items-center text-center">
-              <b-avatar :src="$store.getters.profilePicture"
+              <b-avatar :src="CDN($store.getters.profilePicture)"
                         class="rounded-circle user_img" width="150"/>
               <div class="mt-3">
                 <h4>{{ $store.getters.person.firstName }} {{ $store.getters.person.lastName }}</h4>
                 <p class="text-secondary mb-1">Full Stack Developer</p>
                 <p class="text-muted font-size-sm">Bay Area, San Francisco, CA</p>
-                <button class="btn btn-primary">Follow</button>
-                <button class="btn btn-outline-primary">Message</button>
+                <b-button variant="danger">Follow</b-button>
+                <b-button variant="outline-primary">Message</b-button>
               </div>
             </div>
-          </div>
-        </div>
-        <div class="card mt-3">
+          </b-card-body>
+        </b-card>
+        <b-card no-body class="mt-3">
           <b-table
               :per-page="perPage"
               :current-page="currentPage"
@@ -72,18 +72,18 @@
               size="sm"
               class="my-0"
           ></b-pagination>
-        </div>
+        </b-card>
         <ListGrupAlertComponent v-if="$route.params.personId === $store.state.userId" />
-      </div>
-      <div v-if="$route.params.personId === $store.state.userId" class="col-md-7 col-lg-6 mb-3">
+      </b-col>
+      <b-col v-if="$route.params.personId === $store.state.userId" class="col-md-7 col-lg-6 mb-3">
         <transition name="fade" mode="out-in">
-          <div v-if="isLoading" class="card-body">
+          <b-card-body v-if="isLoading">
             <div class="d-flex justify-content-center">
               <div>
                 <b-spinner variant="warning"/>
               </div>
             </div>
-          </div>
+          </b-card-body>
           <div v-else>
             <div id="map-container">
               <l-map :zoom="zoom" :center="center">
@@ -111,13 +111,13 @@
                 ></l-polyline>
               </l-map>
             </div>
-            <div class="card mt-3">
+            <b-card class="mt-3">
               <RangeInputClosestPoints
                   :closestPoints="closestPoints"
                   @changeClosestPoints="closestPoints = $event"
               />
-            </div>
-            <div class="card mt-3">
+            </b-card>
+            <b-card no-body class="mt-3">
               <b-table striped hover :items="closest" :fields="fields2">
                 <template #head(profile_picture)>
                   <ButtonGroupMessageModalComponent :closest="closest"/>
@@ -127,14 +127,14 @@
                             class="rounded-circle user_img"/>
                 </template>
               </b-table>
-            </div>
+            </b-card>
           </div>
         </transition>
-      </div>
-      <div v-else class="col-md-7 col-lg-6 mb-3">
-        <b-img style="width: 100%; opacity: 20%" src="/logo.png"></b-img>
-      </div>
-    </div>
+      </b-col>
+      <b-col v-else class="col-md-7 col-lg-6 mb-3">
+        <b-img style="width: 100%; opacity: 20%" :src="CDN('/logo.png')"></b-img>
+      </b-col>
+    </b-row>
   </b-container>
 </template>
 
@@ -329,24 +329,6 @@ export default {
         if (item.id === this.activeGroupIndex) return 'table-active'
       }
     },
-    logoIcon(logoIcon) {
-      if (logoIcon.startsWith('http://') || logoIcon.startsWith('https://')) {
-        // Jeśli zmienna profile_picture zawiera pełny URL
-        return logoIcon;
-      } else {
-        // Jeśli zmienna profile_picture zawiera tylko nazwę pliku
-        return '/media/photos/' + logoIcon;
-      }
-    },
-    profilePicture(profilePicture) {
-      if (profilePicture.startsWith('http://') || profilePicture.startsWith('https://')) {
-        // Jeśli zmienna profile_picture zawiera pełny URL
-        return profilePicture;
-      } else {
-        // Jeśli zmienna profile_picture zawiera tylko nazwę pliku
-        return '/media/photos/' + profilePicture;
-      }
-    }
   },
   async created() {
     await this.getPerson();
