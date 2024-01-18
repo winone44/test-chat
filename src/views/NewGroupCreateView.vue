@@ -1,10 +1,8 @@
 <template>
-  <div id="login-form">
-    <div class="main-wrapper vh-100" style="background-color: #508bfc">
-      <b-container class="py-5 h-100">
+      <b-container>
         <b-row class="d-flex justify-content-center align-items-center h-100">
           <b-col cols="12" class="col-md-8 col-md-8 col-lg-6 col-xl-5">
-            <b-card class="shadow-2-strong" style="border-radius: 1rem">
+            <b-card>
               <b-card-body class="p-5 text-center">
                 <h3 class="mb-5">Stwórz nową grupę</h3>
                 <div class="form-outline mb-4">
@@ -72,8 +70,6 @@
                     </b-form-group>
                     <b-button type="submit" variant="primary" :disabled="$v.$invalid">Wyślij</b-button>
                   </b-form>
-                  <b-button @click="showMsgBoxTwo"></b-button>
-                  <b-button @click="$bvModal.show('modal-scoped')">Open Modal</b-button>
 
                   <b-modal
                       id="modal-scoped"
@@ -107,8 +103,6 @@
           </b-col>
         </b-row>
       </b-container>
-    </div>
-  </div>
 </template>
 
 <script>
@@ -153,18 +147,6 @@ export default {
     }
   },
   methods: {
-    showMsgBoxTwo() {
-      this.$bvModal.msgBoxOk('Please confirm that you want to delete everything.', {
-        title: 'Please Confirm',
-        size: 'sm',
-        buttonSize: 'sm',
-        okVariant: 'primary',
-        okTitle: 'Następna',
-        footerClass: 'p-2',
-        hideHeaderClose: false,
-        centered: true
-      })
-    },
     async addGroup() {
       this.$store.state.waitForCreateSuccess = true;
       await this.$store.dispatch("addGroup", {

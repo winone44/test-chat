@@ -1,21 +1,21 @@
 <template>
   <div class="home">
-    <div class="container-fluid h-100">
-      <div v-if="$store.getters.nearestUser === 0" class="row justify-content-center h-100">
+    <b-container fluid class="h-100">
+      <b-row v-if="$store.getters.nearestUser === 0" class="justify-content-center h-100">
         Reload?
-      </div>
-      <div v-else class="row justify-content-center h-100">
-        <div class="col-md-4 col-xl-3 chat">
-          <div class="card mb-sm-3 mb-md-0 contacts_card">
-            <div class="card-header">
-              <div class="input-group">
-                <input v-model="filter" type="text" placeholder="Wyszukiwanie..." name="" class="form-control search">
-                <div class="input-group-prepend">
-                  <span class="input-group-text search_btn"><b-icon icon="search"></b-icon></span>
-                </div>
-              </div>
-            </div>
-            <div class="card-body contacts_body">
+      </b-row>
+      <b-row v-else class="justify-content-center h-100">
+        <b-col class="col-md-4 col-xl-3 chat">
+          <b-card no-body class="mb-sm-3 mb-md-0 contacts_card">
+            <b-card-header>
+              <b-input-group>
+                <b-input v-model="filter" type="text" placeholder="Wyszukiwanie..." name="" class="search" />
+                <b-input-group-prepend>
+                  <b-input-group-text class="search_btn"><b-icon icon="search"></b-icon></b-input-group-text>
+                </b-input-group-prepend>
+              </b-input-group>
+            </b-card-header>
+            <b-card-body class="contacts_body">
               <swiper
                   :slides-per-view="1"
                   @slideChange="onSlideChange">
@@ -32,7 +32,7 @@
                         <div class="d-flex bd-highlight">
                           <div class="img_cont">
                             <b-avatar :src="profilePicture(person.profile_picture)"
-                                      class="rounded-circle user_img"/>
+                                      class="user_img"/>
                           </div>
                           <div class="user_info">
                             <span>{{ person.firstName }} {{ person.lastName }}</span>
@@ -66,7 +66,7 @@
                         <div class="d-flex bd-highlight">
                           <div class="img_cont">
                             <b-avatar :src="profilePicture(person.profile_picture)"
-                                      class="rounded-circle user_img"/>
+                                      class="user_img"/>
                             <span
                                 class="online_icon"
                                 :class="{offline: !filteredPeopleInbox.online}"
@@ -91,22 +91,24 @@
                   </ul>
                 </swiper-slide>
               </swiper>
-            </div>
-            <div class="card-footer">
+            </b-card-body>
+            <b-card-footer>
               <b-button variant="primary" :to="{name: 'ChatView', params: {personId: this.$store.state.userId}}">
                 Notatnik
               </b-button>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-8 col-xl-6 chat">
-          <div class="card">
-            <div class="card-header msg_head">
+            </b-card-footer>
+          </b-card>
+        </b-col>
+        <b-col class="col-md-8 col-xl-6 chat">
+          <b-card no-body>
+            <b-card-header class="msg_head">
               <div class="d-flex bd-highlight">
                 <router-link :to="{ name: 'ProfileView', params: { personId: this.personId }}">
                   <div class="img_cont">
-                    <b-avatar :src="CDN($store.getters.profilePicture)"
-                              class="rounded-circle user_img"/>
+                    <b-avatar
+                        :src="CDN($store.getters.profilePicture)"
+                        class="user_img"
+                    />
                     <span
                         class="online_icon"
                         :class="{offline: !$store.getters.person.online}"
@@ -118,38 +120,40 @@
                   <p>{{ $store.state.messages === null ? 0 : $store.state.messages.length }} Wiadomości</p>
                 </div>
               </div>
-              <span @click="showActionMenu =! showActionMenu" id="action_menu_btn"><b-icon
-                  icon="three-dots-vertical"></b-icon></span>
+              <span @click="showActionMenu =! showActionMenu" id="action_menu_btn">
+                <b-icon icon="three-dots-vertical" />
+              </span>
               <div v-show="showActionMenu" class="action_menu">
                 <ul>
-                  <router-link custom v-slot="{ navigate }"
-                               :to="{ name: 'ProfileView', params: { personId: this.personId }}">
+                  <router-link
+                      custom v-slot="{ navigate }"
+                      :to="{ name: 'ProfileView', params: { personId: this.personId }}"
+                  >
                     <li @click="navigate">
-                      <b-icon icon="person-circle"></b-icon>
+                      <b-icon icon="person-circle" />
                       Wyświetl profil
                     </li>
                   </router-link>
                   <li v-if="!$store.getters.person.blocked_user" @click="blockUser($store.getters.person.id)">
-                    <b-icon icon="shield"></b-icon>
+                    <b-icon icon="shield" />
                     Zablokuj
                   </li>
                   <li v-else @click="unblockUser($store.getters.person.id)">
-                    <b-icon icon="shield-slash"></b-icon>
+                    <b-icon icon="shield-slash" />
                     Odblokuj
                   </li>
                 </ul>
               </div>
-            </div>
+            </b-card-header>
             <transition name="fade" mode="out-in">
-              <div v-if="isLoading" class="card-body">
+              <b-card-body v-if="isLoading">
                 <div class="d-flex justify-content-center">
                   <div>
                     <b-spinner variant="warning"/>
                   </div>
                 </div>
-
-              </div>
-              <div v-else ref="messagesContainer" class="card-body msg_card_body">
+              </b-card-body>
+              <b-card-body v-else ref="messagesContainer" class="msg_card_body">
                 <div
                     v-for="(message, index) in $store.state.messages"
                     :key="index"
@@ -159,8 +163,9 @@
                   }"
                 >
                   <div v-if="String(message.receiver.id) === String($store.state.userId)" class="img_cont_msg">
-                    <b-avatar :src="CDN($store.getters.profilePicture)"
-                              class="rounded-circle user_img_msg"
+                    <b-avatar
+                        :src="CDN($store.getters.profilePicture)"
+                        class="user_img_msg"
                     />
                   </div>
                   <div
@@ -176,27 +181,30 @@
                     >{{ message.created_at | formatDateMessages }}</span>
                   </div>
                   <div v-if="String(message.receiver.id) !== String($store.state.userId)" class="img_cont_msg">
-                    <b-avatar :src="profilePicture($store.state.profilePicture)"
-                              class="rounded-circle user_img_msg"/>
+                    <b-avatar
+                        :src="profilePicture($store.state.profilePicture)"
+                        class="user_img_msg"
+                    />
                   </div>
                 </div>
-              </div>
+              </b-card-body>
             </transition>
-            <div class="card-footer">
-              <div class="input-group">
+            <b-card-footer>
+              <b-input-group>
                 <b-form-textarea v-model="newMessageText" @keydown="handleKeydown" name="" class="type_msg"
-                                 placeholder="Wpisz wiadomość..."></b-form-textarea>
+                                 placeholder="Wpisz wiadomość..." />
                 <b-input-group-append class="input-group-append">
-                  <span @click="sendMessage" class="input-group-text send_btn"><b-icon
-                      icon="cursor-fill"></b-icon></span>
+                  <span @click="sendMessage" class="input-group-text send_btn">
+                    <b-icon icon="cursor-fill" />
+                  </span>
                 </b-input-group-append>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+              </b-input-group>
+            </b-card-footer>
+          </b-card>
+        </b-col>
+      </b-row>
 
-    </div>
+    </b-container>
   </div>
 </template>
 

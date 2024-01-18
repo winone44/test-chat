@@ -124,6 +124,7 @@ const store = new Vuex.Store({
         person: state => {
             if (state.person === null) {
                 return {
+                    id: null,
                     online: false,
                     firstName: '',
                     lastName: '',
@@ -193,6 +194,9 @@ const store = new Vuex.Store({
         setPerson(state, payload) {
             console.log(payload)
             state.person = payload;
+        },
+        updatePerson(state, payload) {
+            state.person.description = payload.description;
         },
         setPeople(state, payload) {
             state.people = payload;
@@ -452,7 +456,7 @@ const store = new Vuex.Store({
             try {
                 let {data} = await apiClient.patch(`accounts/person/${id}/patch/`, newData);
                 console.log(data)
-                commit('setPerson', data)
+                commit('updatePerson', data)
             } catch (e) {
                 console.log(e)
             }

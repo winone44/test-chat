@@ -2,21 +2,7 @@
   <b-container>
     <b-row class="gutters-sm">
       <b-col class="col-md-5 col-lg-6 mb-3">
-        <b-card>
-          <b-card-body>
-            <div class="d-flex flex-column align-items-center text-center">
-              <b-avatar :src="CDN($store.getters.profilePicture)"
-                        class="rounded-circle user_img" width="150"/>
-              <div class="mt-3">
-                <h4>{{ $store.getters.person.firstName }} {{ $store.getters.person.lastName }}</h4>
-                <p class="text-secondary mb-1">Full Stack Developer</p>
-                <p class="text-muted font-size-sm">Bay Area, San Francisco, CA</p>
-                <b-button variant="danger">Follow</b-button>
-                <b-button variant="outline-primary">Message</b-button>
-              </div>
-            </div>
-          </b-card-body>
-        </b-card>
+        <ProfileCardComponent />
         <b-card no-body class="mt-3">
           <b-table
               :per-page="perPage"
@@ -108,7 +94,7 @@
                     :key="i+'line'"
                     :lat-lngs="line"
                     :color="lineColor"
-                ></l-polyline>
+                />
               </l-map>
             </div>
             <b-card class="mt-3">
@@ -123,8 +109,10 @@
                   <ButtonGroupMessageModalComponent :closest="closest"/>
                 </template>
                 <template #cell(profile_picture)="data">
-                  <b-avatar :src="profilePicture(data.value)"
-                            class="rounded-circle user_img"/>
+                  <b-avatar
+                      :src="profilePicture(data.value)"
+                      class="user_img"
+                  />
                 </template>
               </b-table>
             </b-card>
@@ -146,10 +134,12 @@ import ButtonDelGroupModalComponent from "@/components/ProfileView/ButtonLeaveGr
 import ButtonGroupMessageModalComponent from "@/components/ProfileView/ButtonGroupMessageModalComponent.vue";
 import RangeInputClosestPoints from "@/components/ProfileView/RangeInputClosestPoints.vue";
 import ListGrupAlertComponent from "@/components/ProfileView/ListGrupAlertComponent.vue";
+import ProfileCardComponent from "@/components/ProfileSettingsView/ProfileCardComponent.vue";
 
 export default {
   name: "ProfileView",
   components: {
+    ProfileCardComponent,
     ListGrupAlertComponent,
     RangeInputClosestPoints,
     ButtonGroupMessageModalComponent,
@@ -338,32 +328,6 @@ export default {
 </script>
 
 <style scoped>
-.main-body {
-  padding: 15px;
-}
-
-.card {
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .1), 0 1px 2px 0 rgba(0, 0, 0, .06);
-}
-
-.card {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-  word-wrap: break-word;
-  background-color: #fff;
-  background-clip: border-box;
-  border: 0 solid rgba(0, 0, 0, .125);
-  border-radius: .25rem;
-}
-
-.card-body {
-  flex: 1 1 auto;
-  min-height: 1px;
-  padding: 1rem;
-}
-
 .gutters-sm {
   margin-right: -8px;
   margin-left: -8px;
@@ -403,11 +367,7 @@ export default {
   background-color: #cbd6ea !important;
 }
 
-.user_img {
-  height: 60px;
-  width: 60px;
-  border: 1.5px solid #f5f6fa;
-}
+
 
 .disabled {
   pointer-events: none;
