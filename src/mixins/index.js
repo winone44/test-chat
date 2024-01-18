@@ -7,7 +7,7 @@ export default {
         CDN(path) {
             return process.env.VUE_APP_CDN_URL + path;
         },
-        profilePicture(profilePicture) {
+        profilePictureCDN(profilePicture) {
             if (profilePicture.startsWith('http://') || profilePicture.startsWith('https://')) {
                 // Jeśli zmienna profile_picture zawiera pełny URL
                 return profilePicture;
@@ -16,7 +16,7 @@ export default {
                 return this.CDN('/media/photos/') + profilePicture;
             }
         },
-        logoIcon(logoIcon) {
+        logoIconCDN(logoIcon) {
             if (logoIcon.startsWith('http://') || logoIcon.startsWith('https://')) {
                 // Jeśli zmienna profile_picture zawiera pełny URL
                 return logoIcon;

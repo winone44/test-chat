@@ -110,17 +110,6 @@ const store = new Vuex.Store({
                 return state.people[0].id
             }
         },
-        profilePicture: state => {
-            if (state.person === null || state.person.profile_picture === undefined) {
-                return ''
-            } else if (state.person.profile_picture.startsWith('http://') || state.person.profile_picture.startsWith('https://')) {
-                // Jeśli zmienna profile_picture zawiera pełny URL
-                return state.person.profile_picture;
-            } else {
-                // Jeśli zmienna profile_picture zawiera tylko nazwę pliku
-                return '/media/photos/' + state.person.profile_picture;
-            }
-        },
         person: state => {
             if (state.person === null) {
                 return {
@@ -135,6 +124,7 @@ const store = new Vuex.Store({
                     longitude: null,
                     username: null,
                     gender: '',
+                    profile_picture: '',
                     groups: [
                         {
                             group_site_url: '',
@@ -195,8 +185,11 @@ const store = new Vuex.Store({
             console.log(payload)
             state.person = payload;
         },
-        updatePerson(state, payload) {
+        updatePersonDescription(state, payload) {
             state.person.description = payload.description;
+        },
+        updatePersonProfilePicture(state, payload) {
+            state.person.profile_picture = payload.profile_picture;
         },
         setPeople(state, payload) {
             state.people = payload;
@@ -456,7 +449,19 @@ const store = new Vuex.Store({
             try {
                 let {data} = await apiClient.patch(`accounts/person/${id}/patch/`, newData);
                 console.log(data)
-                commit('updatePerson', data)
+                commit('updatePersonDescription', data)
+            } catch (e) {
+                console.log(e)
+            }
+        },
+        async patchPersonProfilePicture({commit, state}, {id, newData}) {
+            if (state.userId == null) {
+                return;
+            }
+            try {
+                let {data} = await apiClient.patch(`accounts/person/${id}/patch/`, newData);
+                console.log(data)
+                commit('updatePersonProfilePicture', data)
             } catch (e) {
                 console.log(e)
             }

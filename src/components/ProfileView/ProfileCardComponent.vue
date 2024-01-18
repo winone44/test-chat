@@ -3,12 +3,17 @@
     <b-card-body>
       <div class="d-flex flex-column align-items-center text-center">
         <b-avatar
-            :src="CDN($store.getters.profilePicture)"
+            :src="profilePictureCDN(this.$store.getters.person.profile_picture)"
             class="mt-3 user_img"
             :class="{online: $store.getters.person.online}"
         />
-          <b-row>
-            <b-col v-if="!showTextArea" class="text-secondary mt-3" style="white-space: pre-line">{{$store.getters.person.description}}</b-col>
+        <b-row class="mt-3">
+          <b-col>
+            <h4>{{ $store.getters.person.firstName }} {{ $store.getters.person.lastName }}</h4>
+          </b-col>
+        </b-row>
+          <b-row class="mt-1">
+            <b-col v-if="!showTextArea" class="text-secondary" style="white-space: pre-line">{{$store.getters.person.description}}</b-col>
             <b-col v-else class="mt-3">
               <b-form @submit.prevent="submitNewDescription">
                 <b-form-textarea v-model="description"></b-form-textarea>
@@ -84,8 +89,8 @@ export default {
       } catch (e) {
         console.log(e)
       }
-    }
-  }
+    },
+  },
 }
 
 </script>

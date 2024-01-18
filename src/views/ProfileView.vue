@@ -18,7 +18,7 @@
                   :class="{pointer: $route.params.personId === $store.state.userId, disabled: $route.params.personId !== $store.state.userId}"
                   @click="getGroupMembers(data.item.id)"
               >
-                <b-img width="24px" :src="logoIcon(data.item.logo_url)"></b-img>
+                <b-img width="24px" :src="logoIconCDN(data.item.logo_url)"></b-img>
                 {{ data.item.name }}
               </div>
             </template>
@@ -85,7 +85,7 @@
                   <l-icon
                       :icon-size="[32, 32]"
                       :icon-anchor="[16, 32]"
-                      :icon-url="profilePicture(person.profile_picture) === '/media/photos/' ? '/media/photos/avatar.png' : profilePicture(person.profile_picture)">
+                      :icon-url="profilePictureCDN(person.profile_picture) === '/media/photos/' ? '/media/photos/avatar.png' : profilePictureCDN(person.profile_picture)">
                   </l-icon>
                   <l-tooltip>{{ person.name }}</l-tooltip>
                 </l-marker>
@@ -110,7 +110,7 @@
                 </template>
                 <template #cell(profile_picture)="data">
                   <b-avatar
-                      :src="profilePicture(data.value)"
+                      :src="profilePictureCDN(data.value)"
                       class="user_img"
                   />
                 </template>
@@ -134,7 +134,7 @@ import ButtonDelGroupModalComponent from "@/components/ProfileView/ButtonLeaveGr
 import ButtonGroupMessageModalComponent from "@/components/ProfileView/ButtonGroupMessageModalComponent.vue";
 import RangeInputClosestPoints from "@/components/ProfileView/RangeInputClosestPoints.vue";
 import ListGrupAlertComponent from "@/components/ProfileView/ListGrupAlertComponent.vue";
-import ProfileCardComponent from "@/components/ProfileSettingsView/ProfileCardComponent.vue";
+import ProfileCardComponent from "@/components/ProfileView/ProfileCardComponent.vue";
 
 export default {
   name: "ProfileView",

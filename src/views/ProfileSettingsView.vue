@@ -1,8 +1,11 @@
 <template>
   <b-card no-body>
     <b-tabs pills card :vertical="vertical" lazy fill>
-      <b-tab :title="localT('generalInformationTitle')" active>
+      <b-tab :title="localT('generalInformation')" active>
         <GeneralInformationComponent />
+      </b-tab>
+      <b-tab :title="localT('changeProfilePicture')">
+        <ChangeProfileProfilePictureComponent />
       </b-tab>
       <b-tab :title="localT('blockedMembers')">
         <BlockedMembersComponent />
@@ -23,10 +26,14 @@ import GeneralInformationComponent from "@/components/ProfileSettingsView/Genera
 import ChangePasswordComponent from "@/components/ProfileSettingsView/ChangePasswordComponent.vue";
 import DeleteAccountComponent from "@/components/ProfileSettingsView/DeleteAccountComponent.vue";
 import BlockedMembersComponent from "@/components/ProfileSettingsView/BlockedMembersComponent.vue";
+import ChangeProfileProfilePictureComponent
+  from "@/components/ProfileSettingsView/ChangeProfileProfilePictureComponent.vue";
 
 export default {
   name: "ProfileSettingsView",
-  components: {BlockedMembersComponent, DeleteAccountComponent, ChangePasswordComponent, GeneralInformationComponent},
+  components: {
+    ChangeProfileProfilePictureComponent,
+    BlockedMembersComponent, DeleteAccountComponent, ChangePasswordComponent, GeneralInformationComponent},
   data() {
     return {
       size: 0,

@@ -31,7 +31,7 @@
                       <li @click="navigate">
                         <div class="d-flex bd-highlight">
                           <div class="img_cont">
-                            <b-avatar :src="profilePicture(person.profile_picture)"
+                            <b-avatar :src="profilePictureCDN(person.profile_picture)"
                                       class="user_img"/>
                           </div>
                           <div class="user_info">
@@ -42,7 +42,7 @@
                               </b-col>
                               <b-col>
                                 <img v-for="(group, index2) in person.groups" :key="index2" width="20px"
-                                     :src="CDN('/media/photos/' + group.logo_url)">
+                                     :src="logoIconCDN(group.logo_url)">
                               </b-col>
                             </b-row>
                           </div>
@@ -65,7 +65,7 @@
                       <li @click="navigate">
                         <div class="d-flex bd-highlight">
                           <div class="img_cont">
-                            <b-avatar :src="profilePicture(person.profile_picture)"
+                            <b-avatar :src="profilePictureCDN(person.profile_picture)"
                                       class="user_img"/>
                             <span
                                 class="online_icon"
@@ -106,7 +106,7 @@
                 <router-link :to="{ name: 'ProfileView', params: { personId: this.personId }}">
                   <div class="img_cont">
                     <b-avatar
-                        :src="CDN($store.getters.profilePicture)"
+                        :src="profilePictureCDN($store.getters.person.profile_picture)"
                         class="user_img"
                     />
                     <span
@@ -164,7 +164,7 @@
                 >
                   <div v-if="String(message.receiver.id) === String($store.state.userId)" class="img_cont_msg">
                     <b-avatar
-                        :src="CDN($store.getters.profilePicture)"
+                        :src="profilePictureCDN($store.getters.person.profile_picture)"
                         class="user_img_msg"
                     />
                   </div>
@@ -182,7 +182,7 @@
                   </div>
                   <div v-if="String(message.receiver.id) !== String($store.state.userId)" class="img_cont_msg">
                     <b-avatar
-                        :src="profilePicture($store.state.profilePicture)"
+                        :src="profilePictureCDN($store.state.profilePicture)"
                         class="user_img_msg"
                     />
                   </div>

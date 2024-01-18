@@ -12,7 +12,7 @@
                   :description="$store.state.groupInfoDetail.user_count | declineUser"
               >
                 <b-form-input
-                    id="input-id"
+                    id="input-name"
                     type="text"
                     v-model="$store.state.groupInfoDetail.name"
                     disabled
