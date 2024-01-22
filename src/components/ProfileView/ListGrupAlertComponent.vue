@@ -17,11 +17,11 @@
     <b-row>
       <b-col>
         <b-button :disabled="this.$store.state.groupAlerts.previous === null" @click="getPrevAlerts" block>
-          <span v-show="!isSpinnerShow">previous</span>
+          <span v-show="!isSpinnerShow">{{ localT('previous') }}</span>
           <b-spinner v-show="isSpinnerShow" small label="Small Spinning"></b-spinner>
         </b-button>
         <b-button :disabled="this.$store.state.groupAlerts.next === null" @click="getAlerts" block>
-          <span v-show="!isSpinnerShow">next</span>
+          <span v-show="!isSpinnerShow">{{ localT('next') }}</span>
           <b-spinner v-show="isSpinnerShow" small label="Small Spinning"></b-spinner>
         </b-button>
       </b-col>

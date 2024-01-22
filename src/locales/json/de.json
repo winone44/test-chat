@@ -81,6 +81,15 @@
     "newMessagePlaceholder": "Nachricht eingeben..."
   },
 
+  "ProfileView": {
+    "headGroupNameGroupTable": "Gruppennamen",
+    "headWebsiteGroupTable": "Webseite",
+    "profilePictureLabelCloseUsers": "Avatar",
+    "nameLabelCloseUsers": "Name",
+    "distanceLabelCloseUsers": "Entfernung (in km)"
+  },
+
+
   "ProfileSettingsView": {
     "generalInformation": "Allgemeine Informationen",
     "changeProfilePicture": "Profilbild ändern",
@@ -123,7 +132,13 @@
   },
 
   "LocationCheckView": {
-    "location": "Standort:"
+    "location": "Standort:",
+    "getLocationError": "Geolokalisierung wird von diesem Browser nicht unterstützt.",
+    "showPosition": "Breitengrad: {latitude}, Längengrad: {longitude}. Umleitung...",
+    "getLocationShowErrorPERMISSION_DENIED": "Überprüfen Sie die Browsereinstellungen. Der Benutzer hat die Anfrage nach Geolokalisierung abgelehnt.",
+    "getLocationShowErrorPOSITION_UNAVAILABLE": "Standortinformationen sind nicht verfügbar.",
+    "getLocationShowErrorTIMEOUT": "Die Anfrage, den Standort des Benutzers zu erhalten, hat zu lange gedauert.",
+    "getLocationShowErrorUNKNOWN_ERROR": "Ein unbekannter Fehler ist aufgetreten."
   },
 
   "NewGroupCreateView": {
@@ -155,6 +170,21 @@
     "titlePrepareShareGroupAccessLink": "Erfolg",
     "messageErrorPrepareShareGroupAccessLink": "Das Passwort konnte nicht in die Zwischenablage kopiert werden:",
     "titleErrorPrepareShareGroupAccessLink": "Fehler"
+  },
+
+  "GroupAlertComponent": {
+    "exampleAlertTitle": "Mein Titel",
+    "from": "von {firstName} {lastName}",
+    "to": "an {group}"
+  },
+
+  "RangeInputClosestPointsComponent": {
+    "maximumNumberOfConnections": "Maximale Anzahl an Verbindungen: {closestPoints}"
+  },
+
+  "ListGrupAlertComponent": {
+    "previous": "vorherige",
+    "next": "nächste"
   },
 
 

@@ -81,6 +81,14 @@
     "newMessagePlaceholder": "Введите сообщение..."
   },
 
+  "ProfileView": {
+    "headGroupNameGroupTable": "Названия групп",
+    "headWebsiteGroupTable": "Веб-сайт",
+    "profilePictureLabelCloseUsers": "Аватар",
+    "nameLabelCloseUsers": "Имя",
+    "distanceLabelCloseUsers": "Расстояние (в км)"
+  },
+
   "ProfileSettingsView": {
     "generalInformation": "Общая информация",
     "changeProfilePicture": "Сменить фото профиля",
@@ -123,7 +131,13 @@
   },
 
   "LocationCheckView": {
-    "location": "Местоположение:"
+    "location": "Местоположение:",
+    "getLocationError": "Геолокация не поддерживается этим браузером.",
+    "showPosition": "Широта: {latitude}, Долгота: {longitude}. Перенаправление...",
+    "getLocationShowErrorPERMISSION_DENIED": "Проверьте настройки браузера. Пользователь отказал в запросе геолокации.",
+    "getLocationShowErrorPOSITION_UNAVAILABLE": "Информация о местоположении недоступна.",
+    "getLocationShowErrorTIMEOUT": "Запрос на получение местоположения пользователя занял слишком много времени.",
+    "getLocationShowErrorUNKNOWN_ERROR": "Произошла неизвестная ошибка."
   },
 
   "NewGroupCreateView": {
@@ -155,6 +169,21 @@
     "titlePrepareShareGroupAccessLink": "Успех",
     "messageErrorPrepareShareGroupAccessLink": "Не удалось скопировать пароль в буфер обмена:",
     "titleErrorPrepareShareGroupAccessLink": "Ошибка"
+  },
+
+  "GroupAlertComponent": {
+    "exampleAlertTitle": "Мой заголовок",
+    "from": "от {firstName} {lastName}",
+    "to": "к {group}"
+  },
+
+  "RangeInputClosestPointsComponent": {
+    "maximumNumberOfConnections": "Максимальное количество соединений: {closestPoints}"
+  },
+
+  "ListGrupAlertComponent": {
+    "previous": "предыдущие",
+    "next": "следующие"
   },
 
 

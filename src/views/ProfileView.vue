@@ -23,7 +23,7 @@
               </div>
             </template>
             <template #head(name)>
-              Nazwa organizacji
+              {{ localT('headGroupNameGroupTable') }}
             </template>
             <template #cell(group_site_url)="data">
               <a :href="data.item.group_site_url">{{ data.item.group_site_url | normalizeUrl }}</a>
@@ -43,7 +43,7 @@
                 </div>
               </div>
               <div v-else>
-                Strona internetowa
+                {{ localT('headWebsiteGroupTable') }}
               </div>
             </template>
             <template v-if="isUnlockDelButtons" #cell(del)="row">
@@ -98,7 +98,7 @@
               </l-map>
             </div>
             <b-card class="mt-3">
-              <RangeInputClosestPoints
+              <RangeInputClosestPointsComponent
                   :closestPoints="closestPoints"
                   @changeClosestPoints="closestPoints = $event"
               />
@@ -132,16 +132,16 @@ import 'leaflet/dist/leaflet.css';
 import ButtonAddGroupModalComponent from "@/components/ProfileView/ButtonAddGroupModalComponent.vue";
 import ButtonDelGroupModalComponent from "@/components/ProfileView/ButtonLeaveGroupModalComponent.vue";
 import ButtonGroupMessageModalComponent from "@/components/ProfileView/ButtonGroupMessageModalComponent.vue";
-import RangeInputClosestPoints from "@/components/ProfileView/RangeInputClosestPoints.vue";
 import ListGrupAlertComponent from "@/components/ProfileView/ListGrupAlertComponent.vue";
 import ProfileCardComponent from "@/components/ProfileView/ProfileCardComponent.vue";
+import RangeInputClosestPointsComponent from "@/components/ProfileView/RangeInputClosestPointsComponent.vue";
 
 export default {
   name: "ProfileView",
   components: {
+    RangeInputClosestPointsComponent,
     ProfileCardComponent,
     ListGrupAlertComponent,
-    RangeInputClosestPoints,
     ButtonGroupMessageModalComponent,
     ButtonAddGroupModalComponent,
     ButtonDelGroupModalComponent,
@@ -185,16 +185,16 @@ export default {
       fields2: [
         {
           key: 'profile_picture',
-          label: 'Awatar',
+          label: this.localT('profilePictureLabelCloseUsers'),
         },
         {
           key: 'name',
-          label: 'Nazwa',
+          label: this.localT('nameLabelCloseUsers'),
           sortable: true
         },
         {
           key: 'distance',
-          label: 'Dystans (w km)',
+          label: this.localT('distanceLabelCloseUsers'),
           sortable: true
         }
       ],

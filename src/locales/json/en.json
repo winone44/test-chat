@@ -81,6 +81,15 @@
     "newMessagePlaceholder": "Type a message..."
   },
 
+  "ProfileView": {
+    "headGroupNameGroupTable": "Group names",
+    "headWebsiteGroupTable": "Website",
+    "profilePictureLabelCloseUsers": "Avatar",
+    "nameLabelCloseUsers": "Name",
+    "distanceLabelCloseUsers": "Distance (in km)"
+  },
+
+
   "ProfileSettingsView": {
     "generalInformation": "General information",
     "changeProfilePicture": "Change profile picture",
@@ -123,7 +132,13 @@
   },
 
   "LocationCheckView": {
-    "location": "Location:"
+    "location": "Location:",
+    "getLocationError": "Geolocation is not supported by this browser.",
+    "showPosition": "Latitude: {latitude}, Longitude: {longitude}. Redirecting...",
+    "getLocationShowErrorPERMISSION_DENIED": "Check browser settings. User denied the request for Geolocation.",
+    "getLocationShowErrorPOSITION_UNAVAILABLE": "Location information is unavailable.",
+    "getLocationShowErrorTIMEOUT": "The request to get user location timed out.",
+    "getLocationShowErrorUNKNOWN_ERROR": "An unknown error occurred."
   },
 
   "NewGroupCreateView": {
@@ -155,6 +170,21 @@
     "titlePrepareShareGroupAccessLink": "Success",
     "messageErrorPrepareShareGroupAccessLink": "Failed to copy the password to the clipboard:",
     "titleErrorPrepareShareGroupAccessLink": "Error"
+  },
+
+  "GroupAlertComponent": {
+    "exampleAlertTitle": "My title",
+    "from": "from {firstName} {lastName}",
+    "to": "to {group}"
+  },
+
+  "RangeInputClosestPointsComponent": {
+    "maximumNumberOfConnections": "Maximum number of connections: {closestPoints}"
+  },
+
+  "ListGrupAlertComponent": {
+    "previous": "previous",
+    "next": "next"
   },
 
 

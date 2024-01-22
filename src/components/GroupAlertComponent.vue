@@ -1,16 +1,16 @@
 <template>
   <b-alert show :variant="alertStyle">
     <header>
-      <h4 class="alert-heading">{{ title === '' ? 'Mój tytuł' : title }}</h4>
+      <h4 class="alert-heading">{{ title === '' ? localT('exampleAlertTitle') : title }}</h4>
       <span>
-          od {{ firstName }} {{ lastName }}
+        {{$t('GroupAlertComponent.from', {firstName: this.firstName, lastName: this.lastName})}}
         </span>
       <span>
           {{ startDateTime | formatDateAlerts }}
         </span>
       <br/>
       <span>
-         do {{ group }}
+         {{$t('GroupAlertComponent.to', {group: this.group})}}
         </span>
       <span>
          {{ endDateTime | formatDateAlerts }}

@@ -7,14 +7,14 @@
                   min="1"
                   max="20"
     />
-    <div class="mt-2">Maksymalna liczba połączeń: {{ closestPoints }}</div>
+    <div class="mt-2">{{$t('RangeInputClosestPointsComponent.maximumNumberOfConnections', {closestPoints: closestPoints})}}</div>
   </div>
 </template>
 
 <script>
 
 export default {
-  name: "RangeInputClosestPoints",
+  name: "RangeInputClosestPointsComponent",
   props: {
     closestPoints: [Number, String]
   },

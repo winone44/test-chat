@@ -82,6 +82,14 @@
     "newMessagePlaceholder": "Wpisz wiadomość..."
   },
 
+  "ProfileView": {
+    "headGroupNameGroupTable": "Nazwa grup",
+    "headWebsiteGroupTable": "Strona internetowa",
+    "profilePictureLabelCloseUsers": "Awatar",
+    "nameLabelCloseUsers": "Nazwa",
+    "distanceLabelCloseUsers": "Dystans (w km)"
+  },
+
   "ProfileSettingsView": {
     "generalInformation": "Informacje ogólne",
     "changeProfilePicture": "Zmień zdjęcie profilowe",
@@ -124,7 +132,13 @@
   },
 
   "LocationCheckView": {
-    "location": "Lokalizacja:"
+    "location": "Lokalizacja:",
+    "getLocationError": "Geolokalizacja nie jest wspierana przez tę przeglądarkę.",
+    "showPosition": "Szerokość geograficzna: {latitude}, Długość geograficzna: {longitude}. Przekierowanie...",
+    "getLocationShowErrorPERMISSION_DENIED": "Sprawdź ustawienia przeglądarki. Użytkownik odmówił zgody na geolokalizację.",
+    "getLocationShowErrorPOSITION_UNAVAILABLE": "Informacje o lokalizacji są niedostępne.",
+    "getLocationShowErrorTIMEOUT": "Próba uzyskania lokalizacji użytkownika trwała zbyt długo.",
+    "getLocationShowErrorUNKNOWN_ERROR": "Wystąpił nieznany błąd."
   },
 
   "NewGroupCreateView": {
@@ -156,6 +170,21 @@
     "titlePrepareShareGroupAccessLink": "Sukces",
     "messageErrorPrepareShareGroupAccessLink": "Nie udało się skopiować hasła do schowka:",
     "titleErrorPrepareShareGroupAccessLink": "Błąd"
+  },
+
+  "GroupAlertComponent": {
+    "exampleAlertTitle": "Mój tytuł",
+    "from": "od {firstName} {lastName}",
+    "to": "do {group}"
+  },
+
+  "RangeInputClosestPointsComponent": {
+    "maximumNumberOfConnections": "Maksymalna liczba połączeń: {closestPoints}"
+  },
+
+  "ListGrupAlertComponent": {
+    "previous": "poprzednie",
+    "next": "następne"
   },
 
   "GeneralInformationComponent": {

@@ -20,11 +20,14 @@ export default {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(this.showPosition, this.showError, {enableHighAccuracy: true});
       } else {
-        this.location = "Geolokalizacja nie jest wspierana przez tę przeglądarkę.";
+        this.location = this.localT('getLocationError');
       }
     },
     async showPosition(position) {
-      this.location = `Szerokość geograficzna: ${position.coords.latitude}, Długość geograficzna: ${position.coords.longitude}. Przekierowanie...`;
+      this.location = this.$t('LocationCheckView.showPosition', {
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude
+      });
       await this.submitNewDescription(position.coords.latitude, position.coords.longitude);
       await this.getPeople();
       await this.$router.push({name: 'ChatView', params: {personId: this.$store.getters.nearestUser}})
@@ -32,16 +35,16 @@ export default {
     showError(error) {
       switch (error.code) {
         case error.PERMISSION_DENIED:
-          this.location = "Sprawdź ustawienia przeglądarki. Użytkownik odmówił zgody na geolokalizację.";
+          this.location = this.localT('getLocationShowErrorPERMISSION_DENIED');
           break;
         case error.POSITION_UNAVAILABLE:
-          this.location = "Informacje o lokalizacji są niedostępne.";
+          this.location = this.localT('getLocationShowErrorPOSITION_UNAVAILABLE');
           break;
         case error.TIMEOUT:
-          this.location = "Próba uzyskania lokalizacji użytkownika trwała zbyt długo.";
+          this.location = this.localT('getLocationShowErrorTIMEOUT');
           break;
         case error.UNKNOWN_ERROR:
-          this.location = "Wystąpił nieznany błąd.";
+          this.location = this.localT('getLocationShowErrorUNKNOWN_ERROR');
           break;
       }
     },
