@@ -6,6 +6,7 @@
     "chat": "Czat",
     "login": "Logowanie",
     "newGroup": "Utwórz nową grupę",
+    "newAlert": "Utwórz nowy alert",
     "profile": "Profil",
     "settings": "Ustawienia",
     "logout": "Wyloguj",
@@ -69,10 +70,92 @@
     "loginButton": "Zaloguj się"
   },
 
+  "ChatView": {
+    "reload": "Przeładuj?",
+    "search": "Wyszukiwanie...",
+    "inbox": "INBOX",
+    "notebook": "Notatnik",
+    "messages": "Wiadomości",
+    "viewProfile": "Wyświetl profil",
+    "block": "Zablokuj",
+    "unblock": "Odblokuj",
+    "newMessagePlaceholder": "Wpisz wiadomość..."
+  },
+
   "ProfileSettingsView": {
-    "generalInformationTitle": "Informacje ogólne",
+    "generalInformation": "Informacje ogólne",
+    "changeProfilePicture": "Zmień zdjęcie profilowe",
+    "createdAlerts": "Utworzone alerty",
+    "blockedUsers": "Zablokowani użytkownicy",
     "passwordChange": "Zmiana hasła",
     "deleteProfile": "Usuń profil"
+  },
+
+  "NewAlertCreateView": {
+    "createNewAlertForGroup": "Utwórz nowy alert dla grupy",
+    "title": "Tytuł",
+    "enterAlertTitle": "Wpisz tytuł alertu",
+    "content": "Treść",
+    "enterContent": "Podaj adres url do logo",
+    "alertDisplayStart": "Start wyświetlania alertu",
+    "alertCreationDate": "Zwyczaj jest to data utworzenia alertu chyba że alert ma być opóźniony",
+    "alertDisplayEnd": "Koniec wyświetlania alertu",
+    "eventStartDate": "Zwyczaj jest to data początku przedsięwzięcia/imprezy",
+    "theAlertAddressed": "Alert kierowany jest do grupy",
+    "alertStyle": "Styl alertu",
+    "primaryAlert": "Alert podstawowy",
+    "secondaryAlert": "Alert dodatkowy",
+    "successAlert": "Alert sukcesu",
+    "dangerAlert": "Alert o niebezpieczeństwie",
+    "warningAlert": "Alert ostrzegawczy",
+    "infoAlert": "Alert informacyjnyy",
+    "lightAlert": "Alert jasny",
+    "darkAlert": "Alert ciemny"
+  },
+
+  "JoinGroupView": {
+    "groupNameLabel": "Nazwa:",
+    "groupNameDescription": "Opis",
+    "groupIDLabel": "ID:",
+    "groupPasswordLabel": "Hasło:",
+    "placeholderEnterGroupID": "Wprowadź identyfikator grupy",
+    "placeholderEnterGroupPassword": "Wprowadź hasło grupy",
+    "submitButtonLabel": "Dodaj do grupy"
+  },
+
+  "LocationCheckView": {
+    "location": "Lokalizacja:"
+  },
+
+  "NewGroupCreateView": {
+    "newGroupCreateTitle": "Stwórz nową grupę",
+    "groupNameLabel": "Nazwa grupy",
+    "groupNamePlaceholder": "Podaj nazwę grupy",
+    "logoUrlLabel": "Url logo",
+    "logoUrlPlaceholder": "Podaj adres url do logo",
+    "groupSiteUrlLabel": "Adres url",
+    "groupSiteUrlPlaceholder": "Podaj adres url do strony organizacji",
+    "groupPasswordLabel": "Hasło do grupy",
+    "generatePasswordButton": "Generuj hasło",
+    "copyToClipboardButton": "Kopiuj",
+    "submitButton": "Wyślij",
+    "headerModal": "Stworzona Grupa",
+    "paragrafModal": "Dołączyłeś do grupy automatycznie. Opuścić grupę możesz w zakładce profil</p>\n                      <p><b>Zachowaj ID</b> stworzonej grupy. <b>ID i hasło</b> posłuży innym użytkownikom do dołączenia\n                        do tej grupy",
+    "nextButtonModal": "Następna",
+    "idLabelTable": "ID",
+    "nameLabelTable": "Nazwa",
+    "logoUrlLabelTable": "Adres logo",
+    "groupSiteUrlLabelTable": "Adres internetowy",
+    "passwordLabelTable": "Hasło",
+    "shareLabelTable": "Udostępnij",
+    "messageCopyToClipboard": "Hasło skopiowane do schowka",
+    "titleCopyToClipboard": "Sukces",
+    "messageErrorCopyToClipboard": "Nie udało się skopiować hasła do schowka:",
+    "titleErrorCopyToClipboard": "Błąd",
+    "messagePrepareShareGroupAccessLink": "Hasło skopiowane do schowka",
+    "titlePrepareShareGroupAccessLink": "Sukces",
+    "messageErrorPrepareShareGroupAccessLink": "Nie udało się skopiować hasła do schowka:",
+    "titleErrorPrepareShareGroupAccessLink": "Błąd"
   },
 
   "GeneralInformationComponent": {
@@ -83,6 +166,28 @@
     "username": "Nazwa użytkownika:",
     "followedGroupsCount": "Liczba obserwowanych grup:",
     "lastKnownLocation": "Ostatnia zarejestrowana lokalizacja:"
+  },
+
+  "ChangeProfileProfilePictureComponent": {
+    "changeAvatar": "Zmień awatar",
+    "avatarURL": "Awatar URL:",
+    "placeholderAvatarURL": "Wpisz url awatara",
+    "change": "Zmień"
+  },
+
+  "CreatedAlertsComponent": {
+    "title": "Tytuł",
+    "content": "Treść",
+    "startDate": "Start wyświetlania alertu",
+    "endDate": "Koniec wyświetlania alertu",
+    "groupName": "Nazwa grupy",
+    "delete": "Usuń"
+  },
+
+  "BlockedUsersComponent": {
+    "firstName": "Imię",
+    "lastName": "Nazwisko",
+    "unblock": "Odblokuj"
   },
 
   "ChangePasswordComponent": {

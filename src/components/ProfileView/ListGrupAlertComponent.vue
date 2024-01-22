@@ -4,6 +4,8 @@
       <b-col>
         <GroupAlertComponent
             :title="alert.title"
+            :firstName="alert.user.firstName"
+            :lastName="alert.user.lastName"
             :content="alert.content"
             :startDateTime="alert.start_date"
             :endDateTime="alert.end_date"

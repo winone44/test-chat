@@ -4,11 +4,11 @@
           <b-col cols="12" class="col-md-8 col-md-8 col-lg-6 col-xl-5">
             <b-card>
               <b-card-body class="p-5 text-center">
-                <h3 class="mb-5">Stwórz nową grupę</h3>
+                <h3 class="mb-5">{{ localT('newGroupCreateTitle') }}</h3>
                 <div class="form-outline mb-4">
                   <b-form @submit.prevent="addGroup">
                     <b-form-group
-                        label="Nazwa grupy"
+                        :label="localT('groupNameLabel')"
                         label-for="groupName"
                         label-cols="4"
                     >
@@ -19,11 +19,11 @@
                           @input="$v.groupName.$model = $event.trim()"
                           :state="!$v.groupName.$dirty ? null : !$v.groupName.$error"
                           required
-                          placeholder="Podaj nazwę grupy"
+                          :placeholder="localT('groupNamePlaceholder')"
                       ></b-form-input>
                     </b-form-group>
                     <b-form-group
-                        label="Url logo"
+                        :label="localT('logoUrlLabel')"
                         label-for="logo_url"
                         label-cols="4"
                     >
@@ -34,11 +34,11 @@
                           @input="$v.logoUrl.$model = $event.trim()"
                           :state="!$v.logoUrl.$dirty ? null : !$v.logoUrl.$error"
                           required
-                          placeholder="Podaj adres url do logo"
+                          :placeholder="localT('logoUrlPlaceholder')"
                       ></b-form-input>
                     </b-form-group>
                     <b-form-group
-                        label="Adres url"
+                        :label="localT('groupSiteUrlLabel')"
                         label-for="groupSiteUrl"
                         label-cols="4"
                     >
@@ -49,11 +49,11 @@
                           @input="$v.groupSiteUrl.$model = $event.trim()"
                           :state="!$v.groupSiteUrl.$dirty ? null : !$v.groupSiteUrl.$error"
                           required
-                          placeholder="Podaj adres url do strony organizacji"
+                          :placeholder="localT('groupSiteUrlPlaceholder')"
                       ></b-form-input>
                     </b-form-group>
                     <b-form-group
-                        label="Hasło do grupy"
+                        :label="localT('groupPasswordLabel')"
                         label-for="password"
                         label-cols="4"
                     >
@@ -65,10 +65,10 @@
                           @input="$v.password.$model = $event.trim()"
                           :state="!$v.password.$dirty ? null : !$v.password.$error"
                       ></b-form-input>
-                      <b-button @click.prevent="generatePassword">Generuj hasło</b-button>
-                      <b-button @click.prevent="copyToClipboard">Kopiuj</b-button>
+                      <b-button @click.prevent="generatePassword">{{localT('generatePasswordButton')}}</b-button>
+                      <b-button @click.prevent="copyToClipboard">{{localT('copyToClipboardButton')}}</b-button>
                     </b-form-group>
-                    <b-button type="submit" variant="primary" :disabled="$v.$invalid">Wyślij</b-button>
+                    <b-button type="submit" variant="primary" :disabled="$v.$invalid">{{localT('submitButton')}}</b-button>
                   </b-form>
 
                   <b-modal
@@ -76,7 +76,7 @@
                       @ok="clearForm"
                   >
                     <template #modal-header>
-                      <h5>Stworzona Grupa</h5>
+                      <h5>{{localT('headerModal')}}</h5>
                     </template>
 
                     <template #default>
@@ -85,15 +85,13 @@
                           <b-button @click="prepareShareGroupAccessLink(data.item.id, data.item.password)"><b-icon icon="share" /></b-button>
                         </template>
                       </b-table>
-                      <p>Dołączyłeś do grupy automatycznie. Opuścić grupę możesz w zakładce profil</p>
-                      <p><b>Zachowaj ID</b> stworzonej grupy. <b>ID i hasło</b> posłuży innym użytkownikom do dołączenia
-                        do tej grupy </p>
+                      <p>{{ localT('paragrafModal')}}</p>
                     </template>
 
                     <template #modal-footer="{ ok }">
                       <!-- Przycisk z niestandardową wartością wyzwalacza zamknięcia -->
                       <b-button size="sm" variant="outline-secondary" @click="ok()">
-                        Następna
+                        {{localT('nextButtonModal')}}
                       </b-button>
                     </template>
                   </b-modal>
@@ -121,27 +119,27 @@ export default {
       fields: [
         {
           key: 'id',
-          label: 'ID'
+          label: this.localT('idLabelTable')
         },
         {
           key: 'name',
-          label: 'Nazwa'
+          label: this.localT('nameLabelTable')
         },
         {
           key: 'logo_url',
-          label: 'Adres logo'
+          label: this.localT('logoUrlLabelTable')
         },
         {
           key: 'group_site_url',
-          label: 'Adres internetowy'
+          label: this.localT('groupSiteUrlLabelTable')
         },
         {
           key: 'password',
-          label: 'Hasło'
+          label: this.localT('passwordLabelTable')
         },
         {
           key: 'share',
-          label: 'Udostępnij'
+          label: this.localT('shareLabelTable')
         }
       ]
     }
@@ -174,14 +172,14 @@ export default {
     async copyToClipboard() {
       try {
         await navigator.clipboard.writeText(this.password);
-        this.$bvToast.toast('Hasło skopiowane do schowka', {
-          title: 'Sukces',
+        this.$bvToast.toast(this.localT('messageCopyToClipboard'), {
+          title: this.localT('titleCopyToClipboard'),
           variant: 'success',
           autoHideDelay: 5000,
         })
       } catch (err) {
-        this.$bvToast.toast(`Nie udało się skopiować hasła do schowka: ${err}`, {
-          title: 'Błąd',
+        this.$bvToast.toast(this.localT('messageErrorCopyToClipboard') + ` ${err}`, {
+          title: this.localT('titleErrorCopyToClipboard'),
           variant: 'danger',
           autoHideDelay: 5000,
         })
@@ -190,13 +188,13 @@ export default {
     async prepareShareGroupAccessLink(id, password) {
       try {
         await navigator.clipboard.writeText(`${process.env.VUE_APP_BASE_URL}join-to-group/${id}?password=${password}`);
-        this.$bvToast.toast('Hasło skopiowane do schowka', {
-          title: 'Sukces',
+        this.$bvToast.toast(this.localT('messagePrepareShareGroupAccessLink'), {
+          title: this.localT('titlePrepareShareGroupAccessLink'),
           variant: 'success',
           autoHideDelay: 5000,
         })
       } catch (err) {
-        this.$bvToast.toast(`Nie udało się skopiować hasła do schowka: ${err}`, {
+        this.$bvToast.toast(this.localT('titlePrepareShareGroupAccessLink') + ` ${err}`, {
           title: 'Błąd',
           variant: 'danger',
           autoHideDelay: 5000,

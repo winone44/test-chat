@@ -1,7 +1,7 @@
 <template>
   <div>
     <div>
-      <p>Lokalizacja: {{ location }}</p>
+      <p>{{localT('location')}} {{ location }}</p>
     </div>
   </div>
 </template>

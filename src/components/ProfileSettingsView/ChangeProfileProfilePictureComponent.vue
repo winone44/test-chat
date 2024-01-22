@@ -10,7 +10,7 @@
     <b-form @submit.prevent="submitNewProfilePicture">
       <b-form-group
           id="profile-picture-url"
-          label="Awatar URL:"
+          :label="localT('avatarURL')"
           label-for="input-profile-picture-url"
       >
         <b-form-input
@@ -18,13 +18,13 @@
             type="text"
             v-model="profilePicture"
             :disabled="!isInputShow"
-            placeholder="Wpisz url awatara"
+            :placeholder="localT('placeholderAvatarURL')"
             @input="$v.profilePicture.$model = $event.trim()"
             :state="!$v.profilePicture.$dirty ? null : !$v.profilePicture.$error"
             required
         ></b-form-input>
       </b-form-group>
-      <b-button :disabled="!isInputShow" type="submit">Zmień</b-button>
+      <b-button :disabled="!isInputShow" type="submit">{{localT('change')}}</b-button>
     </b-form>
   </b-card>
 </template>

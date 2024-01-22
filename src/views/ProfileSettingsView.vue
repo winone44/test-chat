@@ -7,7 +7,10 @@
       <b-tab :title="localT('changeProfilePicture')">
         <ChangeProfileProfilePictureComponent />
       </b-tab>
-      <b-tab :title="localT('blockedMembers')">
+      <b-tab :title="localT('createdAlerts')">
+        <CreatedAlertsComponent />
+      </b-tab>
+      <b-tab :title="localT('blockedUsers')">
         <BlockedMembersComponent />
       </b-tab>
       <b-tab :title="localT('passwordChange')">
@@ -25,13 +28,15 @@
 import GeneralInformationComponent from "@/components/ProfileSettingsView/GeneralInformationComponent.vue";
 import ChangePasswordComponent from "@/components/ProfileSettingsView/ChangePasswordComponent.vue";
 import DeleteAccountComponent from "@/components/ProfileSettingsView/DeleteAccountComponent.vue";
-import BlockedMembersComponent from "@/components/ProfileSettingsView/BlockedMembersComponent.vue";
+import BlockedMembersComponent from "@/components/ProfileSettingsView/BlockedUsersComponent.vue";
 import ChangeProfileProfilePictureComponent
   from "@/components/ProfileSettingsView/ChangeProfileProfilePictureComponent.vue";
+import CreatedAlertsComponent from "@/components/ProfileSettingsView/CreatedAlertsComponent.vue";
 
 export default {
   name: "ProfileSettingsView",
   components: {
+    CreatedAlertsComponent,
     ChangeProfileProfilePictureComponent,
     BlockedMembersComponent, DeleteAccountComponent, ChangePasswordComponent, GeneralInformationComponent},
   data() {

@@ -7,7 +7,7 @@
             <b-form @submit.prevent="addMemberToGroup">
               <b-form-group
                   id="input-group-name"
-                  label="Nazwa:"
+                  :label="localT('groupNameLabel')"
                   label-for="input-name"
                   :description="$store.state.groupInfoDetail.user_count | declineUser"
               >
@@ -22,7 +22,7 @@
               </b-form-group>
               <b-form-group
                   id="input-group-id"
-                  label="ID:"
+                  :label="localT('groupIDLabel')"
                   label-for="input-id"
               >
                 <b-form-input
@@ -30,20 +30,20 @@
                     type="number"
                     v-model="$store.state.groupInfoDetail.id"
                     disabled
-                    placeholder="Enter group ID"
+                    :placeholder="localT('placeholderEnterGroupID')"
                     required
                 ></b-form-input>
               </b-form-group>
               <b-form-group
                   id="input-group-password"
-                  label="Hasło:"
+                  :label="localT('groupPasswordLabel')"
                   label-for="input-password"
               >
                 <b-form-input
                     id="input-password"
                     type="text"
                     :disabled="isPasswordInputDisabled"
-                    placeholder="Enter group password"
+                    :placeholder="localT('placeholderEnterGroupPassword')"
                     required
                     v-model="$v.password.$model"
                     :state="!$v.password.$dirty ? null : !$v.password.$error"
@@ -54,7 +54,7 @@
                     variant="primary"
                     :disabled="$v.$invalid"
                 >
-                  Dodaj do grupy
+                  {{localT('submitButtonLabel')}}
                 </b-button>
               </b-form-group>
             </b-form>

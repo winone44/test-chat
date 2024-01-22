@@ -97,6 +97,7 @@ const store = new Vuex.Store({
         },
         groupAlerts: null,
         blockedUsers: null,
+        createdAlertsByUser: null,
     },
     getters: {
         isAuth: state => {
@@ -222,6 +223,12 @@ const store = new Vuex.Store({
         },
         setBlockUsers(state, payload) {
             state.blockedUsers = payload
+        },
+        setCreatedAlertsByUser(state, payload) {
+            state.createdAlertsByUser = payload
+        },
+        delBlockUsers(state, payload) {
+            state.createdAlertsByUser = state.createdAlertsByUser.filter(obj => obj.id !== payload.id);
         }
     },
     actions: {
@@ -393,6 +400,29 @@ const store = new Vuex.Store({
             try {
                 await apiClient.delete(`accounts/blocked-user/`, {data: payload});
                 state.person.blocked_user = false;
+            } catch (e) {
+                console.log(e)
+            }
+        },
+        async getCreatedAlertsByUser({commit, state}, payload) {
+            if (state.userId == null) {
+                return;
+            }
+            try {
+                let {data} = await apiClient.get(`accounts/alerts/`, payload);
+                console.log(data)
+                commit('setCreatedAlertsByUser', data)
+            } catch (e) {
+                console.log(e)
+            }
+        },
+        async delCreatedAlert({commit, state}, payload) {
+            if (state.userId == null) {
+                return;
+            }
+            try {
+                await apiClient.delete(`accounts/alerts/`, {data: payload});
+                commit('delBlockUsers', payload)
             } catch (e) {
                 console.log(e)
             }

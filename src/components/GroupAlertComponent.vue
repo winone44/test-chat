@@ -3,7 +3,7 @@
     <header>
       <h4 class="alert-heading">{{ title === '' ? 'Mój tytuł' : title }}</h4>
       <span>
-          od {{ $store.state.username }}
+          od {{ firstName }} {{ lastName }}
         </span>
       <span>
           {{ startDateTime | formatDateAlerts }}
@@ -29,6 +29,8 @@ export default {
   name: 'GroupAlertComponent',
   props: {
     title: [String],
+    firstName: [String],
+    lastName: [String],
     content: [String],
     startDateTime: [String],
     endDateTime: [String],

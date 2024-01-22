@@ -6,6 +6,7 @@
     "login": "Anmeldung",
     "newGroup": "Neue Gruppe erstellen",
     "profile": "Profil",
+    "newAlert": "Neuen Alarm erstellen",
     "settings": "Einstellungen",
     "logout": "Abmelden",
     "selectLanguage": "Sprache wählen",
@@ -68,11 +69,94 @@
     "loginButton": "Einloggen"
   },
 
+  "ChatView": {
+    "reload": "Neu laden?",
+    "search": "Suche...",
+    "inbox": "POSTEINGANG",
+    "notebook": "Notizbuch",
+    "messages": "Nachrichten",
+    "viewProfile": "Profil anzeigen",
+    "block": "Blockieren",
+    "unblock": "Entblocken",
+    "newMessagePlaceholder": "Nachricht eingeben..."
+  },
+
   "ProfileSettingsView": {
-    "generalInformationTitle": "Allgemeine Informationen",
+    "generalInformation": "Allgemeine Informationen",
+    "changeProfilePicture": "Profilbild ändern",
+    "createdAlerts": "Erstellte Alarme",
+    "blockedUsers": "Blockierte Benutzer",
     "passwordChange": "Passwort ändern",
     "deleteProfile": "Profil löschen"
   },
+
+  "NewAlertCreateView": {
+    "createNewAlertForGroup": "Erstellen Sie einen neuen Alarm für die Gruppe",
+    "title": "Titel",
+    "enterAlertTitle": "Geben Sie den Alarmtitel ein",
+    "content": "Inhalt",
+    "enterContent": "Geben Sie die URL zum Logo an",
+    "alertDisplayStart": "Alarmanzeige Start",
+    "alertCreationDate": "Normalerweise ist dies das Erstellungsdatum des Alarms, es sei denn, der Alarm soll verzögert werden",
+    "alertDisplayEnd": "Alarmanzeige Ende",
+    "eventStartDate": "Normalerweise ist dies das Startdatum des Ereignisses/Anlasses",
+    "theAlertAddressed": "Der Alarm richtet sich an die Gruppe",
+    "alertStyle": "Alarmstil",
+    "primaryAlert": "Hauptalarm",
+    "secondaryAlert": "Nebenalarm",
+    "successAlert": "Erfolgsalarm",
+    "dangerAlert": "Gefahrenalarm",
+    "warningAlert": "Warnalarm",
+    "infoAlert": "Informationsalarm",
+    "lightAlert": "Heller Alarm",
+    "darkAlert": "Dunkler Alarm"
+  },
+
+  "JoinGroupView": {
+    "groupNameLabel": "Name:",
+    "groupNameDescription": "Beschreibung",
+    "groupIDLabel": "ID:",
+    "groupPasswordLabel": "Passwort:",
+    "placeholderEnterGroupID": "Gruppen-ID eingeben",
+    "placeholderEnterGroupPassword": "Gruppenpasswort eingeben",
+    "submitButtonLabel": "Der Gruppe beitreten"
+  },
+
+  "LocationCheckView": {
+    "location": "Standort:"
+  },
+
+  "NewGroupCreateView": {
+    "newGroupCreateTitle": "Erstelle eine neue Gruppe",
+    "groupNameLabel": "Gruppenname",
+    "groupNamePlaceholder": "Gruppennamen eingeben",
+    "logoUrlLabel": "Logo-URL",
+    "logoUrlPlaceholder": "Geben Sie die Logo-URL ein",
+    "groupSiteUrlLabel": "Website-URL",
+    "groupSiteUrlPlaceholder": "Geben Sie die URL der Organisation ein",
+    "groupPasswordLabel": "Gruppenpasswort",
+    "generatePasswordButton": "Passwort generieren",
+    "copyToClipboardButton": "Kopieren",
+    "submitButton": "Absenden",
+    "headerModal": "Gruppe erstellt",
+    "paragrafModal": "Sie sind automatisch der Gruppe beigetreten. Sie können die Gruppe im Profil-Tab verlassen. Bewahren Sie die ID der erstellten Gruppe auf. Die ID und das Passwort werden von anderen Benutzern verwendet, um dieser Gruppe beizutreten",
+    "nextButtonModal": "Nächste",
+    "idLabelTable": "ID",
+    "nameLabelTable": "Name",
+    "logoUrlLabelTable": "Logo-Adresse",
+    "groupSiteUrlLabelTable": "Website-Adresse",
+    "passwordLabelTable": "Passwort",
+    "shareLabelTable": "Teilen",
+    "messageCopyToClipboard": "Passwort in die Zwischenablage kopiert",
+    "titleCopyToClipboard": "Erfolg",
+    "messageErrorCopyToClipboard": "Das Passwort konnte nicht in die Zwischenablage kopiert werden:",
+    "titleErrorCopyToClipboard": "Fehler",
+    "messagePrepareShareGroupAccessLink": "Passwort in die Zwischenablage kopiert",
+    "titlePrepareShareGroupAccessLink": "Erfolg",
+    "messageErrorPrepareShareGroupAccessLink": "Das Passwort konnte nicht in die Zwischenablage kopiert werden:",
+    "titleErrorPrepareShareGroupAccessLink": "Fehler"
+  },
+
 
   "GeneralInformationComponent": {
     "gender": "Geschlecht:",
@@ -83,6 +167,29 @@
     "followedGroupsCount": "Anzahl der verfolgten Gruppen:",
     "lastKnownLocation": "Letzter bekannter Standort:"
   },
+
+  "ChangeProfileProfilePictureComponent": {
+    "changeAvatar": "Avatar ändern",
+    "avatarURL": "Avatar-URL:",
+    "placeholderAvatarURL": "Geben Sie die Avatar-URL ein",
+    "change": "Ändern"
+  },
+
+  "CreatedAlertsComponent": {
+    "title": "Titel",
+    "content": "Inhalt",
+    "startDate": "Anzeigestart des Alerts",
+    "endDate": "Anzeigeende des Alerts",
+    "groupName": "Gruppenname",
+    "delete": "Löschen"
+  },
+
+  "BlockedUsersComponent": {
+    "firstName": "Vorname",
+    "lastName": "Nachname",
+    "unblock": "Entsperren"
+  },
+
 
   "ChangePasswordComponent": {
     "currentPasswordLabel": "Aktuelles Passwort:",

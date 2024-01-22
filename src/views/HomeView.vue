@@ -6,8 +6,8 @@
         <h3 class="fade-in-left">{{ localT('subtitle') }}</h3>
         <p class="fade-in-up">{{ localT('description') }}</p>
         <div class="fade-in-up">
-          <b-button :to="{ name: 'LoginView' }">{{ localT('loginButton') }}</b-button>
-          <b-button :to="{ name: 'RegisterView' }">{{ localT('registerButton') }}</b-button>
+          <b-button variant="primary" :to="{ name: 'LoginView' }">{{ localT('loginButton') }}</b-button>
+          <b-button class="ml-2" variant="outline-success" :to="{ name: 'RegisterView' }">{{ localT('registerButton') }}</b-button>
         </div>
       </div>
 
@@ -91,7 +91,7 @@ export default {
   position: absolute;
   top: 0;
   left: 0;
-  background-color: #76d9f6;
+  background-color: #0053ad;
   width: 100%;
   height: 100vh;
   opacity: 0.5;

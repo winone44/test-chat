@@ -2,14 +2,14 @@
   <div class="home">
     <b-container fluid class="h-100">
       <b-row v-if="$store.getters.nearestUser === 0" class="justify-content-center h-100">
-        Reload?
+        {{ localT('reload') }}
       </b-row>
       <b-row v-else class="justify-content-center h-100">
         <b-col class="col-md-4 col-xl-3 chat">
           <b-card no-body class="mb-sm-3 mb-md-0 contacts_card">
             <b-card-header>
               <b-input-group>
-                <b-input v-model="filter" type="text" placeholder="Wyszukiwanie..." name="" class="search" />
+                <b-input v-model="filter" type="text" :placeholder="localT('search')" name="" class="search" />
                 <b-input-group-prepend>
                   <b-input-group-text class="search_btn"><b-icon icon="search"></b-icon></b-input-group-text>
                 </b-input-group-prepend>
@@ -53,7 +53,7 @@
                   </ul>
                 </swiper-slide>
                 <swiper-slide>
-                  INBOX
+                  {{ localT('inbox') }}
                   <ul class="contacts">
                     <router-link
                         custom v-slot="{ navigate }"
@@ -94,7 +94,7 @@
             </b-card-body>
             <b-card-footer>
               <b-button variant="primary" :to="{name: 'ChatView', params: {personId: this.$store.state.userId}}">
-                Notatnik
+                {{ localT('notebook') }}
               </b-button>
             </b-card-footer>
           </b-card>
@@ -117,7 +117,7 @@
                 </router-link>
                 <div class="user_info">
                   <span>{{ $store.getters.person.firstName }} {{ $store.getters.person.lastName }}</span>
-                  <p>{{ $store.state.messages === null ? 0 : $store.state.messages.length }} Wiadomości</p>
+                  <p>{{ $store.state.messages === null ? 0 : $store.state.messages.length }} {{ localT('messages') }}</p>
                 </div>
               </div>
               <span @click="showActionMenu =! showActionMenu" id="action_menu_btn">
@@ -131,16 +131,16 @@
                   >
                     <li @click="navigate">
                       <b-icon icon="person-circle" />
-                      Wyświetl profil
+                      {{ localT('viewProfile') }}
                     </li>
                   </router-link>
                   <li v-if="!$store.getters.person.blocked_user" @click="blockUser($store.getters.person.id)">
                     <b-icon icon="shield" />
-                    Zablokuj
+                    {{ localT('block') }}
                   </li>
                   <li v-else @click="unblockUser($store.getters.person.id)">
                     <b-icon icon="shield-slash" />
-                    Odblokuj
+                    {{ localT('unblock') }}
                   </li>
                 </ul>
               </div>
@@ -192,7 +192,7 @@
             <b-card-footer>
               <b-input-group>
                 <b-form-textarea v-model="newMessageText" @keydown="handleKeydown" name="" class="type_msg"
-                                 placeholder="Wpisz wiadomość..." />
+                                 :placeholder="localT('newMessagePlaceholder')" />
                 <b-input-group-append class="input-group-append">
                   <span @click="sendMessage" class="input-group-text send_btn">
                     <b-icon icon="cursor-fill" />

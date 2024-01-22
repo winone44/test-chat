@@ -6,6 +6,7 @@
     "login": "Login",
     "newGroup": "Create new group",
     "profile": "Profile",
+    "newAlert": "Create new alert",
     "settings": "Settings",
     "logout": "Logout",
     "selectLanguage": "Select language",
@@ -68,11 +69,94 @@
     "loginButton": "Log In"
   },
 
-  "ProfileSettingsView": {
-    "generalInformationTitle": "General Information",
-    "passwordChange": "Change Password",
-    "deleteProfile": "Delete Profile"
+  "ChatView": {
+    "reload": "Reload?",
+    "search": "Searching...",
+    "inbox": "INBOX",
+    "notebook": "Notebook",
+    "messages": "Messages",
+    "viewProfile": "View profile",
+    "block": "Block",
+    "unblock": "Unblock",
+    "newMessagePlaceholder": "Type a message..."
   },
+
+  "ProfileSettingsView": {
+    "generalInformation": "General information",
+    "changeProfilePicture": "Change profile picture",
+    "createdAlerts": "Created alerts",
+    "blockedUsers": "Blocked users",
+    "passwordChange": "Change password",
+    "deleteProfile": "Delete profile"
+  },
+
+  "NewAlertCreateView": {
+    "createNewAlertForGroup": "Create a new alert for the group",
+    "title": "Title",
+    "enterAlertTitle": "Enter alert title",
+    "content": "Content",
+    "enterContent": "Provide the URL to the logo",
+    "alertDisplayStart": "Alert display start",
+    "alertCreationDate": "Usually this is the date of alert creation unless the alert is to be delayed",
+    "alertDisplayEnd": "Alert display end",
+    "eventStartDate": "Usually this is the start date of the event/occasion",
+    "theAlertAddressed": "The alert is addressed to the group",
+    "alertStyle": "Alert style",
+    "primaryAlert": "Primary alert",
+    "secondaryAlert": "Secondary alert",
+    "successAlert": "Success alert",
+    "dangerAlert": "Danger alert",
+    "warningAlert": "Warning alert",
+    "infoAlert": "Information alert",
+    "lightAlert": "Light alert",
+    "darkAlert": "Dark alert"
+  },
+
+  "JoinGroupView": {
+    "groupNameLabel": "Name:",
+    "groupNameDescription": "Description",
+    "groupIDLabel": "ID:",
+    "groupPasswordLabel": "Password:",
+    "placeholderEnterGroupID": "Enter group ID",
+    "placeholderEnterGroupPassword": "Enter group password",
+    "submitButtonLabel": "Join group"
+  },
+
+  "LocationCheckView": {
+    "location": "Location:"
+  },
+
+  "NewGroupCreateView": {
+    "newGroupCreateTitle": "Create a new group",
+    "groupNameLabel": "Group name",
+    "groupNamePlaceholder": "Enter group name",
+    "logoUrlLabel": "Logo URL",
+    "logoUrlPlaceholder": "Enter the logo URL",
+    "groupSiteUrlLabel": "Website URL",
+    "groupSiteUrlPlaceholder": "Enter the organization's website URL",
+    "groupPasswordLabel": "Group password",
+    "generatePasswordButton": "Generate password",
+    "copyToClipboardButton": "Copy",
+    "submitButton": "Submit",
+    "headerModal": "Group Created",
+    "paragrafModal": "You have automatically joined the group. You can leave the group in the profile tab. Keep the ID of the created group. The ID and password will be used by other users to join this group",
+    "nextButtonModal": "Next",
+    "idLabelTable": "ID",
+    "nameLabelTable": "Name",
+    "logoUrlLabelTable": "Logo Address",
+    "groupSiteUrlLabelTable": "Website Address",
+    "passwordLabelTable": "Password",
+    "shareLabelTable": "Share",
+    "messageCopyToClipboard": "Password copied to clipboard",
+    "titleCopyToClipboard": "Success",
+    "messageErrorCopyToClipboard": "Failed to copy the password to the clipboard:",
+    "titleErrorCopyToClipboard": "Error",
+    "messagePrepareShareGroupAccessLink": "Password copied to clipboard",
+    "titlePrepareShareGroupAccessLink": "Success",
+    "messageErrorPrepareShareGroupAccessLink": "Failed to copy the password to the clipboard:",
+    "titleErrorPrepareShareGroupAccessLink": "Error"
+  },
+
 
   "GeneralInformationComponent": {
     "gender": "Gender:",
@@ -83,6 +167,29 @@
     "followedGroupsCount": "Number of Followed Groups:",
     "lastKnownLocation": "Last Known Location:"
   },
+
+  "ChangeProfileProfilePictureComponent": {
+    "changeAvatar": "Change avatar",
+    "avatarURL": "Avatar URL:",
+    "placeholderAvatarURL": "Enter avatar URL",
+    "change": "Change"
+  },
+
+  "CreatedAlertsComponent": {
+    "title": "Title",
+    "content": "Content",
+    "startDate": "Alert display start",
+    "endDate": "Alert display end",
+    "groupName": "Group name",
+    "delete": "Delete"
+  },
+
+  "BlockedUsersComponent": {
+    "firstName": "First name",
+    "lastName": "Last name",
+    "unblock": "Unblock"
+  },
+
 
   "ChangePasswordComponent": {
     "currentPasswordLabel": "Current Password:",

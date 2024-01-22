@@ -4,10 +4,10 @@
       <b-col>
         <b-card>
           <b-card-body>
-            <h3 class="mb-5">Utwórz nowy alert</h3>
+            <h3 class="mb-5">{{ localT('createNewAlertForGroup') }}</h3>
             <b-form @submit.prevent="addAlert">
               <b-form-group
-                  label="Tytuł"
+                  :label="localT('title')"
                   label-for="alert-title"
                   label-cols="4"
               >
@@ -18,11 +18,11 @@
                     @input="$v.title.$model = $event.trim()"
                     :state="!$v.title.$dirty ? null : !$v.title.$error"
                     required
-                    placeholder="Wpisz tytuł alertu"
+                    :placeholder="localT('enterAlertTitle')"
                 />
               </b-form-group>
               <b-form-group
-                  label="Treść"
+                  :label="localT('content')"
                   label-for="content"
                   label-cols="4"
               >
@@ -33,14 +33,14 @@
                     @input="$v.content.$model = $event.trim()"
                     :state="!$v.content.$dirty ? null : !$v.content.$error"
                     required
-                    placeholder="Podaj adres url do logo"
+                    :placeholder="localT('enterContent')"
                 />
               </b-form-group>
               <b-form-group
-                  label="Start wyświetlania alertu"
+                  :label="localT('alertDisplayStart')"
                   label-for="start-date"
                   label-cols="4"
-                  description="Zwyczaj jest to data utworzenia alertu chyba że alert ma być opóźniony"
+                  :description="localT('alertCreationDate')"
               >
                 <b-row>
                   <b-col cols="12" md="8">
@@ -70,10 +70,10 @@
                 </b-row>
               </b-form-group>
               <b-form-group
-                  label="Koniec wyświetlania alertu"
+                  :label="localT('alertDisplayEnd')"
                   label-for="end-date"
                   label-cols="4"
-                  description="Zwyczaj jest to data początku przedsięwzięcia/imprezy"
+                  :description="localT('eventStartDate')"
               >
                 <b-row>
                   <b-col cols="12" md="8">
@@ -103,7 +103,7 @@
               </b-form-group>
 
               <b-form-group
-                  label="Alert kierowany jest do"
+                  :label="localT('theAlertAddressed')"
                   label-for="group"
                   label-cols="4"
               >
@@ -115,7 +115,7 @@
                 />
               </b-form-group>
               <b-form-group
-                  label="Styl alertu"
+                  :label="localT('alertStyle')"
                   label-for="alert-style"
                   label-cols="4"
               >
@@ -167,14 +167,14 @@ export default {
       alertStyle: 'success',
       options: [],
       options2: [
-        {value: 'primary', text: 'Alert podstawowy'},
-        {value: 'secondary', text: 'Alert dodatkowy'},
-        {value: 'success', text: 'Alert sukcesu'},
-        {value: 'danger', text: 'Alert o niebezpieczeństwie'},
-        {value: 'warning', text: 'Alert ostrzegawczy'},
-        {value: 'info', text: 'Alert informacyjny'},
-        {value: 'light', text: 'Alert jasny'},
-        {value: 'dark', text: 'Alert ciemny'},
+        {value: 'primary', text: this.localT('primaryAlert')},
+        {value: 'secondary', text: this.localT('secondaryAlert')},
+        {value: 'success', text: this.localT('successAlert')},
+        {value: 'danger', text: this.localT('dangerAlert')},
+        {value: 'warning', text: this.localT('warningAlert')},
+        {value: 'info', text: this.localT('infoAlert')},
+        {value: 'light', text: this.localT('lightAlert')},
+        {value: 'dark', text: this.localT('darkAlert')},
       ]
     }
   },
@@ -206,6 +206,7 @@ export default {
   },
   methods: {
     async addAlert() {
+      this.$store.state.waitForCreateSuccess = true;
       const datetimeStart = new Date(this.startDate + 'T' + this.startTime);
       const datetimeEnd = new Date(this.endDate + 'T' + this.endTime);
       await this.$store.dispatch("sendGrupAlert", {
@@ -216,6 +217,7 @@ export default {
         group: this.group.id,
         style: this.alertStyle,
       })
+      this.$store.state.waitForCreateSuccess = false;
     },
     async getPerson() {
       await this.$store.dispatch("getPerson", {

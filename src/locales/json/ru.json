@@ -6,6 +6,7 @@
     "login": "Вход",
     "newGroup": "Создать новую группу",
     "profile": "Профиль",
+    "newAlert": "Создать новое уведомление",
     "settings": "Настройки",
     "logout": "Выйти",
     "selectLanguage": "Выберите язык",
@@ -68,11 +69,94 @@
     "loginButton": "Войти"
   },
 
+  "ChatView": {
+    "reload": "Перезагрузить?",
+    "search": "Поиск...",
+    "inbox": "ВХОДЯЩИЕ",
+    "notebook": "Блокнот",
+    "messages": "Сообщения",
+    "viewProfile": "Посмотреть профиль",
+    "block": "Заблокировать",
+    "unblock": "Разблокировать",
+    "newMessagePlaceholder": "Введите сообщение..."
+  },
+
   "ProfileSettingsView": {
-    "generalInformationTitle": "Общая информация",
+    "generalInformation": "Общая информация",
+    "changeProfilePicture": "Сменить фото профиля",
+    "createdAlerts": "Созданные уведомления",
+    "blockedUsers": "Заблокированные пользователи",
     "passwordChange": "Смена пароля",
     "deleteProfile": "Удалить профиль"
   },
+
+  "NewAlertCreateView": {
+    "createNewAlertForGroup": "Создать новое уведомление для группы",
+    "title": "Заголовок",
+    "enterAlertTitle": "Введите заголовок уведомления",
+    "content": "Содержание",
+    "enterContent": "Укажите URL логотипа",
+    "alertDisplayStart": "Начало отображения уведомления",
+    "alertCreationDate": "Обычно это дата создания уведомления, если уведомление должно быть задержано",
+    "alertDisplayEnd": "Конец отображения уведомления",
+    "eventStartDate": "Обычно это дата начала события/мероприятия",
+    "theAlertAddressed": "Уведомление адресовано группе",
+    "alertStyle": "Стиль уведомления",
+    "primaryAlert": "Основное уведомление",
+    "secondaryAlert": "Дополнительное уведомление",
+    "successAlert": "Уведомление об успехе",
+    "dangerAlert": "Уведомление о опасности",
+    "warningAlert": "Предупреждающее уведомление",
+    "infoAlert": "Информационное уведомление",
+    "lightAlert": "Светлое уведомление",
+    "darkAlert": "Темное уведомление"
+  },
+
+  "JoinGroupView": {
+    "groupNameLabel": "Название:",
+    "groupNameDescription": "Описание",
+    "groupIDLabel": "ID:",
+    "groupPasswordLabel": "Пароль:",
+    "placeholderEnterGroupID": "Введите идентификатор группы",
+    "placeholderEnterGroupPassword": "Введите пароль группы",
+    "submitButtonLabel": "Вступить в группу"
+  },
+
+  "LocationCheckView": {
+    "location": "Местоположение:"
+  },
+
+  "NewGroupCreateView": {
+    "newGroupCreateTitle": "Создать новую группу",
+    "groupNameLabel": "Название группы",
+    "groupNamePlaceholder": "Введите название группы",
+    "logoUrlLabel": "URL логотипа",
+    "logoUrlPlaceholder": "Введите URL логотипа",
+    "groupSiteUrlLabel": "URL сайта",
+    "groupSiteUrlPlaceholder": "Введите URL сайта организации",
+    "groupPasswordLabel": "Пароль группы",
+    "generatePasswordButton": "Сгенерировать пароль",
+    "copyToClipboardButton": "Копировать",
+    "submitButton": "Отправить",
+    "headerModal": "Группа создана",
+    "paragrafModal": "Вы автоматически присоединились к группе. Покинуть группу можно в разделе профиля. Сохраните ID созданной группы. ID и пароль будут использоваться другими пользователями для присоединения к этой группе",
+    "nextButtonModal": "Далее",
+    "idLabelTable": "ID",
+    "nameLabelTable": "Название",
+    "logoUrlLabelTable": "Адрес логотипа",
+    "groupSiteUrlLabelTable": "Адрес сайта",
+    "passwordLabelTable": "Пароль",
+    "shareLabelTable": "Поделиться",
+    "messageCopyToClipboard": "Пароль скопирован в буфер обмена",
+    "titleCopyToClipboard": "Успех",
+    "messageErrorCopyToClipboard": "Не удалось скопировать пароль в буфер обмена:",
+    "titleErrorCopyToClipboard": "Ошибка",
+    "messagePrepareShareGroupAccessLink": "Пароль скопирован в буфер обмена",
+    "titlePrepareShareGroupAccessLink": "Успех",
+    "messageErrorPrepareShareGroupAccessLink": "Не удалось скопировать пароль в буфер обмена:",
+    "titleErrorPrepareShareGroupAccessLink": "Ошибка"
+  },
+
 
   "GeneralInformationComponent": {
     "gender": "Пол:",
@@ -83,6 +167,29 @@
     "followedGroupsCount": "Количество отслеживаемых групп:",
     "lastKnownLocation": "Последнее известное местоположение:"
   },
+
+  "ChangeProfileProfilePictureComponent": {
+    "changeAvatar": "Сменить аватар",
+    "avatarURL": "URL аватара:",
+    "placeholderAvatarURL": "Введите URL аватара",
+    "change": "Изменить"
+  },
+
+  "CreatedAlertsComponent": {
+    "title": "Заголовок",
+    "content": "Содержание",
+    "startDate": "Начало отображения уведомления",
+    "endDate": "Конец отображения уведомления",
+    "groupName": "Название группы",
+    "delete": "Удалить"
+  },
+
+  "BlockedUsersComponent": {
+    "firstName": "Имя",
+    "lastName": "Фамилия",
+    "unblock": "Разблокировать"
+  },
+
 
   "ChangePasswordComponent": {
     "currentPasswordLabel": "Текущий Пароль:",
