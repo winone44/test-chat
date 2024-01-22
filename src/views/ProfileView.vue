@@ -85,7 +85,7 @@
                   <l-icon
                       :icon-size="[32, 32]"
                       :icon-anchor="[16, 32]"
-                      :icon-url="profilePictureCDN(person.profile_picture) === '/media/photos/' ? '/media/photos/avatar.png' : profilePictureCDN(person.profile_picture)">
+                      :icon-url="iconUrl(person)">
                   </l-icon>
                   <l-tooltip>{{ person.name }}</l-tooltip>
                 </l-marker>
@@ -213,6 +213,9 @@ export default {
     }
   },
   methods: {
+    iconUrl(person){
+      return this.profilePictureCDN(person.profile_picture) === `${process.env.VUE_APP_CDN_URL}/media/photos/` ? this.profilePictureCDN('avatar.png') : this.profilePictureCDN(person.profile_picture)
+    },
     unLockDelButtons() {
       if (this.isUnlockDelButtons) {
         this.fields = this.fields.filter(field => field.key !== 'del');
@@ -323,7 +326,8 @@ export default {
   async created() {
     await this.getPerson();
     await this.getGroupMembers(this.$store.state.person.groups[0].id);
-  }
+  },
+
 }
 </script>
 

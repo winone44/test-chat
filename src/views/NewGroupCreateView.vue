@@ -187,7 +187,7 @@ export default {
     },
     async prepareShareGroupAccessLink(id, password) {
       try {
-        await navigator.clipboard.writeText(`${process.env.VUE_APP_BASE_URL}join-to-group/${id}?password=${password}`);
+        await navigator.clipboard.writeText(`${process.env.VUE_APP_BASE_URL}${process.env.VUE_APP_ROUTER_MODE === 'hash'? '/#/' : ''}join-to-group/${id}?password=${password}`);
         this.$bvToast.toast(this.localT('messagePrepareShareGroupAccessLink'), {
           title: this.localT('titlePrepareShareGroupAccessLink'),
           variant: 'success',

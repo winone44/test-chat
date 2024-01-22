@@ -113,7 +113,7 @@ const routes = [
 ]
 
 const router = new VueRouter({
-  mode: 'history',
+  mode: process.env.VUE_APP_API_ROUTER_MODE,
   base: process.env.BASE_URL,
   routes
 })
