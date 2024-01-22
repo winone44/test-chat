@@ -5,7 +5,7 @@
         <b-avatar
             :src="profilePictureCDN(this.$store.getters.person.profile_picture)"
             class="mt-3 user_img"
-            :class="{online: $store.getters.person.online}"
+            :class="{online: $store.getters.person.online || $route.params.personId === $store.state.userId}"
         />
         <b-row class="mt-3">
           <b-col>
