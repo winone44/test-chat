@@ -5,7 +5,7 @@
         {{ localT('reload') }}
       </b-row>
       <b-row v-else class="justify-content-center h-100">
-        <b-col class="col-md-4 col-xl-3 chat">
+        <b-col md="4" xl="3" class="chat">
           <b-card no-body class="mb-sm-3 mb-md-0 contacts_card">
             <b-card-header>
               <b-input-group>
@@ -42,7 +42,7 @@
                               </b-col>
                               <b-col>
                                 <img v-for="(group, index2) in person.groups" :key="index2" width="20px"
-                                     :src="logoIconCDN(group.logo_url)">
+                                     :src="logoIconCDN(group.logo_url)" alt="">
                               </b-col>
                             </b-row>
                           </div>
@@ -80,7 +80,7 @@
                               </b-col>
                               <b-col>
                                 <img v-for="(group, index2) in person.groups" :key="index2" width="20px"
-                                     :src="CDN('/media/photos/' + group.logo_url)">
+                                     :src="CDN('/media/photos/' + group.logo_url)" alt="">
                               </b-col>
                             </b-row>
                           </div>
