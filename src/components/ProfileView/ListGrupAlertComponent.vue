@@ -1,5 +1,6 @@
 <template>
-  <div class="card mt-3">
+  <div v-if="isLoading" class="card mt-3"></div>
+  <div v-else class="card mt-3">
     <b-row v-for="(alert, index) in $store.state.groupAlerts.results" :key="index">
       <b-col>
         <GroupAlertComponent
@@ -37,6 +38,7 @@ export default {
   components: {GroupAlertComponent},
   data () {
     return {
+      isLoading: true,
       isSpinnerShow: false,
     }
   },
@@ -44,9 +46,8 @@ export default {
     async getAlerts() {
       let page = 1;
       if (!this.$store.state.groupAlerts) {
-        this.isSpinnerShow = true;
         await this.$store.dispatch("getGrupAlert", 1)
-        this.isSpinnerShow = false;
+        this.isLoading = false;
       } else if (this.$store.state.groupAlerts && this.$store.state.groupAlerts.next !== null) {
         this.isSpinnerShow = true;
         page = this.$store.state.groupAlerts.next;

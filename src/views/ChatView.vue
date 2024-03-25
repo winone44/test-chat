@@ -11,7 +11,7 @@
               <b-input-group>
                 <b-input v-model="filter" type="text" :placeholder="localT('search')" name="" class="search" />
                 <b-input-group-prepend>
-                  <b-input-group-text class="search_btn"><b-icon icon="search"></b-icon></b-input-group-text>
+                  <b-input-group-text class="search_btn"><b-icon icon="search" /></b-input-group-text>
                 </b-input-group-prepend>
               </b-input-group>
             </b-card-header>
@@ -104,16 +104,22 @@
             <b-card-header class="msg_head">
               <div class="d-flex bd-highlight">
                 <router-link :to="{ name: 'ProfileView', params: { personId: this.personId }}">
-                  <div class="img_cont">
-                    <b-avatar
-                        :src="profilePictureCDN($store.getters.person.profile_picture)"
-                        class="user_img"
-                    />
-                    <span
-                        class="online_icon"
-                        :class="{offline: !$store.getters.person.online}"
-                    ></span>
-                  </div>
+                    <div class="img_cont">
+                      <transition name="fade" mode="out-in">
+                      <b-avatar v-if="isLoading2"
+                          src=""
+                          class="user_img"
+                      />
+                      <b-avatar v-else
+                          :src="profilePictureCDN($store.getters.person.profile_picture)"
+                          class="user_img"
+                      />
+                      </transition>
+                      <span
+                          class="online_icon"
+                          :class="{offline: !$store.getters.person.online}"
+                      />
+                    </div>
                 </router-link>
                 <div class="user_info">
                   <span>{{ $store.getters.person.firstName }} {{ $store.getters.person.lastName }}</span>
@@ -169,8 +175,8 @@
                     />
                   </div>
                   <div
-                      :class="{'msg_cotainer': String(message.receiver.id) === String($store.state.userId),
-                            'msg_cotainer_send': String(message.receiver.id) !== String($store.state.userId)
+                      :class="{'msg_container': String(message.receiver.id) === String($store.state.userId),
+                            'msg_container_send': String(message.receiver.id) !== String($store.state.userId)
                   }"
                   >
                     <span>{{ message.text }}</span>
@@ -195,7 +201,7 @@
                                  :placeholder="localT('newMessagePlaceholder')" />
                 <b-input-group-append class="input-group-append">
                   <span @click="sendMessage" class="input-group-text send_btn">
-                    <b-icon icon="cursor-fill" />
+                    <b-icon icon="chevron-right" />
                   </span>
                 </b-input-group-append>
               </b-input-group>
@@ -231,6 +237,7 @@ export default {
       intervalId: null,
       conversation: [],
       isLoading: true,
+      isLoading2: true,
       newMessageText: '',
       shouldAnimate: false, // zmienna do śledzenia, czy powinna wystąpić animacja
       isFirstLoad: true, // zmienna do śledzenia, czy to pierwsze załadowanie
@@ -256,6 +263,7 @@ export default {
       if (to.params.personId !== from.params.personId) {
         this.clearAllIntervals();
         this.isLoading = true;
+        this.isLoading2 = true;
         this.isFirstLoad = true;
         this.$store.state.person = [];
         this.$store.state.messages = [];
@@ -308,6 +316,7 @@ export default {
       await this.$store.dispatch("getPerson", {
         id: this.personId
       })
+      this.isLoading2 = false;
     },
     async getMessage() {
       await this.$store.dispatch("getMessages", {
@@ -413,8 +422,8 @@ export default {
 
 .card {
   height: 500px;
-  border-radius: 15px !important;
-  background-color: rgba(0, 0, 0, 0.4) !important;
+  border-radius: 5px !important;
+  background-color: rgba(0, 0, 255, 0.2) !important;
 }
 
 .contacts_body {
@@ -428,12 +437,12 @@ export default {
 }
 
 .card-header {
-  border-radius: 15px 15px 0 0 !important;
+  border-radius: 5px 5px 0 0 !important;
   border-bottom: 0 !important;
 }
 
 .card-footer {
-  border-radius: 0 0 15px 15px !important;
+  border-radius: 0 0 5px 5px !important;
   border-top: 0 !important;
 }
 
@@ -442,36 +451,28 @@ export default {
 }
 
 .search {
-  border-radius: 15px 0 0 15px !important;
-  background-color: rgba(0, 0, 0, 0.3) !important;
+  border-radius: 5px 0 0 5px !important;
+  background-color: rgba(255, 255, 255, 0.6) !important;
   border: 0 !important;
-  color: white !important;
+  color: black !important;
 }
 
 .search:focus {
   box-shadow: none !important;
-  outline: 0px !important;
+  outline: 0 !important;
 }
 
 .type_msg {
-  background-color: rgba(0, 0, 0, 0.3) !important;
+  background-color: rgba(255, 255, 255, 0.6) !important;
   border: 0 !important;
-  color: white !important;
+  color: black !important;
   height: 60px !important;
   overflow-y: auto;
 }
 
 .type_msg:focus {
   box-shadow: none !important;
-  outline: 0px !important;
-}
-
-.attach_btn {
-  border-radius: 15px 0 0 15px !important;
-  background-color: rgba(0, 0, 0, 0.3) !important;
-  border: 0 !important;
-  color: white !important;
-  cursor: pointer;
+  outline: 0 !important;
 }
 
 .send_btn {
@@ -482,7 +483,7 @@ export default {
 }
 
 .search_btn {
-  border-radius: 0 15px 15px 0 !important;
+  border-radius: 0 5px 5px 0 !important;
   background-color: rgba(0, 0, 0, 0.3) !important;
   border: 0 !important;
   color: white !important;
@@ -512,13 +513,11 @@ export default {
 .user_img {
   height: 60px;
   width: 60px;
-  border: 1.5px solid #f5f6fa;
 }
 
 .user_img_msg {
   height: 40px;
   width: 40px;
-  border: 1.5px solid #f5f6fa;
 }
 
 .img_cont {
@@ -540,7 +539,6 @@ export default {
   border-radius: 50%;
   bottom: 13px;
   right: 13px;
-  border: 1.5px solid white;
 }
 
 .offline {
@@ -563,23 +561,23 @@ export default {
   color: rgba(255, 255, 255, 0.6);
 }
 
-.msg_cotainer {
+.msg_container {
   margin-top: auto;
   margin-bottom: auto;
   margin-left: 10px;
-  border-radius: 25px;
-  background-color: #82ccdd;
+  border-radius: 5px 25px 5px 25px;
+  background-color: #a6d277;
   padding: 10px;
   position: relative;
   white-space: pre-wrap;
 }
 
-.msg_cotainer_send {
+.msg_container_send {
   margin-top: auto;
   margin-bottom: auto;
   margin-right: 10px;
-  border-radius: 25px;
-  background-color: #78e08f;
+  border-radius: 25px 5px 25px 5px;
+  background-color: #61a5ff;
   padding: 10px;
   position: relative;
   white-space: pre-wrap;
@@ -622,7 +620,7 @@ export default {
   padding: 15px 0;
   background-color: rgba(0, 0, 0, 0.5);
   color: white;
-  border-radius: 15px;
+  border-radius: 5px;
   top: 30px;
   right: 15px;
 }
